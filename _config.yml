@@ -8,9 +8,9 @@ permalink: /:year/:month/:day/:title.html
 # relative_permalinks: true
 
 # Setup
-title:            R Tutorials
-tagline:          'Content for MIE 1402 at U of T'
-description:      'This is a description'
+title:            R
+tagline:          
+description:      'Content for MIE 1402 tutorials'
 baseurl: "/R-Tutorials-1" # If you are making a gh-pages project blog, this is
                         # the name of your project repo, preceded by a /'
                         # Set it to just "/" if you are making a user page.

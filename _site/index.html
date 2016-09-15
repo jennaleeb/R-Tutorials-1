@@ -101,6 +101,377 @@
   
   <div class="post">
     <h1 class="post-title">
+      <a href="/R-Tutorials-1//2016/09/15/tutorial-1-intro-to-r.html">
+        Introduction to R
+      </a>
+    </h1>
+    
+<a href="/R-Tutorials-1/2016/09/15/tutorial-1-intro-to-r.html#disqus_thread"
+    class = "commentcount"></a>
+    
+    <span class="post-date">15 Sep 2016</span>
+
+    <p>— .intro-slide</p>
+
+<h2 id="introduction-to-r">Introduction to R</h2>
+
+<p><strong>Jenna Blumenthal</strong><br />
+   MIE 1402</p>
+
+<hr />
+
+<h2 id="what-is-r">What is R?</h2>
+
+<ul>
+  <li>Language &amp; environment for statistical computing</li>
+  <li>Widely used by statisticians, data miners</li>
+  <li>Popular among academics &amp; industry</li>
+</ul>
+
+<hr />
+
+<h2 id="what-is-it-used-for">What is it used for?</h2>
+
+<ul>
+  <li>Data handling, organizing</li>
+  <li>Basic mathematical operations</li>
+  <li>Linear, nonlinear modeling, classical stats tests, time-series analysis, classification, clustering, etc</li>
+  <li>Publication-quality graphics</li>
+</ul>
+
+<hr />
+
+<h2 id="what-makes-r-so-great">What makes R so great?</h2>
+
+<ul>
+  <li>Open source (i.e. free)</li>
+  <li>Highly extensible (user-submitted <strong>packages</strong>)
+    <ul>
+      <li>Functions available for very specific areas</li>
+    </ul>
+  </li>
+  <li>Excellent documentation</li>
+  <li>Great graphics
+    <ul>
+      <li>Publication-quality graphs (<code class="highlighter-rouge">ggplot2</code>)</li>
+      <li>RMarkdown, LaTeX (write reports without copying and pasting)</li>
+      <li>Shiny (interative data visualizations, etc.)</li>
+    </ul>
+  </li>
+  <li>Reproducible analysis</li>
+</ul>
+
+<hr />
+
+<h2 id="what-are-some-other-options">What are some other options?</h2>
+
+<ul>
+  <li>SAS, SPSS, Stata, MATLAB, etc…</li>
+  <li>Not so free</li>
+  <li>Not so open-source (meaning there is a smaller community to help when you get stuck)</li>
+</ul>
+
+<hr />
+
+<h2 id="getting-set-up">Getting set up</h2>
+
+<h3 id="what-youll-need">What you’ll need</h3>
+
+<p>R: <a href="http://www.r-project.org/">http://www.r-project.org/</a></p>
+
+<h3 id="what-youll-want">What you’ll want</h3>
+<p>RStudio (highly recommended GUI): <a href="https://www.rstudio.com/">https://www.rstudio.com/</a></p>
+
+<p>LaTeX (good for report-writing): <a href="https://www.latex-project.org/">https://www.latex-project.org/</a></p>
+
+<p>Git (good for version control): <a href="https://git-scm.com/downloads">https://git-scm.com/downloads</a></p>
+
+<hr />
+
+<h2 id="rstudio">RStudio</h2>
+
+<p><img src="assets/img/RStudio_screenshot.png" alt="" /></p>
+
+<hr />
+
+<h3 id="console">Console</h3>
+<ul>
+  <li>Command-line interface</li>
+  <li>Type after the <code class="highlighter-rouge">&gt;</code> prompt and R will execute your command</li>
+  <li>This is where R does the stuff</li>
+</ul>
+
+<h3 id="editor">Editor</h3>
+<ul>
+  <li>Collection of commands can be edited and saved</li>
+  <li><code class="highlighter-rouge">File --&gt; New | File --&gt; Open --&gt; R Script</code></li>
+</ul>
+
+<h3 id="environment">Environment</h3>
+<ul>
+  <li>What data/values R has in its memory</li>
+  <li>Good for viewing complex objects</li>
+</ul>
+
+<h3 id="files-packages-docs-views">Files, packages, docs, views</h3>
+<ul>
+  <li>Browse directory, open files, install/load packages, look at documentation (for help), preview graphs, etc.</li>
+</ul>
+
+<hr />
+
+<h2 id="getting-started">Getting started</h2>
+
+<p>Before you start being a stats wizard…get organized.</p>
+
+<hr />
+
+<h3 id="working-directory">1. Working directory</h3>
+
+<ul>
+  <li>The folder you are currently in</li>
+  <li>If you ask R to retrieve a certain file, it will look in the working directory (unless another path is given)</li>
+  <li>If you save a file from R, it will save in your working directory (ditto)</li>
+  <li>Be careful, sometimes you think you are in the correct wd, but you are not. Double check using:</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">getwd</span><span class="p">()</span></code></pre></figure>
+
+<p>You can change the working directory using</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">setwd</span><span class="p">(</span><span class="s2">"Desktop/ExperimentalMethods/RTutorials"</span><span class="p">)</span></code></pre></figure>
+
+<hr />
+
+<h3 id="install-packagesload-libraries">2. Install packages/load libraries</h3>
+
+<ul>
+  <li>The core of what makes R great</li>
+  <li>Some useful ones come preloaded, but there are many more</li>
+  <li>Andy Field will reference the ones he uses in the textbook</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">install.packages</span><span class="p">(</span><span class="s2">"package-name"</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">package</span><span class="o">-</span><span class="n">name</span><span class="p">)</span></code></pre></figure>
+
+<h4 id="notes">Notes</h4>
+
+<ul>
+  <li>The first one uses quotes, the second doesn’t. Don’t ask me why.</li>
+  <li>Often you figure out you don’t have a package by getting an error.</li>
+  <li>Check to see what packages you have installed using</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">library</span><span class="p">()</span></code></pre></figure>
+
+<ul>
+  <li>You only have to <strong>install</strong> the package once, but you need to <strong>load</strong> the package every time you set up a new environment.</li>
+</ul>
+
+<hr />
+
+<h2 id="some-basic-examples">Some basic examples</h2>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="m">1+1</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] 2</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">4</span><span class="w">
+</span><span class="n">a</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] 4</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">fruit</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"apples"</span><span class="p">,</span><span class="w"> </span><span class="s2">"pears"</span><span class="p">,</span><span class="w"> </span><span class="s2">"strawberries"</span><span class="p">)</span></code></pre></figure>
+
+<hr />
+
+<h2 id="data">Data</h2>
+
+<p>There are several ways to import data into your R environment:</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># Built into R
+</span><span class="n">read.csv</span><span class="p">()</span><span class="w">
+</span><span class="n">read.delim</span><span class="p">()</span><span class="w">
+</span><span class="n">read.table</span><span class="p">()</span><span class="w">
+
+</span><span class="c1"># rio package
+</span><span class="n">library</span><span class="p">(</span><span class="n">rio</span><span class="p">)</span><span class="w">
+</span><span class="n">import</span><span class="p">()</span><span class="w">
+
+</span><span class="c1"># Base datasets (often used in examples)
+</span><span class="n">library</span><span class="p">(</span><span class="n">datasets</span><span class="p">)</span><span class="w">
+</span><span class="n">mtcars</span></code></pre></figure>
+
+<hr />
+
+<h2 id="viewing--summarizing-etc">Viewing , summarizing, etc</h2>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">mtcars</span><span class="w">
+</span><span class="n">View</span><span class="p">(</span><span class="n">mtcars</span><span class="p">)</span><span class="w">
+</span><span class="n">head</span><span class="p">(</span><span class="n">mtcars</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">mtcars</span><span class="p">[</span><span class="m">1</span><span class="p">,]</span><span class="w">
+</span><span class="n">mtcars</span><span class="p">[,</span><span class="m">1</span><span class="p">]</span><span class="w">
+</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="w"> </span><span class="err">#</span><span class="w"> </span><span class="n">beacause</span><span class="w"> </span><span class="n">mtcars</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">dataframe</span><span class="o">!</span></code></pre></figure>
+
+<hr />
+
+<h3 id="what-is-a-dataframe">What is a dataframe?</h3>
+
+<p>Sort of like a spreadsheet in Excel, except more fun.
+- header contains column names
+- note, most functions like to work with dataframes, but others like matrices
+- Similar, but different object type
+- can generally coerce using</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">as.data.frame</span><span class="p">()</span><span class="w">
+</span><span class="n">as.matrix</span><span class="p">()</span></code></pre></figure>
+
+<hr />
+
+<h3 id="diy-dataframe">DIY Dataframe</h3>
+
+<p>Note, I rarely do this. Likely you will be pulling data from another source.</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">metallicaNames</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"Lars"</span><span class="p">,</span><span class="w"> </span><span class="s2">"James"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Kirk"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Rob"</span><span class="p">)</span><span class="w">
+</span><span class="n">metallicaAges</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">47</span><span class="p">,</span><span class="w"> </span><span class="m">47</span><span class="p">,</span><span class="w"> </span><span class="m">48</span><span class="p">,</span><span class="w"> </span><span class="m">46</span><span class="p">)</span><span class="w">
+</span><span class="n">metallica_data</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.frame</span><span class="p">(</span><span class="n">Name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">metallicaNames</span><span class="p">,</span><span class="w"> </span><span class="n">Age</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">metallicaAges</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">metallica_data</span><span class="o">$</span><span class="n">Age</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] 47 47 48 46</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">mean</span><span class="p">(</span><span class="n">metallica_data</span><span class="o">$</span><span class="n">Age</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] 47</code></pre></figure>
+
+<hr />
+
+<h3 id="subsetting-data">Subsetting data</h3>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">metallica_data</span><span class="o">$</span><span class="n">Age</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="m">47</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1]  TRUE  TRUE  TRUE FALSE</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">older_band_members</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">metallica_data</span><span class="p">[</span><span class="n">metallica_data</span><span class="o">$</span><span class="n">Age</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="m">47</span><span class="p">,]</span><span class="w">
+
+</span><span class="c1"># OR use subset (a bit more intuitive)
+</span><span class="n">older_band_members</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">subset</span><span class="p">(</span><span class="n">metallica_data</span><span class="p">,</span><span class="w"> </span><span class="n">Age</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="m">47</span><span class="p">)</span></code></pre></figure>
+
+<hr />
+
+<h2 id="r-commander">R Commander</h2>
+
+<ul>
+  <li>GUI interface</li>
+  <li>If you are an SPSS user, it may feel more familiar</li>
+  <li>I don’t like it (it used to crash my computer)</li>
+</ul>
+
+<hr />
+
+<h2 id="saving">Saving</h2>
+
+<p>If you did some data manipulation and would like to save it as a new file:</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">write.table</span><span class="p">()</span><span class="w">
+</span><span class="n">write.csv</span><span class="p">(</span><span class="n">metallica_data</span><span class="p">,</span><span class="w"> </span><span class="s2">"MetallicaData.csv"</span><span class="p">)</span><span class="w"> </span><span class="err">#</span><span class="w"> </span><span class="n">note</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="n">will</span><span class="w"> </span><span class="n">save</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">your</span><span class="w"> </span><span class="n">wd</span></code></pre></figure>
+
+<p>Save the R file, <strong>DON’T</strong> save the R workspace</p>
+
+<p>Can also make a <code class="highlighter-rouge">project</code> - helpful for saving the working directory, dataframes, etc.</p>
+
+<hr />
+
+<h2 id="brief-introduction-to-graphs-and-ggplot2">Brief introduction to graphs and <code class="highlighter-rouge">ggplot2</code></h2>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">hist</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">)</span></code></pre></figure>
+
+<p><img src="/R-Tutorials-1/figure/source/2016-09-15-tutorial-1-intro-to-r/unnamed-chunk-16-1.png" alt="plot of chunk unnamed-chunk-16" /></p>
+
+<hr />
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">plot</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">,</span><span class="w"> </span><span class="n">mtcars</span><span class="o">$</span><span class="n">disp</span><span class="p">)</span></code></pre></figure>
+
+<p><img src="/R-Tutorials-1/figure/source/2016-09-15-tutorial-1-intro-to-r/unnamed-chunk-17-1.png" alt="plot of chunk unnamed-chunk-17" /></p>
+
+<hr />
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">install.packages</span><span class="p">(</span><span class="s2">"ggplot2"</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## Warning: package 'ggplot2' was built under R version 3.2.4</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">plot</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ggplot</span><span class="p">(</span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mtcars</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">mpg</span><span class="p">,</span><span class="w"> </span><span class="n">disp</span><span class="p">))</span><span class="w">
+</span><span class="n">plot</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">geom_point</span><span class="p">()</span></code></pre></figure>
+
+<p><img src="/R-Tutorials-1/figure/source/2016-09-15-tutorial-1-intro-to-r/unnamed-chunk-20-1.png" alt="plot of chunk unnamed-chunk-20" /></p>
+
+<hr />
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">plot</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">geom_point</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ggtitle</span><span class="p">(</span><span class="s2">"This is my awesome graph"</span><span class="p">)</span></code></pre></figure>
+
+<p><img src="/R-Tutorials-1/figure/source/2016-09-15-tutorial-1-intro-to-r/unnamed-chunk-21-1.png" alt="plot of chunk unnamed-chunk-21" /></p>
+
+<p>Note that the <code class="highlighter-rouge">plot</code> object isn’t updating unless it is reassigned</p>
+
+<p>Read Ch 4 for some more examples.</p>
+
+<hr />
+<p>## R Markdown</p>
+
+<ul>
+  <li>instead of C+P-ing everything</li>
+  <li>Write your report, generate results, insert graphs, etc. all in the same file</li>
+  <li>A few hours of learning will save LOTS of time</li>
+  <li>Turn your analyses into:
+    <ul>
+      <li>PDF</li>
+      <li>Word</li>
+      <li>Slides</li>
+      <li>HTML (like me!)</li>
+      <li>Interactive dashboard</li>
+    </ul>
+  </li>
+  <li>File –&gt; New –&gt; R Markdown (.Rmd file)</li>
+  <li>To generate PDF files, you’ll need LaTeX
+    <ul>
+      <li>Mac: http://www.tug.org/mactex/</li>
+      <li>Windows: http://miktex.org/</li>
+    </ul>
+  </li>
+  <li>We will go into syntax, etc in a future tutorial</li>
+</ul>
+
+<hr />
+
+<h2 id="more-resources">More resources</h2>
+
+<ul>
+  <li>Datacamp: datacamp.com/courses/free-introduction-to-r</li>
+  <li>R Markdown: http://rmarkdown.rstudio.com/lesson-1.html</li>
+  <li>The textbook is great</li>
+</ul>
+
+<hr />
+<p>## References</p>
+
+<p>Wikipedia:
+<a href="https://en.wikipedia.org/wiki/R_(programming_language)">https://en.wikipedia.org/wiki/R_(programming_language)</a></p>
+
+<p>A (very) short introduction to R: 
+<a href="https://cran.r-project.org/doc/contrib/Torfs+Brauer-Short-R-Intro.pdf">https://cran.r-project.org/doc/contrib/Torfs+Brauer-Short-R-Intro.pdf</a></p>
+
+<p>Field A, Miles J, Field Z. Discovering Statistics Using R. London: Sage; 2012.</p>
+
+<hr />
+
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
       <a href="/R-Tutorials-1//2015/12/13/knitr-hyde-getting-started.html">
         Getting Started with Knitr-Hyde
       </a>

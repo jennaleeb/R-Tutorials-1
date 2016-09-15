@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->  
+<html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+	<title>Introduction to R</title>
+	<meta name="description" content="Introduction to R">
+	<meta name="author" content="Jenna Blumenthal">
+	<meta name="generator" content="slidify" />
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=1024, user-scalable=no">
+	
+	<!-- Required stylesheet -->
+	<link rel="stylesheet" href="libraries/frameworks/deckjs/core/deck.core.css">
+	<link rel="stylesheet" href="libraries/frameworks/deckjs/extensions/goto/deck.goto.css">
+<link rel="stylesheet" href="libraries/frameworks/deckjs/extensions/hash/deck.hash.css">
+<link rel="stylesheet" href="libraries/frameworks/deckjs/extensions/menu/deck.menu.css">
+<link rel="stylesheet" href="libraries/frameworks/deckjs/extensions/navigation/deck.navigation.css">
+<link rel="stylesheet" href="libraries/frameworks/deckjs/extensions/scale/deck.scale.css">
+<link rel="stylesheet" href="libraries/frameworks/deckjs/extensions/status/deck.status.css">
+<!-- Style theme. More available in /themes/style/  -->
+	<link rel="stylesheet" href="libraries/frameworks/deckjs/themes/style/swiss.css">
+	
+	<!-- Transition theme. More available in /themes/transition/  -->
+	<link rel="stylesheet" href="libraries/frameworks/deckjs/themes/transition/horizontal-slide.css">
+	<script src="libraries/frameworks/deckjs/modernizr.custom.js"></script>
+	
+	<!-- LOAD STYLE SHEETS -->
+	<link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css">
+	
+	  <link rel="stylesheet" href = "assets/css/ribbons.css">
+
+</head>
+
+<body class="deck-container">
+
+  <!-- Begin slides -->
+  <section class="slide " id="slide-1">
+  
+  
+</section>
+<section class="slide intro-slide" id="slide-2">
+  <h2>Introduction to R</h2>
+  <p><strong>Jenna Blumenthal</strong><br>
+   MIE 1402</p>
+
+</section>
+<section class="slide " id="slide-3">
+  <h2>What is R?</h2>
+  <ul>
+<li>Language &amp; environment for statistical computing</li>
+<li>Widely used by statisticians, data miners</li>
+<li>Popular among academics &amp; industry</li>
+</ul>
+
+</section>
+<section class="slide " id="slide-4">
+  <h2>What is it used for?</h2>
+  <ul>
+<li>Data handling, organizing</li>
+<li>Basic mathematical operations</li>
+<li>Linear, nonlinear modeling, classical stats tests, time-series analysis, classification, clustering, etc</li>
+<li>Publication-quality graphics</li>
+</ul>
+
+</section>
+<section class="slide " id="slide-5">
+  <h2>What makes R so great?</h2>
+  <ul>
+<li>Open source (i.e. free)</li>
+<li>Highly extensible (user-submitted <strong>packages</strong>)
+
+<ul>
+<li>Functions available for very specific areas</li>
+</ul></li>
+<li>Excellent documentation</li>
+<li>Great graphics
+
+<ul>
+<li>Publication-quality graphs (<code>ggplot2</code>)</li>
+<li>RMarkdown, LaTeX (write reports without copying and pasting)</li>
+<li>Shiny (interative data visualizations, etc.)</li>
+</ul></li>
+<li>Reproducible analysis</li>
+</ul>
+
+</section>
+<section class="slide " id="slide-6">
+  <h2>What are some other options?</h2>
+  <ul>
+<li>SAS, SPSS, Stata, MATLAB, etc...</li>
+<li>Not so free</li>
+<li>Not so open-source (meaning there is a smaller community to help when you get stuck)</li>
+</ul>
+
+</section>
+<section class="slide " id="slide-7">
+  <h2>Getting set up</h2>
+  <h3>What you&#39;ll need</h3>
+
+<p>R: <a href="http://www.r-project.org/">http://www.r-project.org/</a></p>
+
+<h3>What you&#39;ll want</h3>
+
+<p>RStudio (highly recommended GUI): <a href="https://www.rstudio.com/">https://www.rstudio.com/</a></p>
+
+<p>LaTeX (good for report-writing): <a href="https://www.latex-project.org/">https://www.latex-project.org/</a></p>
+
+<p>Git (good for version control): <a href="https://git-scm.com/downloads">https://git-scm.com/downloads</a></p>
+
+</section>
+<section class="slide " id="slide-8">
+  <h2>RStudio</h2>
+  <p><img src="assets/img/RStudio_screenshot.png" alt=""></p>
+
+</section>
+<section class="slide " id="slide-9">
+  <h3>Console</h3>
+  <ul>
+<li>Command-line interface</li>
+<li>Type after the <code>&gt;</code> prompt and R will execute your command</li>
+<li>This is where R does the stuff</li>
+</ul>
+
+<h3>Editor</h3>
+
+<ul>
+<li>Collection of commands can be edited and saved</li>
+<li><code>File --&gt; New | File --&gt; Open --&gt; R Script</code></li>
+</ul>
+
+<h3>Environment</h3>
+
+<ul>
+<li>What data/values R has in its memory</li>
+<li>Good for viewing complex objects</li>
+</ul>
+
+<h3>Files, packages, docs, views</h3>
+
+<ul>
+<li>Browse directory, open files, install/load packages, look at documentation (for help), preview graphs, etc.</li>
+</ul>
+
+</section>
+<section class="slide " id="slide-10">
+  <h2>Getting started</h2>
+  <p>Before you start being a stats wizard...get organized.</p>
+
+</section>
+<section class="slide " id="slide-11">
+  <h3>1. Working directory</h3>
+  <ul>
+<li>The folder you are currently in</li>
+<li>If you ask R to retrieve a certain file, it will look in the working directory (unless another path is given)</li>
+<li>If you save a file from R, it will save in your working directory (ditto)</li>
+<li>Be careful, sometimes you think you are in the correct wd, but you are not. Double check using:</li>
+</ul>
+
+<pre><code class="r">getwd()
+</code></pre>
+
+<p>You can change the working directory using </p>
+
+<pre><code class="r">setwd(&quot;Desktop/ExperimentalMethods/RTutorials&quot;)
+</code></pre>
+
+</section>
+<section class="slide " id="slide-12">
+  <h3>2. Install packages/load libraries</h3>
+  <ul>
+<li>The core of what makes R great</li>
+<li>Some useful ones come preloaded, but there are many more</li>
+<li>Andy Field will reference the ones he uses in the textbook</li>
+</ul>
+
+<pre><code class="r">install.packages(&quot;package-name&quot;)
+library(package-name)
+</code></pre>
+
+<h4>Notes</h4>
+
+<ul>
+<li>The first one uses quotes, the second doesn&#39;t. Don&#39;t ask me why.</li>
+<li>Often you figure out you don&#39;t have a package by getting an error.</li>
+<li>Check to see what packages you have installed using</li>
+</ul>
+
+<pre><code class="r">library()
+</code></pre>
+
+<ul>
+<li>You only have to <strong>install</strong> the package once, but you need to <strong>load</strong> the package every time you set up a new environment.</li>
+</ul>
+
+</section>
+<section class="slide " id="slide-13">
+  <h2>Some basic examples</h2>
+  <pre><code class="r">1+1
+</code></pre>
+
+<pre><code>## [1] 2
+</code></pre>
+
+<pre><code class="r">a = 4
+a
+</code></pre>
+
+<pre><code>## [1] 4
+</code></pre>
+
+<pre><code class="r">fruit &lt;- c(&quot;apples&quot;, &quot;pears&quot;, &quot;strawberries&quot;)
+</code></pre>
+
+</section>
+<section class="slide " id="slide-14">
+  <h2>Data</h2>
+  <p>There are several ways to import data into your R environment:</p>
+
+<pre><code class="r"># Built into R
+read.csv()
+read.delim()
+read.table()
+
+# rio package
+library(rio)
+import()
+
+# Base datasets (often used in examples)
+library(datasets)
+mtcars
+</code></pre>
+
+</section>
+<section class="slide " id="slide-15">
+  <h2>Viewing , summarizing, etc</h2>
+  <pre><code class="r">mtcars
+View(mtcars)
+head(mtcars)
+</code></pre>
+
+<pre><code class="r">mtcars[1,]
+mtcars[,1]
+mtcars$mpg # beacause mtcars is a dataframe!
+</code></pre>
+
+</section>
+<section class="slide " id="slide-16">
+  <h3>What is a dataframe?</h3>
+  <p>Sort of like a spreadsheet in Excel, except more fun.</p>
+
+<ul>
+<li>header contains column names</li>
+<li>note, most functions like to work with dataframes, but others like matrices</li>
+<li>Similar, but different object type</li>
+<li>can generally coerce using</li>
+</ul>
+
+<pre><code class="r">as.data.frame()
+as.matrix()
+</code></pre>
+
+</section>
+<section class="slide " id="slide-17">
+  <h3>DIY Dataframe</h3>
+  <p>Note, I rarely do this. Likely you will be pulling data from another source.</p>
+
+<pre><code class="r">metallicaNames &lt;- c(&quot;Lars&quot;, &quot;James&quot;, &quot;Kirk&quot;, &quot;Rob&quot;)
+metallicaAges &lt;- c(47, 47, 48, 46)
+metallica_data &lt;- data.frame(Name = metallicaNames, Age = metallicaAges)
+</code></pre>
+
+<pre><code class="r">metallica_data$Age
+</code></pre>
+
+<pre><code>## [1] 47 47 48 46
+</code></pre>
+
+<pre><code class="r">mean(metallica_data$Age)
+</code></pre>
+
+<pre><code>## [1] 47
+</code></pre>
+
+</section>
+<section class="slide " id="slide-18">
+  <h3>Subsetting data</h3>
+  <pre><code class="r">metallica_data$Age &gt;= 47
+</code></pre>
+
+<pre><code>## [1]  TRUE  TRUE  TRUE FALSE
+</code></pre>
+
+<pre><code class="r">older_band_members &lt;- metallica_data[metallica_data$Age &gt;= 47,]
+
+# OR use subset (a bit more intuitive)
+older_band_members &lt;- subset(metallica_data, Age &gt;= 47)
+</code></pre>
+
+</section>
+<section class="slide " id="slide-19">
+  <h2>R Commander</h2>
+  <ul>
+<li>GUI interface</li>
+<li>If you are an SPSS user, it may feel more familiar</li>
+<li>I don&#39;t like it (it used to crash my computer)</li>
+</ul>
+
+</section>
+<section class="slide " id="slide-20">
+  <h2>Saving</h2>
+  <p>If you did some data manipulation and would like to save it as a new file:</p>
+
+<pre><code class="r">write.table()
+write.csv(metallica_data, &quot;MetallicaData.csv&quot;) # note it will save in your wd
+</code></pre>
+
+<p>Save the R file, <strong>DON&#39;T</strong> save the R workspace</p>
+
+<p>Can also make a <code>project</code> - helpful for saving the working directory, dataframes, etc.</p>
+
+</section>
+<section class="slide " id="slide-21">
+  <h2>Brief introduction to graphs and <code>ggplot2</code></h2>
+  <pre><code class="r">hist(mtcars$mpg)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-16-1.png" alt="plot of chunk unnamed-chunk-16"></p>
+
+</section>
+<section class="slide " id="slide-22">
+  
+  <pre><code class="r">plot(mtcars$mpg, mtcars$disp)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-17-1.png" alt="plot of chunk unnamed-chunk-17"></p>
+
+</section>
+<section class="slide " id="slide-23">
+  
+  <pre><code class="r">install.packages(&quot;ggplot2&quot;)
+</code></pre>
+
+<pre><code class="r">library(ggplot2)
+</code></pre>
+
+<pre><code>## Warning: package &#39;ggplot2&#39; was built under R version 3.2.4
+</code></pre>
+
+<pre><code class="r">plot &lt;- ggplot(data = mtcars, aes(mpg, disp))
+plot + geom_point()
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-20-1.png" alt="plot of chunk unnamed-chunk-20"></p>
+
+</section>
+<section class="slide " id="slide-24">
+  
+  <pre><code class="r">plot + geom_point() + ggtitle(&quot;This is my awesome graph&quot;)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-21-1.png" alt="plot of chunk unnamed-chunk-21"></p>
+
+<p>Note that the <code>plot</code> object isn&#39;t updating unless it is reassigned</p>
+
+<p>Read Ch 4 for some more examples.</p>
+
+</section>
+<section class="slide " id="slide-25">
+  <h2>R Markdown</h2>
+  <ul>
+<li>instead of C+P-ing everything</li>
+<li>Write your report, generate results, insert graphs, etc. all in the same file</li>
+<li>A few hours of learning will save LOTS of time</li>
+<li>Turn your analyses into:
+
+<ul>
+<li>PDF</li>
+<li>Word</li>
+<li>Slides</li>
+<li>HTML (like me!)</li>
+<li>Interactive dashboard</li>
+</ul></li>
+<li>File --&gt; New --&gt; R Markdown (.Rmd file)</li>
+<li>To generate PDF files, you&#39;ll need LaTeX
+
+<ul>
+<li>Mac: <a href="http://www.tug.org/mactex/">http://www.tug.org/mactex/</a></li>
+<li>Windows: <a href="http://miktex.org/">http://miktex.org/</a></li>
+</ul></li>
+<li>We will go into syntax, etc in a future tutorial</li>
+</ul>
+
+</section>
+<section class="slide " id="slide-26">
+  <h2>More resources</h2>
+  <ul>
+<li>Datacamp: datacamp.com/courses/free-introduction-to-r</li>
+<li>R Markdown: <a href="http://rmarkdown.rstudio.com/lesson-1.html">http://rmarkdown.rstudio.com/lesson-1.html</a></li>
+<li>The textbook is great</li>
+</ul>
+
+</section>
+<section class="slide " id="slide-27">
+  <h2>References</h2>
+  <p>Wikipedia:
+<a href="https://en.wikipedia.org/wiki/R_(programming_language">https://en.wikipedia.org/wiki/R_(programming_language)</a>)</p>
+
+<p>A (very) short introduction to R: 
+<a href="https://cran.r-project.org/doc/contrib/Torfs+Brauer-Short-R-Intro.pdf">https://cran.r-project.org/doc/contrib/Torfs+Brauer-Short-R-Intro.pdf</a></p>
+
+<p>Field A, Miles J, Field Z. Discovering Statistics Using R. London: Sage; 2012.</p>
+
+</section>
+<section class="slide " id="slide-28">
+  
+  
+</section>
+</body>
+  <!-- deck.navigation snippet -->
+  <a href="#" class="deck-prev-link" title="Previous">&#8592;</a>
+  <a href="#" class="deck-next-link" title="Next">&#8594;</a>
+  
+  <!-- deck.status snippet -->
+  <p class="deck-status">
+  <span class="deck-status-current"></span>
+    /
+  <span class="deck-status-total"></span>
+  </p>
+  
+  <!-- deck.goto snippet -->
+  <form action="." method="get" class="goto-form">
+  	<label for="goto-slide">Go to slide:</label>
+  	<input type="text" name="slidenum" id="goto-slide" list="goto-datalist">
+  	<datalist id="goto-datalist"></datalist>
+  	<input type="submit" value="Go">
+  </form>
+  
+  <!-- deck.hash snippet -->
+  <a href="." title="Permalink to this slide" class="deck-permalink">#</a>
+  
+  
+  <!-- Grab CDN jQuery, with a protocol relative URL; fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/frameworks/deckjs/jquery-1.7.min.js"><\/script>')</script>
+  
+  <!-- Add Slide Class to Build Elements -->
+  <script type='text/javascript'>
+  $('ol.build li').addClass('slide')
+  $('ul.build li').addClass('slide')
+  </script>
+  
+  <!-- Deck Core and extensions -->
+  <script src="libraries/frameworks/deckjs/core/deck.core.js"></script>
+  <script src="libraries/frameworks/deckjs/extensions/goto/deck.goto.js"></script>
+<script src="libraries/frameworks/deckjs/extensions/hash/deck.hash.js"></script>
+<script src="libraries/frameworks/deckjs/extensions/menu/deck.menu.js"></script>
+<script src="libraries/frameworks/deckjs/extensions/navigation/deck.navigation.js"></script>
+<script src="libraries/frameworks/deckjs/extensions/scale/deck.scale.js"></script>
+<script src="libraries/frameworks/deckjs/extensions/status/deck.status.js"></script>
+<!-- Initialize the deck -->
+  <script>
+  $(function() {
+  	$.deck('.slide');
+  });
+  </script>  <!-- LOAD HIGHLIGHTER JS FILES -->
+<script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<!-- DONE LOADING HIGHLIGHTER JS FILES -->
+ 
+
+</html>

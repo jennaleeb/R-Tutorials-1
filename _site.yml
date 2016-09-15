@@ -1,0 +1,7 @@
+name: "R-tutorials-website"
+output_dir: "."
+navbar:
+  title: "MIE R Tutorials"
+  left:
+    - text: "Home"
+      href: index.html

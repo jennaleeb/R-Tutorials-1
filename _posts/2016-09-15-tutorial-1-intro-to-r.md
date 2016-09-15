@@ -74,7 +74,9 @@ Git (good for version control): [https://git-scm.com/downloads](https://git-scm.
 
 ## RStudio
 
-![R Studio Screenshot]({{ site.url }}/assets/img/RStudio_screenshot.png)
+![](assets/img/RStudio_screenshot.png)
+
+![R Studio Screenshot](https://jennaleeb.github.io/R-Tutorials-1/assets/img/RStudio_screenshot.png)
 
 ---
 

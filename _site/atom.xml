@@ -4,7 +4,7 @@
  <title>R Tutorial 1</title>
  <link href="https://jennaleeb.github.io//R-Tutorials-1atom.xml" rel="self"/>
  <link href="https://jennaleeb.github.io//R-Tutorials-1"/>
- <updated>2016-09-15T11:42:57-04:00</updated>
+ <updated>2016-09-15T11:49:29-04:00</updated>
  <id>https://jennaleeb.github.io</id>
  <author>
    <name>Homer White</name>
@@ -13,13 +13,11 @@
 
  
  <entry>
-   <title>Introduction to R</title>
+   <title>Tutorial 1 - Introduction to R</title>
    <link href="https://jennaleeb.github.io/2016/09/15/tutorial-1-intro-to-r.html"/>
    <updated>2016-09-15T00:00:00-04:00</updated>
    <id>https://jennaleeb.github.io/2016/09/15/tutorial-1-intro-to-r</id>
-   <content type="html">&lt;p&gt;— .intro-slide&lt;/p&gt;
-
-&lt;h2 id=&quot;introduction-to-r&quot;&gt;Introduction to R&lt;/h2&gt;
+   <content type="html">&lt;h2 id=&quot;introduction-to-r&quot;&gt;Introduction to R&lt;/h2&gt;
 
 &lt;p&gt;&lt;strong&gt;Jenna Blumenthal&lt;/strong&gt;&lt;br /&gt;
    MIE 1402&lt;/p&gt;
@@ -97,6 +95,8 @@
 &lt;h2 id=&quot;rstudio&quot;&gt;RStudio&lt;/h2&gt;
 
 &lt;p&gt;&lt;img src=&quot;assets/img/RStudio_screenshot.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://jennaleeb.github.io/assets/img/screenshot.jpg&quot; alt=&quot;R Studio Screenshot&quot; /&gt;&lt;/p&gt;
 
 &lt;hr /&gt;
 

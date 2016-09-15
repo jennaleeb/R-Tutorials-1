@@ -1,5 +1,5 @@
 ---
-title       : Introduction to R
+title       : Tutorial 1 - Introduction to R
 subtitle    : 
 author      : Jenna Blumenthal
 job         : MIE 1402
@@ -10,8 +10,6 @@ widgets     : []            # {mathjax, quiz, bootstrap}
 mode        : selfcontained # {standalone, draft}
 knit        : slidify::knit2slides
 ---
-
---- .intro-slide
 
 ## Introduction to R
 
@@ -77,6 +75,8 @@ Git (good for version control): [https://git-scm.com/downloads](https://git-scm.
 ## RStudio
 
 ![](assets/img/RStudio_screenshot.png)
+
+![R Studio Screenshot]({{ site.url }}/assets/img/screenshot.jpg)
 
 ---
 

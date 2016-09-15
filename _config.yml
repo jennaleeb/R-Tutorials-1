@@ -8,8 +8,8 @@ permalink: /:year/:month/:day/:title.html
 # relative_permalinks: true
 
 # Setup
-title:            R Tutorial 1
-tagline:          ''
+title:            R Tutorials
+tagline:          'Content for MIE 1402 at U of T'
 description:      'This is a description'
 baseurl: "/R-Tutorials-1" # If you are making a gh-pages project blog, this is
                         # the name of your project repo, preceded by a /'
@@ -22,19 +22,19 @@ baseurlknitr:  "/R-Tutorials-1/" # This will always be your baseurl plus and ext
 url: "https://jennaleeb.github.io" # the base hostname & protocol for your site
 
 # set limit on number of post to appear on Home page
-homepostlimit: 4
+homepostlimit: 10
 
 # Disqus comments:
 disqus:           true
-shortname:        homerhanumatknitrhyde
+shortname:        MIE1402
 
 # Social Media
-twitter:          true # add a twitter button to each post
-facebook:         true # add a facebook share button to each post
+twitter:          false # add a twitter button to each post
+facebook:         false # add a facebook share button to each post
 
 author:
-  name:           'Homer White'
-  url:            https://statistics.rainandrhino.org
+  name:           'Jenna Blumenthal'
+  url:            jennaleeb.github.io
 
 github:
-  repo:           https://github.com/homerhanumat/knitr-hyde
+  repo:           https://github.com/jennaleeb/R-Tutorials-1

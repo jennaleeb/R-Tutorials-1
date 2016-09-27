@@ -67,21 +67,19 @@ kable(head(iris), align = "c")
 |     5.0      |     3.6     |     1.4      |     0.2     | setosa  |
 |     5.4      |     3.9     |     1.7      |     0.4     | setosa  |
 
---- &two-col
+---
 
 ## Assumption of parametric data  
 Most stats we are used are parametric tests, based on the normal distribution.
 
-*** {name: left}
-
+```r
+library(ggplot2)
+```
 
 ```r
 ggplot(iris, aes(Sepal.Width)) + geom_histogram(aes(iris$Sepal.Width), fill = "white", colour = "black", bins = 25)
 ```
 
-![plot of chunk unnamed-chunk-3](assets/fig/unnamed-chunk-3-1.png)
-
-*** {name: right}
 
 ```r
 shapiro.test(iris$Sepal.Width)

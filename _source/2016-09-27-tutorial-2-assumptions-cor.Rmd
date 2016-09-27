@@ -1,0 +1,247 @@
+---
+title       : Tutorial 2
+subtitle    : 
+author      : Jenna Blumenthal
+job         : MIE 1402
+framework   : deckjs        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+---
+
+## Parametric Assumptions & Correlations
+
+   **Jenna Blumenthal**  
+   Tutorial #: 2  
+   MIE 1402
+
+---
+
+## By now...
+
+- You have R, R Studio installed
+- You have played around with it (imported some data, ran some commands)
+- You have followed an example from the textbook
+
+---
+
+## Today
+
+1. Assumptions
+  - basis for parametric tests
+  - normality, homogeneity of variance
+2. Correlations
+  - general procedure in R
+  - partial, semi-partial, non-parametric statistics
+3. Assignment 1
+
+--- .full-width-table
+
+## Data we will be using
+
+```{r message=FALSE, warning=FALSE}
+library(knitr)
+```
+<style type="text/css">
+table { width: 90%; font-size: 24}
+</style>
+```{r}
+kable(head(iris), align = "c")
+```
+
+--- &two-col
+
+## Assumption of parametric data  
+Most stats we are used are parametric tests, based on the normal distribution.
+
+*** {name: left}
+
+```{r}
+ggplot(iris, aes(Sepal.Width)) + geom_histogram(aes(iris$Sepal.Width), fill = "white", colour = "black", bins = 25)
+
+```
+
+*** {name: right}
+```{r}
+shapiro.test(iris$Sepal.Width)
+```
+
+--- &two-col
+
+### Step 1: Visual Inspection
+
+Normal
+
+*** {name: left}
+```{r}
+ggplot(iris, aes(Sepal.Width)) + geom_histogram(aes(iris$Sepal.Width), fill = "white", colour = "black", bins = 25)
+```
+
+*** {name: right}
+```{r}
+qplot(sample = iris$Sepal.Width)
+```
+
+--- &two-col
+
+### Step 1: Visual Inspection
+
+Positive skew
+
+*** {name: left}
+```{r}
+ggplot(iris, aes(Petal.Width)) + geom_histogram(aes(iris$Petal.Width), fill = "white", colour = "black", bins = 16)
+```
+
+*** {name: right}
+
+```{r}
+qplot(sample = iris$Petal.Width)
+```
+
+--- &two-col
+
+### Step 1: Visual Inspection
+
+Negative kurtosis (platykurtic)
+
+*** {name: left}
+```{r}
+ggplot(iris, aes(Sepal.Length)) + geom_histogram(aes(iris$Sepal.Length), fill = "white", colour = "black", bins = 16)
+```
+
+*** {name: right}
+
+```{r}
+qplot(sample = iris$Sepal.Length)
+```
+
+--- &two-col
+
+### Step 2: Numeric
+
+```{r, message=FALSE}
+library(pastecs)
+```
+
+```{r, echo=FALSE}
+options(scipen = 999)
+```
+
+```{r, echo=FALSE}
+ggplot(iris, aes(Sepal.Width)) + geom_histogram(aes(iris$Sepal.Width), fill = "white", colour = "black", bins = 25)
+```
+
+```{r}
+round(stat.desc(iris$Sepal.Width, norm = TRUE), 2)
+```
+
+---
+
+```{r, echo=FALSE}
+ggplot(iris, aes(Petal.Length)) + geom_histogram(aes(iris$Petal.Length), fill = "white", colour = "black", bins = 25)
+```
+
+
+```{r}
+round(stat.desc(iris$Petal.Length, norm = TRUE), 2)
+```
+
+---
+
+### Step 3: Statistical tests
+
+#### Normal distribution 
+```{r}
+shapiro.test(iris$Sepal.Width)
+```
+
+---
+
+#### Non-normal distribution...
+
+```{r}
+shapiro.test(iris$Sepal.Length)
+```
+
+---
+
+#### ...Unless grouped by species
+
+```{r}
+by(iris$Sepal.Length, iris$Species, shapiro.test)
+```
+
+---
+
+## Testing for homogeneity of variance
+
+Variance in each population is equal
+
+```{r echo=FALSE}
+ggplot(iris, aes(x=Species,y=Sepal.Width)) + geom_boxplot()
+```
+```{r message = FALSE}
+library(car)
+```
+```{r}
+leveneTest(Sepal.Width ~ Species, data = iris)
+```
+
+---
+
+Variance in each population is not equal
+
+```{r}
+ggplot(iris, aes(x=Species,y=Petal.Width)) + geom_boxplot()
+leveneTest(Petal.Width ~ Species, data = iris)
+
+```
+
+---
+
+## Correlation
+
+Standardized covariance
+$$ r = \frac{cov_{xy}}{s_{x}s_{y}}$$
+ 
+---
+
+## Correlation in r
+
+```{r}
+cor.test(iris$Petal.Length, iris$Petal.Width, method = "pearson")
+```
+
+---
+
+### Plotting the correlation and line of best fit
+```{r}
+ggplot(iris, aes(iris$Petal.Length, iris$Petal.Width)) + geom_point() + geom_smooth(method = "lm", se = FALSE)
+```
+
+---
+
+## Partial, Semi-Partial, Non-parametric
+
+```{r, message=FALSE}
+library(ggm)
+```
+
+```{r message=FALSE, warning=FALSE}
+cor(iris$Petal.Length, iris$Sepal.Length)
+pcor(c("Petal.Length", "Sepal.Length", "Petal.Width"), var(iris))
+```
+
+```{r, eval=FALSE}
+cor.test(iris$Petal.Length, iris$Petal.Width, method="spearman")
+cor.test(iris$Petal.Length, iris$Petal.Width, method="kendall")
+```
+
+---
+
+## References
+
+Field A, Miles J, Field Z. Discovering Statistics Using R. London: Sage; 2012.

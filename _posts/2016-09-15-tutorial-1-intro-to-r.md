@@ -77,7 +77,7 @@ Git (good for version control): [https://git-scm.com/downloads](https://git-scm.
 
 ## RStudio
 
-![](assets/img/RStudio_screenshot.png)
+![RStudio Screenshot](/R-Tutorials-1/figure/source/2016-09-15-tutorial-1-intro-to-r/RStudio_screenshot.png)
 ---
 
 ### Console

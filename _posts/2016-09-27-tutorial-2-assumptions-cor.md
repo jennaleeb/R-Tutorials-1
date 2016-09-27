@@ -80,6 +80,10 @@ library(ggplot2)
 ggplot(iris, aes(Sepal.Width)) + geom_histogram(aes(iris$Sepal.Width), fill = "white", colour = "black", bins = 25)
 ```
 
+![plot of chunk unnamed-chunk-3](/R-Tutorials-1/figure/source/2016-09-27-tutorial-2-assumptions-cor/unnamed-chunk-3-1.png)
+
+
+*** {name: right}
 
 ```r
 shapiro.test(iris$Sepal.Width)
@@ -105,7 +109,7 @@ Normal
 ggplot(iris, aes(Sepal.Width)) + geom_histogram(aes(iris$Sepal.Width), fill = "white", colour = "black", bins = 25)
 ```
 
-![plot of chunk unnamed-chunk-5](assets/fig/unnamed-chunk-5-1.png)
+![plot of chunk unnamed-chunk-5](/R-Tutorials-1/figure/source/2016-09-27-tutorial-2-assumptions-cor/unnamed-chunk-5-1.png)
 
 *** {name: right}
 
@@ -113,7 +117,7 @@ ggplot(iris, aes(Sepal.Width)) + geom_histogram(aes(iris$Sepal.Width), fill = "w
 qplot(sample = iris$Sepal.Width)
 ```
 
-![plot of chunk unnamed-chunk-6](assets/fig/unnamed-chunk-6-1.png)
+![plot of chunk unnamed-chunk-6](/R-Tutorials-1/figure/source/2016-09-27-tutorial-2-assumptions-cor/unnamed-chunk-6-1.png)
 
 --- &two-col
 
@@ -127,7 +131,7 @@ Positive skew
 ggplot(iris, aes(Petal.Width)) + geom_histogram(aes(iris$Petal.Width), fill = "white", colour = "black", bins = 16)
 ```
 
-![plot of chunk unnamed-chunk-7](assets/fig/unnamed-chunk-7-1.png)
+![plot of chunk unnamed-chunk-7](/R-Tutorials-1/figure/source/2016-09-27-tutorial-2-assumptions-cor/unnamed-chunk-7-1.png)
 
 *** {name: right}
 
@@ -136,7 +140,7 @@ ggplot(iris, aes(Petal.Width)) + geom_histogram(aes(iris$Petal.Width), fill = "w
 qplot(sample = iris$Petal.Width)
 ```
 
-![plot of chunk unnamed-chunk-8](assets/fig/unnamed-chunk-8-1.png)
+![plot of chunk unnamed-chunk-8](/R-Tutorials-1/figure/source/2016-09-27-tutorial-2-assumptions-cor/unnamed-chunk-8-1.png)
 
 --- &two-col
 
@@ -150,7 +154,7 @@ Negative kurtosis (platykurtic)
 ggplot(iris, aes(Sepal.Length)) + geom_histogram(aes(iris$Sepal.Length), fill = "white", colour = "black", bins = 16)
 ```
 
-![plot of chunk unnamed-chunk-9](assets/fig/unnamed-chunk-9-1.png)
+![plot of chunk unnamed-chunk-9](/R-Tutorials-1/figure/source/2016-09-27-tutorial-2-assumptions-cor/unnamed-chunk-9-1.png)
 
 *** {name: right}
 
@@ -159,7 +163,7 @@ ggplot(iris, aes(Sepal.Length)) + geom_histogram(aes(iris$Sepal.Length), fill = 
 qplot(sample = iris$Sepal.Length)
 ```
 
-![plot of chunk unnamed-chunk-10](assets/fig/unnamed-chunk-10-1.png)
+![plot of chunk unnamed-chunk-10](/R-Tutorials-1/figure/source/2016-09-27-tutorial-2-assumptions-cor/unnamed-chunk-10-1.png)
 
 --- &two-col
 
@@ -172,7 +176,7 @@ library(pastecs)
 
 
 
-![plot of chunk unnamed-chunk-13](assets/fig/unnamed-chunk-13-1.png)
+![plot of chunk unnamed-chunk-13](/R-Tutorials-1/figure/source/2016-09-27-tutorial-2-assumptions-cor/unnamed-chunk-13-1.png)
 
 
 ```r
@@ -192,7 +196,7 @@ round(stat.desc(iris$Sepal.Width, norm = TRUE), 2)
 
 ---
 
-![plot of chunk unnamed-chunk-15](assets/fig/unnamed-chunk-15-1.png)
+![plot of chunk unnamed-chunk-15](/R-Tutorials-1/figure/source/2016-09-27-tutorial-2-assumptions-cor/unnamed-chunk-15-1.png)
 
 
 
@@ -286,7 +290,7 @@ by(iris$Sepal.Length, iris$Species, shapiro.test)
 
 Variance in each population is equal
 
-![plot of chunk unnamed-chunk-20](assets/fig/unnamed-chunk-20-1.png)
+![plot of chunk unnamed-chunk-20](/R-Tutorials-1/figure/source/2016-09-27-tutorial-2-assumptions-cor/unnamed-chunk-20-1.png)
 
 ```r
 library(car)
@@ -312,7 +316,7 @@ Variance in each population is not equal
 ggplot(iris, aes(x=Species,y=Petal.Width)) + geom_boxplot()
 ```
 
-![plot of chunk unnamed-chunk-23](assets/fig/unnamed-chunk-23-1.png)
+![plot of chunk unnamed-chunk-23](/R-Tutorials-1/figure/source/2016-09-27-tutorial-2-assumptions-cor/unnamed-chunk-23-1.png)
 
 ```r
 leveneTest(Petal.Width ~ Species, data = iris)
@@ -365,7 +369,7 @@ cor.test(iris$Petal.Length, iris$Petal.Width, method = "pearson")
 ggplot(iris, aes(iris$Petal.Length, iris$Petal.Width)) + geom_point() + geom_smooth(method = "lm", se = FALSE)
 ```
 
-![plot of chunk unnamed-chunk-25](assets/fig/unnamed-chunk-25-1.png)
+![plot of chunk unnamed-chunk-25](/R-Tutorials-1/figure/source/2016-09-27-tutorial-2-assumptions-cor/unnamed-chunk-25-1.png)
 
 ---
 

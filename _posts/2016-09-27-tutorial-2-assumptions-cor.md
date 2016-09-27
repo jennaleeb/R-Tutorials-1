@@ -1,5 +1,5 @@
 ---
-title       : Tutorial 2
+title       : Tutorial 2 - Parametric assumptions & correlations
 subtitle    : 
 author      : Jenna Blumenthal
 job         : MIE 1402
@@ -9,6 +9,9 @@ hitheme     : tomorrow      #
 widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
 mode        : selfcontained # {standalone, draft}
 knit        : slidify::knit2slides
+layout      : post
+comments    : true
+categories  : ['R', 'graphs', 'statistical tests']
 ---
 
 ## Parametric Assumptions & Correlations

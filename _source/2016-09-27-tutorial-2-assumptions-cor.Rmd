@@ -48,7 +48,7 @@ library(knitr)
 table { width: 90%; font-size: 24}
 </style>
 ```{r}
-kable(strhead(iris), align = "c")
+kable(head(iris), align = "c")
 ```
 
 --- &two-col
@@ -58,9 +58,9 @@ Most stats we are used are parametric tests, based on the normal distribution.
 
 *** {name: left}
 
-```{r}
+```{r warning=FALSE, message=FALSE}
+library(ggplot2)
 ggplot(iris, aes(Sepal.Width)) + geom_histogram(aes(iris$Sepal.Width), fill = "white", colour = "black", bins = 25)
-
 ```
 
 *** {name: right}

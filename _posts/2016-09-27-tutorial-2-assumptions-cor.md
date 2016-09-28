@@ -1,5 +1,5 @@
 ---
-title       : Tutorial 2 - Parametric assumptions & correlations
+title       : Tutorial 2 - Parametric assumptions and correlations
 subtitle    : 
 author      : Jenna Blumenthal
 job         : MIE 1402
@@ -10,8 +10,6 @@ widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
 mode        : selfcontained # {standalone, draft}
 knit        : slidify::knit2slides
 layout      : post
-comments    : true
-categories  : ['R', 'RStudio', 'graphs', 'parametric stats']
 ---
 
 ## Parametric Assumptions & Correlations
@@ -53,14 +51,19 @@ table { width: 90%; font-size: 24}
 </style>
 
 {% highlight r %}
-kable(strhead(iris), align = "c")
+kable(head(iris), align = "c")
 {% endhighlight %}
 
 
 
-{% highlight text %}
-## Error in inherits(x, "list"): could not find function "strhead"
-{% endhighlight %}
+| Sepal.Length | Sepal.Width | Petal.Length | Petal.Width | Species |
+|:------------:|:-----------:|:------------:|:-----------:|:-------:|
+|     5.1      |     3.5     |     1.4      |     0.2     | setosa  |
+|     4.9      |     3.0     |     1.4      |     0.2     | setosa  |
+|     4.7      |     3.2     |     1.3      |     0.2     | setosa  |
+|     4.6      |     3.1     |     1.5      |     0.2     | setosa  |
+|     5.0      |     3.6     |     1.4      |     0.2     | setosa  |
+|     5.4      |     3.9     |     1.7      |     0.4     | setosa  |
 
 --- &two-col
 
@@ -71,14 +74,11 @@ Most stats we are used are parametric tests, based on the normal distribution.
 
 
 {% highlight r %}
+library(ggplot2)
 ggplot(iris, aes(Sepal.Width)) + geom_histogram(aes(iris$Sepal.Width), fill = "white", colour = "black", bins = 25)
 {% endhighlight %}
 
-
-
-{% highlight text %}
-## Error in eval(expr, envir, enclos): could not find function "ggplot"
-{% endhighlight %}
+![plot of chunk unnamed-chunk-3](/R-Tutorials-1/figure/source/2016-09-27-tutorial-2-assumptions-cor/unnamed-chunk-3-1.png)
 
 *** {name: right}
 
@@ -108,11 +108,7 @@ Normal
 ggplot(iris, aes(Sepal.Width)) + geom_histogram(aes(iris$Sepal.Width), fill = "white", colour = "black", bins = 25)
 {% endhighlight %}
 
-
-
-{% highlight text %}
-## Error in eval(expr, envir, enclos): could not find function "ggplot"
-{% endhighlight %}
+![plot of chunk unnamed-chunk-5](/R-Tutorials-1/figure/source/2016-09-27-tutorial-2-assumptions-cor/unnamed-chunk-5-1.png)
 
 *** {name: right}
 
@@ -120,11 +116,7 @@ ggplot(iris, aes(Sepal.Width)) + geom_histogram(aes(iris$Sepal.Width), fill = "w
 qplot(sample = iris$Sepal.Width)
 {% endhighlight %}
 
-
-
-{% highlight text %}
-## Error in eval(expr, envir, enclos): could not find function "qplot"
-{% endhighlight %}
+![plot of chunk unnamed-chunk-6](/R-Tutorials-1/figure/source/2016-09-27-tutorial-2-assumptions-cor/unnamed-chunk-6-1.png)
 
 --- &two-col
 
@@ -138,11 +130,7 @@ Positive skew
 ggplot(iris, aes(Petal.Width)) + geom_histogram(aes(iris$Petal.Width), fill = "white", colour = "black", bins = 16)
 {% endhighlight %}
 
-
-
-{% highlight text %}
-## Error in eval(expr, envir, enclos): could not find function "ggplot"
-{% endhighlight %}
+![plot of chunk unnamed-chunk-7](/R-Tutorials-1/figure/source/2016-09-27-tutorial-2-assumptions-cor/unnamed-chunk-7-1.png)
 
 *** {name: right}
 
@@ -151,11 +139,7 @@ ggplot(iris, aes(Petal.Width)) + geom_histogram(aes(iris$Petal.Width), fill = "w
 qplot(sample = iris$Petal.Width)
 {% endhighlight %}
 
-
-
-{% highlight text %}
-## Error in eval(expr, envir, enclos): could not find function "qplot"
-{% endhighlight %}
+![plot of chunk unnamed-chunk-8](/R-Tutorials-1/figure/source/2016-09-27-tutorial-2-assumptions-cor/unnamed-chunk-8-1.png)
 
 --- &two-col
 
@@ -169,11 +153,7 @@ Negative kurtosis (platykurtic)
 ggplot(iris, aes(Sepal.Length)) + geom_histogram(aes(iris$Sepal.Length), fill = "white", colour = "black", bins = 16)
 {% endhighlight %}
 
-
-
-{% highlight text %}
-## Error in eval(expr, envir, enclos): could not find function "ggplot"
-{% endhighlight %}
+![plot of chunk unnamed-chunk-9](/R-Tutorials-1/figure/source/2016-09-27-tutorial-2-assumptions-cor/unnamed-chunk-9-1.png)
 
 *** {name: right}
 
@@ -182,11 +162,7 @@ ggplot(iris, aes(Sepal.Length)) + geom_histogram(aes(iris$Sepal.Length), fill = 
 qplot(sample = iris$Sepal.Length)
 {% endhighlight %}
 
-
-
-{% highlight text %}
-## Error in eval(expr, envir, enclos): could not find function "qplot"
-{% endhighlight %}
+![plot of chunk unnamed-chunk-10](/R-Tutorials-1/figure/source/2016-09-27-tutorial-2-assumptions-cor/unnamed-chunk-10-1.png)
 
 --- &two-col
 
@@ -199,10 +175,7 @@ library(pastecs)
 
 
 
-
-{% highlight text %}
-## Error in eval(expr, envir, enclos): could not find function "ggplot"
-{% endhighlight %}
+![plot of chunk unnamed-chunk-13](/R-Tutorials-1/figure/source/2016-09-27-tutorial-2-assumptions-cor/unnamed-chunk-13-1.png)
 
 
 {% highlight r %}
@@ -224,10 +197,7 @@ round(stat.desc(iris$Sepal.Width, norm = TRUE), 2)
 
 ---
 
-
-{% highlight text %}
-## Error in eval(expr, envir, enclos): could not find function "ggplot"
-{% endhighlight %}
+![plot of chunk unnamed-chunk-15](/R-Tutorials-1/figure/source/2016-09-27-tutorial-2-assumptions-cor/unnamed-chunk-15-1.png)
 
 
 
@@ -329,10 +299,7 @@ by(iris$Sepal.Length, iris$Species, shapiro.test)
 
 Variance in each population is equal
 
-
-{% highlight text %}
-## Error in eval(expr, envir, enclos): could not find function "ggplot"
-{% endhighlight %}
+![plot of chunk unnamed-chunk-20](/R-Tutorials-1/figure/source/2016-09-27-tutorial-2-assumptions-cor/unnamed-chunk-20-1.png)
 
 {% highlight r %}
 library(car)
@@ -360,13 +327,7 @@ Variance in each population is not equal
 ggplot(iris, aes(x=Species,y=Petal.Width)) + geom_boxplot()
 {% endhighlight %}
 
-
-
-{% highlight text %}
-## Error in eval(expr, envir, enclos): could not find function "ggplot"
-{% endhighlight %}
-
-
+![plot of chunk unnamed-chunk-23](/R-Tutorials-1/figure/source/2016-09-27-tutorial-2-assumptions-cor/unnamed-chunk-23-1.png)
 
 {% highlight r %}
 leveneTest(Petal.Width ~ Species, data = iris)
@@ -423,11 +384,7 @@ cor.test(iris$Petal.Length, iris$Petal.Width, method = "pearson")
 ggplot(iris, aes(iris$Petal.Length, iris$Petal.Width)) + geom_point() + geom_smooth(method = "lm", se = FALSE)
 {% endhighlight %}
 
-
-
-{% highlight text %}
-## Error in eval(expr, envir, enclos): could not find function "ggplot"
-{% endhighlight %}
+![plot of chunk unnamed-chunk-25](/R-Tutorials-1/figure/source/2016-09-27-tutorial-2-assumptions-cor/unnamed-chunk-25-1.png)
 
 ---
 

@@ -10,9 +10,9 @@ widgets     : []            # {mathjax, quiz, bootstrap}
 mode        : selfcontained # {standalone, draft}
 knit        : slidify::knit2slides
 layout      : post
-comments    : true
-categories  : ['R', 'RStudio', 'workflow', 'formatting', 'syntax']
 ---
+
+--- .intro-slide
 
 ## Introduction to R
 
@@ -77,7 +77,8 @@ Git (good for version control): [https://git-scm.com/downloads](https://git-scm.
 
 ## RStudio
 
-![RStudio Screenshot](/R-Tutorials-1/figure/source/2016-09-15-tutorial-1-intro-to-r/RStudio_screenshot.png)
+![](../../../../R-Tutorials-1/assets/img/RStudio_screenshot.png)
+
 ---
 
 ### Console
@@ -406,6 +407,7 @@ Read Ch 4 for some more examples.
 - The textbook is great
 
 ---
+
 ## References
 
 Wikipedia:

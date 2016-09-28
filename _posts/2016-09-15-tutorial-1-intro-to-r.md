@@ -11,7 +11,7 @@ mode        : selfcontained # {standalone, draft}
 knit        : slidify::knit2slides
 layout      : post
 comments    : true
-categories  : ['R', 'RStudio', 'Workflow', 'Formatting', 'Syntax']
+categories  : ['R', 'RStudio', 'workflow', 'formatting', 'syntax']
 ---
 
 ## Introduction to R

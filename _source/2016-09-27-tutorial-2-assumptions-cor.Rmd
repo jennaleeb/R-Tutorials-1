@@ -48,7 +48,7 @@ library(knitr)
 table { width: 90%; font-size: 24}
 </style>
 ```{r}
-kable(head(iris), align = "c")
+kable(strhead(iris), align = "c")
 ```
 
 --- &two-col

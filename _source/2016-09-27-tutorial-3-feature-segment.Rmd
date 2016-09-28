@@ -1,0 +1,137 @@
+---
+title       : Tutorial 3 - Feature Extraction and Segmentation
+subtitle    : 
+author      : Jenna Blumenthal
+job         : MIE 1402
+framework   : deckjs        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+widgets     : []            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+---
+
+
+## Feature Extraction and Segmentation
+
+   **Jenna Blumenthal**  
+   Tutorial #: 3  
+   MIE 1402
+
+---
+
+## Exploratory factor analysis
+
+```{r message=FALSE, echo=FALSE, warning=FALSE}
+library(psych)
+library(knitr)
+```
+
+- We'll use the iris data again
+- Simple dataset, usually you would use this technique for data that has many variables that you would like to condense or explore relationships
+
+<style type="text/css">
+table { width: 90%; font-size: 24}
+</style>
+```{r echo=FALSE}
+kable(head(iris), align = "c")
+```
+
+---
+
+### 1. Extract the same number of factors as variables
+
+```{r}
+pc1 <- principal(iris[1:4], 4)
+pc1
+```
+
+---
+
+### 2. Examine scree plot
+- Eigenvalues plotted against the factor number
+- Look for point of inflection ("elbow")
+```{r}
+plot(pc1$values, type = "b")
+```
+
+---
+
+### 3. Choose number of factors to extract
+
+- Look at eigenvalues (Kaiser's criterion > 1, Jolliffe's criterion > 0.7)
+- Examine scree plot
+- May be theoretical
+
+```{r}
+pc2 <- principal(iris[1:4], 2)
+pc2
+```
+
+---
+
+### 4. Decide whether to use rotation
+
+- Orthogonal or oblique
+- Does it make sense theoretically? 
+- Does it improve things?
+
+```{r}
+pc3 <- principal(iris[1:4], 2, rotate = "oblimin")
+pc3
+```
+
+---
+
+## Segmentation: Cluster Analysis
+
+- Unsupervised learning algorithm that tries to cluster data based on their similarity
+- Again, we'll use the iris data
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+library(ggplot2)
+```
+
+```{r}
+ggplot(iris, aes(Petal.Length, Petal.Width, color = Species)) + geom_point()
+```
+
+---
+
+## Clustering in R
+
+```{r}
+set.seed(20)
+irisCluster <- kmeans(iris[, 3:4], 3, nstart = 20)
+irisCluster$centers
+```
+
+- nstart is the number of random starting assignments
+- R then selects the one the with lowest within-cluster variation
+- we use the set.seed() function to ensure that we get the same randon value when we re-run the code
+
+--- &two-col
+
+***{name: left}
+
+Cluster assignments vs actual species
+```{r echo=FALSE}
+kable(table(irisCluster$cluster, iris$Species))
+```
+
+***{name: right}
+
+```{r echo=FALSE}
+irisCluster$cluster <- as.factor(irisCluster$cluster)
+
+ggplot(iris, aes(Petal.Length, Petal.Width, color = irisCluster$cluster)) + geom_point()
+```
+
+---
+
+## References
+
+Field A, Miles J, Field Z. Discovering Statistics Using R. London: Sage; 2012.
+
+[https://www.r-bloggers.com/k-means-clustering-in-r/](https://www.r-bloggers.com/k-means-clustering-in-r/)
+

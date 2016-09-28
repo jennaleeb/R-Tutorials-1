@@ -10,6 +10,8 @@ widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
 mode        : selfcontained # {standalone, draft}
 knit        : slidify::knit2slides
 layout      : post
+comments    : true
+categories  : ['R', 'RStudio', 'graphs', 'parametric stats']
 ---
 
 ## Parametric Assumptions & Correlations

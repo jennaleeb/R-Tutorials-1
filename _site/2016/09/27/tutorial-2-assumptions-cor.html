@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Tutorial 2 - Parametric assumptions & correlations &middot; R
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/R-Tutorials-1/public/css/poole.css">
+  <link rel="stylesheet" href="/R-Tutorials-1/public/css/syntax.css">
+  <link rel="stylesheet" href="/R-Tutorials-1/public/css/hyde.css">
+  <link rel="stylesheet" href="/R-Tutorials-1/public/css/custom.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/R-Tutorials-1public/apple-touch-icon-144-precomposed.png">
+                                 <link rel="shortcut icon" href="/R-Tutorials-1public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+  
+  <!-- Mathjax -->
+  <script type="text/javascript"
+            src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+    
+    <!--Disqus comment counts-->
+    <script id="dsq-count-scr" src="//MIE1402.disqus.com/count.js" async></script>
+    
+</head>
+
+
+  <body class="theme-base-0b">
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <h1>
+        <a href="/R-Tutorials-1">
+          R
+        </a>
+      </h1>
+      <p class="lead">Content for MIE 1402 tutorials</p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="sidebar-nav-item" href="/R-Tutorials-1">Home</a>
+
+      
+
+      
+      
+        
+          
+        
+      
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/R-Tutorials-1/about.html">About</a>
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/R-Tutorials-1/archive.html">Archives</a>
+          
+        
+      
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/R-Tutorials-1/categories.html">Categories</a>
+          
+        
+      
+        
+          
+        
+      
+      <a class="sidebar-nav-item" href="https://github.com/jennaleeb/R-Tutorials-1">GitHub project</a>
+    </nav>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="post">
+  <h1 class="post-title">Tutorial 2 - Parametric assumptions & correlations</h1>
+  <span class="post-date">27 Sep 2016</span>
+  <h2 id="parametric-assumptions--correlations">Parametric Assumptions &amp; Correlations</h2>
+
+<p><strong>Jenna Blumenthal</strong><br />
+   Tutorial #: 2<br />
+   MIE 1402</p>
+
+<hr />
+
+<h2 id="by-now">By now…</h2>
+
+<ul>
+  <li>You have R, R Studio installed</li>
+  <li>You have played around with it (imported some data, ran some commands)</li>
+  <li>You have followed an example from the textbook</li>
+</ul>
+
+<hr />
+
+<h2 id="today">Today</h2>
+
+<ol>
+  <li>Assumptions
+    <ul>
+      <li>basis for parametric tests</li>
+      <li>normality, homogeneity of variance</li>
+    </ul>
+  </li>
+  <li>Correlations
+    <ul>
+      <li>general procedure in R</li>
+      <li>partial, semi-partial, non-parametric statistics</li>
+    </ul>
+  </li>
+  <li>Assignment 1</li>
+</ol>
+
+<p>— .full-width-table</p>
+
+<h2 id="data-we-will-be-using">Data we will be using</h2>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">library</span><span class="p">(</span><span class="n">knitr</span><span class="p">)</span></code></pre></figure>
+
+<style type="text/css">
+table { width: 90%; font-size: 24}
+</style>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">kable</span><span class="p">(</span><span class="n">strhead</span><span class="p">(</span><span class="n">iris</span><span class="p">),</span><span class="w"> </span><span class="n">align</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"c"</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## Error in inherits(x, "list"): could not find function "strhead"</code></pre></figure>
+
+<p>— &amp;two-col</p>
+
+<h2 id="assumption-of-parametric-data">Assumption of parametric data</h2>
+<p>Most stats we are used are parametric tests, based on the normal distribution.</p>
+
+<p>*** {name: left}</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">ggplot</span><span class="p">(</span><span class="n">iris</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">Sepal.Width</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">geom_histogram</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">iris</span><span class="o">$</span><span class="n">Sepal.Width</span><span class="p">),</span><span class="w"> </span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"white"</span><span class="p">,</span><span class="w"> </span><span class="n">colour</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"black"</span><span class="p">,</span><span class="w"> </span><span class="n">bins</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">25</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## Error in eval(expr, envir, enclos): could not find function "ggplot"</code></pre></figure>
+
+<p>*** {name: right}</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">shapiro.test</span><span class="p">(</span><span class="n">iris</span><span class="o">$</span><span class="n">Sepal.Width</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## 
+## 	Shapiro-Wilk normality test
+## 
+## data:  iris$Sepal.Width
+## W = 0.98492, p-value = 0.1012</code></pre></figure>
+
+<p>— &amp;two-col</p>
+
+<h3 id="step-1-visual-inspection">Step 1: Visual Inspection</h3>
+
+<p>Normal</p>
+
+<p>*** {name: left}</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">ggplot</span><span class="p">(</span><span class="n">iris</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">Sepal.Width</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">geom_histogram</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">iris</span><span class="o">$</span><span class="n">Sepal.Width</span><span class="p">),</span><span class="w"> </span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"white"</span><span class="p">,</span><span class="w"> </span><span class="n">colour</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"black"</span><span class="p">,</span><span class="w"> </span><span class="n">bins</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">25</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## Error in eval(expr, envir, enclos): could not find function "ggplot"</code></pre></figure>
+
+<p>*** {name: right}</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">qplot</span><span class="p">(</span><span class="n">sample</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">iris</span><span class="o">$</span><span class="n">Sepal.Width</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## Error in eval(expr, envir, enclos): could not find function "qplot"</code></pre></figure>
+
+<p>— &amp;two-col</p>
+
+<h3 id="step-1-visual-inspection-1">Step 1: Visual Inspection</h3>
+
+<p>Positive skew</p>
+
+<p>*** {name: left}</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">ggplot</span><span class="p">(</span><span class="n">iris</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">Petal.Width</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">geom_histogram</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">iris</span><span class="o">$</span><span class="n">Petal.Width</span><span class="p">),</span><span class="w"> </span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"white"</span><span class="p">,</span><span class="w"> </span><span class="n">colour</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"black"</span><span class="p">,</span><span class="w"> </span><span class="n">bins</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">16</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## Error in eval(expr, envir, enclos): could not find function "ggplot"</code></pre></figure>
+
+<p>*** {name: right}</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">qplot</span><span class="p">(</span><span class="n">sample</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">iris</span><span class="o">$</span><span class="n">Petal.Width</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## Error in eval(expr, envir, enclos): could not find function "qplot"</code></pre></figure>
+
+<p>— &amp;two-col</p>
+
+<h3 id="step-1-visual-inspection-2">Step 1: Visual Inspection</h3>
+
+<p>Negative kurtosis (platykurtic)</p>
+
+<p>*** {name: left}</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">ggplot</span><span class="p">(</span><span class="n">iris</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">Sepal.Length</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">geom_histogram</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">iris</span><span class="o">$</span><span class="n">Sepal.Length</span><span class="p">),</span><span class="w"> </span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"white"</span><span class="p">,</span><span class="w"> </span><span class="n">colour</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"black"</span><span class="p">,</span><span class="w"> </span><span class="n">bins</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">16</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## Error in eval(expr, envir, enclos): could not find function "ggplot"</code></pre></figure>
+
+<p>*** {name: right}</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">qplot</span><span class="p">(</span><span class="n">sample</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">iris</span><span class="o">$</span><span class="n">Sepal.Length</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## Error in eval(expr, envir, enclos): could not find function "qplot"</code></pre></figure>
+
+<p>— &amp;two-col</p>
+
+<h3 id="step-2-numeric">Step 2: Numeric</h3>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">library</span><span class="p">(</span><span class="n">pastecs</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## Error in eval(expr, envir, enclos): could not find function "ggplot"</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="nf">round</span><span class="p">(</span><span class="n">stat.desc</span><span class="p">(</span><span class="n">iris</span><span class="o">$</span><span class="n">Sepal.Width</span><span class="p">,</span><span class="w"> </span><span class="n">norm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">),</span><span class="w"> </span><span class="m">2</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##      nbr.val     nbr.null       nbr.na          min          max 
+##       150.00         0.00         0.00         2.00         4.40 
+##        range          sum       median         mean      SE.mean 
+##         2.40       458.60         3.00         3.06         0.04 
+## CI.mean.0.95          var      std.dev     coef.var     skewness 
+##         0.07         0.19         0.44         0.14         0.31 
+##     skew.2SE     kurtosis     kurt.2SE   normtest.W   normtest.p 
+##         0.79         0.14         0.18         0.98         0.10</code></pre></figure>
+
+<hr />
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## Error in eval(expr, envir, enclos): could not find function "ggplot"</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="nf">round</span><span class="p">(</span><span class="n">stat.desc</span><span class="p">(</span><span class="n">iris</span><span class="o">$</span><span class="n">Petal.Length</span><span class="p">,</span><span class="w"> </span><span class="n">norm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">),</span><span class="w"> </span><span class="m">2</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##      nbr.val     nbr.null       nbr.na          min          max 
+##       150.00         0.00         0.00         1.00         6.90 
+##        range          sum       median         mean      SE.mean 
+##         5.90       563.70         4.35         3.76         0.14 
+## CI.mean.0.95          var      std.dev     coef.var     skewness 
+##         0.28         3.12         1.77         0.47        -0.27 
+##     skew.2SE     kurtosis     kurt.2SE   normtest.W   normtest.p 
+##        -0.68        -1.42        -1.80         0.88         0.00</code></pre></figure>
+
+<hr />
+
+<h3 id="step-3-statistical-tests">Step 3: Statistical tests</h3>
+
+<h4 id="normal-distribution">Normal distribution</h4>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">shapiro.test</span><span class="p">(</span><span class="n">iris</span><span class="o">$</span><span class="n">Sepal.Width</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## 
+## 	Shapiro-Wilk normality test
+## 
+## data:  iris$Sepal.Width
+## W = 0.98492, p-value = 0.1012</code></pre></figure>
+
+<hr />
+
+<h4 id="non-normal-distribution">Non-normal distribution…</h4>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">shapiro.test</span><span class="p">(</span><span class="n">iris</span><span class="o">$</span><span class="n">Sepal.Length</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## 
+## 	Shapiro-Wilk normality test
+## 
+## data:  iris$Sepal.Length
+## W = 0.97609, p-value = 0.01018</code></pre></figure>
+
+<hr />
+
+<h4 id="unless-grouped-by-species">…Unless grouped by species</h4>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">by</span><span class="p">(</span><span class="n">iris</span><span class="o">$</span><span class="n">Sepal.Length</span><span class="p">,</span><span class="w"> </span><span class="n">iris</span><span class="o">$</span><span class="n">Species</span><span class="p">,</span><span class="w"> </span><span class="n">shapiro.test</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## iris$Species: setosa
+## 
+## 	Shapiro-Wilk normality test
+## 
+## data:  dd[x, ]
+## W = 0.9777, p-value = 0.4595
+## 
+## ---------------------------------------------------- 
+## iris$Species: versicolor
+## 
+## 	Shapiro-Wilk normality test
+## 
+## data:  dd[x, ]
+## W = 0.97784, p-value = 0.4647
+## 
+## ---------------------------------------------------- 
+## iris$Species: virginica
+## 
+## 	Shapiro-Wilk normality test
+## 
+## data:  dd[x, ]
+## W = 0.97118, p-value = 0.2583</code></pre></figure>
+
+<hr />
+
+<h2 id="testing-for-homogeneity-of-variance">Testing for homogeneity of variance</h2>
+
+<p>Variance in each population is equal</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## Error in eval(expr, envir, enclos): could not find function "ggplot"</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">library</span><span class="p">(</span><span class="n">car</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">leveneTest</span><span class="p">(</span><span class="n">Sepal.Width</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">Species</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">iris</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## Levene's Test for Homogeneity of Variance (center = median)
+##        Df F value Pr(&gt;F)
+## group   2  0.5902 0.5555
+##       147</code></pre></figure>
+
+<hr />
+
+<p>Variance in each population is not equal</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">ggplot</span><span class="p">(</span><span class="n">iris</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">Species</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">Petal.Width</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">geom_boxplot</span><span class="p">()</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## Error in eval(expr, envir, enclos): could not find function "ggplot"</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">leveneTest</span><span class="p">(</span><span class="n">Petal.Width</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">Species</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">iris</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## Levene's Test for Homogeneity of Variance (center = median)
+##        Df F value        Pr(&gt;F)    
+## group   2  19.892 0.00000002261 ***
+##       147                          
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre></figure>
+
+<hr />
+
+<h2 id="correlation">Correlation</h2>
+
+<p>Standardized covariance
+<script type="math/tex">r = \frac{cov_{xy}}{s_{x}s_{y}}</script></p>
+
+<hr />
+
+<h2 id="correlation-in-r">Correlation in r</h2>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">cor.test</span><span class="p">(</span><span class="n">iris</span><span class="o">$</span><span class="n">Petal.Length</span><span class="p">,</span><span class="w"> </span><span class="n">iris</span><span class="o">$</span><span class="n">Petal.Width</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"pearson"</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## 
+## 	Pearson's product-moment correlation
+## 
+## data:  iris$Petal.Length and iris$Petal.Width
+## t = 43.387, df = 148, p-value &lt; 0.00000000000000022
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  0.9490525 0.9729853
+## sample estimates:
+##       cor 
+## 0.9628654</code></pre></figure>
+
+<hr />
+
+<h3 id="plotting-the-correlation-and-line-of-best-fit">Plotting the correlation and line of best fit</h3>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">ggplot</span><span class="p">(</span><span class="n">iris</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">iris</span><span class="o">$</span><span class="n">Petal.Length</span><span class="p">,</span><span class="w"> </span><span class="n">iris</span><span class="o">$</span><span class="n">Petal.Width</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">geom_point</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">geom_smooth</span><span class="p">(</span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"lm"</span><span class="p">,</span><span class="w"> </span><span class="n">se</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## Error in eval(expr, envir, enclos): could not find function "ggplot"</code></pre></figure>
+
+<hr />
+
+<h2 id="partial-semi-partial-non-parametric">Partial, Semi-Partial, Non-parametric</h2>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">library</span><span class="p">(</span><span class="n">ggm</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">cor</span><span class="p">(</span><span class="n">iris</span><span class="o">$</span><span class="n">Petal.Length</span><span class="p">,</span><span class="w"> </span><span class="n">iris</span><span class="o">$</span><span class="n">Sepal.Length</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] 0.8717538</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">pcor</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s2">"Petal.Length"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Sepal.Length"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Petal.Width"</span><span class="p">),</span><span class="w"> </span><span class="n">var</span><span class="p">(</span><span class="n">iris</span><span class="p">))</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] 0.5420163</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">cor.test</span><span class="p">(</span><span class="n">iris</span><span class="o">$</span><span class="n">Petal.Length</span><span class="p">,</span><span class="w"> </span><span class="n">iris</span><span class="o">$</span><span class="n">Petal.Width</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="o">=</span><span class="s2">"spearman"</span><span class="p">)</span><span class="w">
+</span><span class="n">cor.test</span><span class="p">(</span><span class="n">iris</span><span class="o">$</span><span class="n">Petal.Length</span><span class="p">,</span><span class="w"> </span><span class="n">iris</span><span class="o">$</span><span class="n">Petal.Width</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="o">=</span><span class="s2">"kendall"</span><span class="p">)</span></code></pre></figure>
+
+<hr />
+
+<h2 id="references">References</h2>
+
+<p>Field A, Miles J, Field Z. Discovering Statistics Using R. London: Sage; 2012.</p>
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2016/09/27/tutorial-3-feature-segment.html">
+            Tutorial 3 - Feature Extraction and Segmentation
+            <small>27 Sep 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/09/15/tutorial-1-intro-to-r.html">
+            Tutorial 1 - Introduction to R
+            <small>15 Sep 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+<div id="disqus_thread"></div>
+
+<script>(function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//MIE1402.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+    </div>
+
+  </body>
+</html>

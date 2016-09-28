@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Tutorial 3 - Feature Extraction and Segmentation &middot; R
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/R-Tutorials-1/public/css/poole.css">
+  <link rel="stylesheet" href="/R-Tutorials-1/public/css/syntax.css">
+  <link rel="stylesheet" href="/R-Tutorials-1/public/css/hyde.css">
+  <link rel="stylesheet" href="/R-Tutorials-1/public/css/custom.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/R-Tutorials-1public/apple-touch-icon-144-precomposed.png">
+                                 <link rel="shortcut icon" href="/R-Tutorials-1public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+  
+  <!-- Mathjax -->
+  <script type="text/javascript"
+            src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+    
+    <!--Disqus comment counts-->
+    <script id="dsq-count-scr" src="//MIE1402.disqus.com/count.js" async></script>
+    
+</head>
+
+
+  <body class="theme-base-0b">
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <h1>
+        <a href="/R-Tutorials-1">
+          R
+        </a>
+      </h1>
+      <p class="lead">Content for MIE 1402 tutorials</p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="sidebar-nav-item" href="/R-Tutorials-1">Home</a>
+
+      
+
+      
+      
+        
+          
+        
+      
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/R-Tutorials-1/about.html">About</a>
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/R-Tutorials-1/archive.html">Archives</a>
+          
+        
+      
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/R-Tutorials-1/categories.html">Categories</a>
+          
+        
+      
+        
+          
+        
+      
+      <a class="sidebar-nav-item" href="https://github.com/jennaleeb/R-Tutorials-1">GitHub project</a>
+    </nav>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="post">
+  <h1 class="post-title">Tutorial 3 - Feature Extraction and Segmentation</h1>
+  <span class="post-date">27 Sep 2016</span>
+  <h2 id="feature-extraction-and-segmentation">Feature Extraction and Segmentation</h2>
+
+<p><strong>Jenna Blumenthal</strong><br />
+   Tutorial #: 3<br />
+   MIE 1402</p>
+
+<hr />
+
+<h2 id="exploratory-factor-analysis">Exploratory factor analysis</h2>
+
+<ul>
+  <li>We’ll use the iris data again</li>
+  <li>Simple dataset, usually you would use this technique for data that has many variables that you would like to condense or explore relationships</li>
+</ul>
+
+<style type="text/css">
+table { width: 90%; font-size: 24}
+</style>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Sepal.Length</th>
+      <th style="text-align: center">Sepal.Width</th>
+      <th style="text-align: center">Petal.Length</th>
+      <th style="text-align: center">Petal.Width</th>
+      <th style="text-align: center">Species</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">5.1</td>
+      <td style="text-align: center">3.5</td>
+      <td style="text-align: center">1.4</td>
+      <td style="text-align: center">0.2</td>
+      <td style="text-align: center">setosa</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">4.9</td>
+      <td style="text-align: center">3.0</td>
+      <td style="text-align: center">1.4</td>
+      <td style="text-align: center">0.2</td>
+      <td style="text-align: center">setosa</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">4.7</td>
+      <td style="text-align: center">3.2</td>
+      <td style="text-align: center">1.3</td>
+      <td style="text-align: center">0.2</td>
+      <td style="text-align: center">setosa</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">4.6</td>
+      <td style="text-align: center">3.1</td>
+      <td style="text-align: center">1.5</td>
+      <td style="text-align: center">0.2</td>
+      <td style="text-align: center">setosa</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">5.0</td>
+      <td style="text-align: center">3.6</td>
+      <td style="text-align: center">1.4</td>
+      <td style="text-align: center">0.2</td>
+      <td style="text-align: center">setosa</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">5.4</td>
+      <td style="text-align: center">3.9</td>
+      <td style="text-align: center">1.7</td>
+      <td style="text-align: center">0.4</td>
+      <td style="text-align: center">setosa</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="extract-the-same-number-of-factors-as-variables">1. Extract the same number of factors as variables</h3>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">pc1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">principal</span><span class="p">(</span><span class="n">iris</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">4</span><span class="p">],</span><span class="w"> </span><span class="m">4</span><span class="p">)</span><span class="w">
+</span><span class="n">pc1</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## Principal Components Analysis
+## Call: principal(r = iris[1:4], nfactors = 4)
+## Standardized loadings (pattern matrix) based upon correlation matrix
+##                RC1   RC3   RC2   RC4 h2       u2 com
+## Sepal.Length  0.53  0.85  0.00  0.00  1  1.1e-16 1.7
+## Sepal.Width  -0.17 -0.04  0.98 -0.01  1  4.4e-16 1.1
+## Petal.Length  0.78  0.54 -0.28  0.14  1 -4.4e-16 2.2
+## Petal.Width   0.89  0.41 -0.20 -0.06  1  0.0e+00 1.5
+## 
+##                        RC1  RC3  RC2  RC4
+## SS loadings           1.71 1.18 1.09 0.02
+## Proportion Var        0.43 0.30 0.27 0.01
+## Cumulative Var        0.43 0.72 0.99 1.00
+## Proportion Explained  0.43 0.30 0.27 0.01
+## Cumulative Proportion 0.43 0.72 0.99 1.00
+## 
+## Mean item complexity =  1.6
+## Test of the hypothesis that 4 components are sufficient.
+## 
+## The root mean square of the residuals (RMSR) is  0 
+##  with the empirical chi square  0  with prob &lt;  NA 
+## 
+## Fit based upon off diagonal values = 1</code></pre></figure>
+
+<hr />
+
+<h3 id="examine-scree-plot">2. Examine scree plot</h3>
+<ul>
+  <li>Eigenvalues plotted against the factor number</li>
+  <li>Look for point of inflection (“elbow”)</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">plot</span><span class="p">(</span><span class="n">pc1</span><span class="o">$</span><span class="n">values</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"b"</span><span class="p">)</span></code></pre></figure>
+
+<p><img src="/R-Tutorials-1/figure/source/2016-09-27-tutorial-3-feature-segment/unnamed-chunk-4-1.png" alt="plot of chunk unnamed-chunk-4" /></p>
+
+<hr />
+
+<h3 id="choose-number-of-factors-to-extract">3. Choose number of factors to extract</h3>
+
+<ul>
+  <li>Look at eigenvalues (Kaiser’s criterion &gt; 1, Jolliffe’s criterion &gt; 0.7)</li>
+  <li>Examine scree plot</li>
+  <li>May be theoretical</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">pc2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">principal</span><span class="p">(</span><span class="n">iris</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">4</span><span class="p">],</span><span class="w"> </span><span class="m">2</span><span class="p">)</span><span class="w">
+</span><span class="n">pc2</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## Principal Components Analysis
+## Call: principal(r = iris[1:4], nfactors = 2)
+## Standardized loadings (pattern matrix) based upon correlation matrix
+##                RC1   RC2   h2     u2 com
+## Sepal.Length  0.96  0.05 0.92 0.0774 1.0
+## Sepal.Width  -0.14  0.98 0.99 0.0091 1.0
+## Petal.Length  0.94 -0.30 0.98 0.0163 1.2
+## Petal.Width   0.93 -0.26 0.94 0.0647 1.2
+## 
+##                        RC1  RC2
+## SS loadings           2.70 1.13
+## Proportion Var        0.68 0.28
+## Cumulative Var        0.68 0.96
+## Proportion Explained  0.71 0.29
+## Cumulative Proportion 0.71 1.00
+## 
+## Mean item complexity =  1.1
+## Test of the hypothesis that 2 components are sufficient.
+## 
+## The root mean square of the residuals (RMSR) is  0.03 
+##  with the empirical chi square  1.72  with prob &lt;  NA 
+## 
+## Fit based upon off diagonal values = 1</code></pre></figure>
+
+<hr />
+
+<h3 id="decide-whether-to-use-rotation">4. Decide whether to use rotation</h3>
+
+<ul>
+  <li>Orthogonal or oblique</li>
+  <li>Does it make sense theoretically?</li>
+  <li>Does it improve things?</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">pc3</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">principal</span><span class="p">(</span><span class="n">iris</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">4</span><span class="p">],</span><span class="w"> </span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="n">rotate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"oblimin"</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## Loading required namespace: GPArotation</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">pc3</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## Principal Components Analysis
+## Call: principal(r = iris[1:4], nfactors = 2, rotate = "oblimin")
+## Standardized loadings (pattern matrix) based upon correlation matrix
+##                TC1   TC2   h2     u2 com
+## Sepal.Length  1.00  0.20 0.92 0.0774 1.1
+## Sepal.Width  -0.02  0.99 0.99 0.0091 1.0
+## Petal.Length  0.94 -0.16 0.98 0.0163 1.1
+## Petal.Width   0.93 -0.11 0.94 0.0647 1.0
+## 
+##                        TC1  TC2
+## SS loadings           2.75 1.08
+## Proportion Var        0.69 0.27
+## Cumulative Var        0.69 0.96
+## Proportion Explained  0.72 0.28
+## Cumulative Proportion 0.72 1.00
+## 
+##  With component correlations of 
+##       TC1   TC2
+## TC1  1.00 -0.27
+## TC2 -0.27  1.00
+## 
+## Mean item complexity =  1
+## Test of the hypothesis that 2 components are sufficient.
+## 
+## The root mean square of the residuals (RMSR) is  0.03 
+##  with the empirical chi square  1.72  with prob &lt;  NA 
+## 
+## Fit based upon off diagonal values = 1</code></pre></figure>
+
+<hr />
+
+<h2 id="segmentation-cluster-analysis">Segmentation: Cluster Analysis</h2>
+
+<ul>
+  <li>Unsupervised learning algorithm that tries to cluster data based on their similarity</li>
+  <li>Again, we’ll use the iris data</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">ggplot</span><span class="p">(</span><span class="n">iris</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">Petal.Length</span><span class="p">,</span><span class="w"> </span><span class="n">Petal.Width</span><span class="p">,</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Species</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">geom_point</span><span class="p">()</span></code></pre></figure>
+
+<p><img src="/R-Tutorials-1/figure/source/2016-09-27-tutorial-3-feature-segment/unnamed-chunk-8-1.png" alt="plot of chunk unnamed-chunk-8" /></p>
+
+<hr />
+
+<h2 id="clustering-in-r">Clustering in R</h2>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">set.seed</span><span class="p">(</span><span class="m">20</span><span class="p">)</span><span class="w">
+</span><span class="n">irisCluster</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">kmeans</span><span class="p">(</span><span class="n">iris</span><span class="p">[,</span><span class="w"> </span><span class="m">3</span><span class="o">:</span><span class="m">4</span><span class="p">],</span><span class="w"> </span><span class="m">3</span><span class="p">,</span><span class="w"> </span><span class="n">nstart</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">20</span><span class="p">)</span><span class="w">
+</span><span class="n">irisCluster</span><span class="o">$</span><span class="n">centers</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##   Petal.Length Petal.Width
+## 1     1.462000    0.246000
+## 2     4.269231    1.342308
+## 3     5.595833    2.037500</code></pre></figure>
+
+<ul>
+  <li>nstart is the number of random starting assignments</li>
+  <li>R then selects the one the with lowest within-cluster variation</li>
+  <li>we use the set.seed() function to ensure that we get the same randon value when we re-run the code</li>
+</ul>
+
+<p>— &amp;two-col</p>
+
+<p>***{name: left}</p>
+
+<p>Cluster assignments vs actual species</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: right">setosa</th>
+      <th style="text-align: right">versicolor</th>
+      <th style="text-align: right">virginica</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: right">50</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">48</td>
+      <td style="text-align: right">4</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">2</td>
+      <td style="text-align: right">46</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>***{name: right}</p>
+
+<p><img src="/R-Tutorials-1/figure/source/2016-09-27-tutorial-3-feature-segment/unnamed-chunk-11-1.png" alt="plot of chunk unnamed-chunk-11" /></p>
+
+<hr />
+
+<h2 id="references">References</h2>
+
+<p>Field A, Miles J, Field Z. Discovering Statistics Using R. London: Sage; 2012.</p>
+
+<p><a href="https://www.r-bloggers.com/k-means-clustering-in-r/">https://www.r-bloggers.com/k-means-clustering-in-r/</a></p>
+
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2016/09/27/tutorial-2-assumptions-cor.html">
+            Tutorial 2 - Parametric assumptions & correlations
+            <small>27 Sep 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/09/15/tutorial-1-intro-to-r.html">
+            Tutorial 1 - Introduction to R
+            <small>15 Sep 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+<div id="disqus_thread"></div>
+
+<script>(function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//MIE1402.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Tutorial 4 - Regression &middot; R
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/R-Tutorials-1/public/css/poole.css">
+  <link rel="stylesheet" href="/R-Tutorials-1/public/css/syntax.css">
+  <link rel="stylesheet" href="/R-Tutorials-1/public/css/hyde.css">
+  <link rel="stylesheet" href="/R-Tutorials-1/public/css/custom.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/R-Tutorials-1public/apple-touch-icon-144-precomposed.png">
+                                 <link rel="shortcut icon" href="/R-Tutorials-1public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+  
+  <!-- Mathjax -->
+  <script type="text/javascript"
+            src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+    
+    <!--Disqus comment counts-->
+    <script id="dsq-count-scr" src="//MIE1402.disqus.com/count.js" async></script>
+    
+</head>
+
+
+  <body class="theme-base-0b">
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <h1>
+        <a href="/R-Tutorials-1">
+          R
+        </a>
+      </h1>
+      <p class="lead">Content for MIE 1402 tutorials</p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="sidebar-nav-item" href="/R-Tutorials-1">Home</a>
+
+      
+
+      
+      
+        
+          
+        
+      
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/R-Tutorials-1/about.html">About</a>
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/R-Tutorials-1/archive.html">Archives</a>
+          
+        
+      
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/R-Tutorials-1/categories.html">Categories</a>
+          
+        
+      
+        
+          
+        
+      
+      <a class="sidebar-nav-item" href="https://github.com/jennaleeb/R-Tutorials-1">GitHub project</a>
+    </nav>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="post">
+  <h1 class="post-title">Tutorial 4 - Regression</h1>
+  <span class="post-date">03 Oct 2016</span>
+  <h2 id="single-and-multiple-regression">Single and Multiple Regression</h2>
+
+<p><strong>Jenna Blumenthal</strong><br />
+   Tutorial #: 4 <br />
+   MIE 1402</p>
+
+<hr />
+
+<h2 id="what-is-regression">What is regression?</h2>
+
+<ul>
+  <li>simply put, predicting one variable from another (or &gt; 1)</li>
+  <li>we fit our data to some sort of model</li>
+  <li>from this model, we can predict the outcome from any predictor data</li>
+</ul>
+
+<hr />
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">ggplot</span><span class="p">(</span><span class="n">longley</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">Year</span><span class="p">,</span><span class="w"> </span><span class="n">Employed</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">geom_point</span><span class="p">()</span><span class="w">
+</span></code></pre>
+</div>
+
+<p><img src="/R-Tutorials-1/figure/source/2016-10-03-tutorial-4-regression/unnamed-chunk-2-1.png" alt="plot of chunk unnamed-chunk-2" /></p>
+
+<hr />
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">ggplot</span><span class="p">(</span><span class="n">longley</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">Year</span><span class="p">,</span><span class="w"> </span><span class="n">Employed</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">geom_point</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">geom_smooth</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">"lm"</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<p><img src="/R-Tutorials-1/figure/source/2016-10-03-tutorial-4-regression/unnamed-chunk-3-1.png" alt="plot of chunk unnamed-chunk-3" /></p>
+
+<hr />
+
+<h2 id="data-we-are-using-today">Data we are using today</h2>
+
+<style type="text/css">
+table { width: 100%; font-size: 11}
+</style>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">library</span><span class="p">(</span><span class="n">datasets</span><span class="p">)</span><span class="w">
+</span><span class="n">kable</span><span class="p">(</span><span class="n">head</span><span class="p">(</span><span class="n">longley</span><span class="p">))</span><span class="w">
+</span></code></pre>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left"> </th>
+      <th style="text-align: right">GNP.deflator</th>
+      <th style="text-align: right">GNP</th>
+      <th style="text-align: right">Unemployed</th>
+      <th style="text-align: right">Armed.Forces</th>
+      <th style="text-align: right">Population</th>
+      <th style="text-align: right">Year</th>
+      <th style="text-align: right">Employed</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">1947</td>
+      <td style="text-align: right">83.0</td>
+      <td style="text-align: right">234.289</td>
+      <td style="text-align: right">235.6</td>
+      <td style="text-align: right">159.0</td>
+      <td style="text-align: right">107.608</td>
+      <td style="text-align: right">1947</td>
+      <td style="text-align: right">60.323</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">1948</td>
+      <td style="text-align: right">88.5</td>
+      <td style="text-align: right">259.426</td>
+      <td style="text-align: right">232.5</td>
+      <td style="text-align: right">145.6</td>
+      <td style="text-align: right">108.632</td>
+      <td style="text-align: right">1948</td>
+      <td style="text-align: right">61.122</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">1949</td>
+      <td style="text-align: right">88.2</td>
+      <td style="text-align: right">258.054</td>
+      <td style="text-align: right">368.2</td>
+      <td style="text-align: right">161.6</td>
+      <td style="text-align: right">109.773</td>
+      <td style="text-align: right">1949</td>
+      <td style="text-align: right">60.171</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">1950</td>
+      <td style="text-align: right">89.5</td>
+      <td style="text-align: right">284.599</td>
+      <td style="text-align: right">335.1</td>
+      <td style="text-align: right">165.0</td>
+      <td style="text-align: right">110.929</td>
+      <td style="text-align: right">1950</td>
+      <td style="text-align: right">61.187</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">1951</td>
+      <td style="text-align: right">96.2</td>
+      <td style="text-align: right">328.975</td>
+      <td style="text-align: right">209.9</td>
+      <td style="text-align: right">309.9</td>
+      <td style="text-align: right">112.075</td>
+      <td style="text-align: right">1951</td>
+      <td style="text-align: right">63.221</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">1952</td>
+      <td style="text-align: right">98.1</td>
+      <td style="text-align: right">346.999</td>
+      <td style="text-align: right">193.2</td>
+      <td style="text-align: right">359.4</td>
+      <td style="text-align: right">113.270</td>
+      <td style="text-align: right">1952</td>
+      <td style="text-align: right">63.639</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="examine-the-data">Examine the data</h2>
+<ul>
+  <li>missing data?</li>
+</ul>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">na.omit</span><span class="p">(</span><span class="n">longley</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<hr />
+
+<h2 id="examine-the-data-1">Examine the data</h2>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="c1"># data types 
+</span><span class="n">str</span><span class="p">(</span><span class="n">longley</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>## 'data.frame':	16 obs. of  7 variables:
+##  $ GNP.deflator: num  83 88.5 88.2 89.5 96.2 ...
+##  $ GNP         : num  234 259 258 285 329 ...
+##  $ Unemployed  : num  236 232 368 335 210 ...
+##  $ Armed.Forces: num  159 146 162 165 310 ...
+##  $ Population  : num  108 109 110 111 112 ...
+##  $ Year        : int  1947 1948 1949 1950 1951 1952 1953 1954 1955 1956 ...
+##  $ Employed    : num  60.3 61.1 60.2 61.2 63.2 ...
+</code></pre>
+</div>
+
+<hr />
+<p>## Examine the data</p>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="c1"># descriptive statistics
+</span><span class="n">stat.desc</span><span class="p">(</span><span class="n">longley</span><span class="p">,</span><span class="w"> </span><span class="n">basic</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>##              GNP.deflator          GNP   Unemployed Armed.Forces
+## median        100.6000000  381.4270000  314.3500000  271.7500000
+## mean          101.6812500  387.6984375  319.3312500  260.6687500
+## SE.mean         2.6978884   24.8487344   23.3616062   17.3979901
+## CI.mean.0.95    5.7504129   52.9638237   49.7940849   37.0829381
+## var           116.4576250 9879.3536593 8732.2342917 4843.0409583
+## std.dev        10.7915534   99.3949378   93.4464247   69.5919604
+## coef.var        0.1061312    0.2563718    0.2926316    0.2669747
+##                Population         Year    Employed
+## median       116.80350000 1.954500e+03 65.50400000
+## mean         117.42400000 1.954500e+03 65.31700000
+## SE.mean        1.73902539 1.190238e+00  0.87799209
+## CI.mean.0.95   3.70664488 2.536932e+00  1.87139584
+## var           48.38734893 2.266667e+01 12.33392173
+## std.dev        6.95610156 4.760952e+00  3.51196836
+## coef.var       0.05923918 2.435893e-03  0.05376806
+</code></pre>
+</div>
+
+<p>— &amp;two-col</p>
+
+<p>***{name: left}</p>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">library</span><span class="p">(</span><span class="n">psych</span><span class="p">)</span><span class="w">
+</span><span class="n">pairs.panels</span><span class="p">(</span><span class="n">longley</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<p><img src="/R-Tutorials-1/figure/source/2016-10-03-tutorial-4-regression/unnamed-chunk-8-1.png" alt="plot of chunk unnamed-chunk-8" /></p>
+
+<style type="text/css">
+.right {
+    position: fixed;
+    bottom: -500px;
+    right: 0;}
+</style>
+
+<p><strong>*{name: right}
+- bivariate scatter plots below the diagonal
+- histograms on the diagonal
+- Pearson correlation above the diagonal
+- **also should be checking assumptions</strong></p>
+
+<hr />
+<p>## Simple regression</p>
+
+<ul>
+  <li>one independent variable</li>
+</ul>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">lm.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">lm</span><span class="p">(</span><span class="n">Employed</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">GNP</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">longley</span><span class="p">)</span><span class="w">
+</span><span class="n">summary</span><span class="p">(</span><span class="n">lm.1</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>## 
+## Call:
+## lm(formula = Employed ~ GNP, data = longley)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.77958 -0.55440 -0.00944  0.34361  1.44594 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 51.843590   0.681372   76.09  &lt; 2e-16 ***
+## GNP          0.034752   0.001706   20.37 8.36e-12 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.6566 on 14 degrees of freedom
+## Multiple R-squared:  0.9674,	Adjusted R-squared:  0.965 
+## F-statistic: 415.1 on 1 and 14 DF,  p-value: 8.363e-12
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="interpreting-the-output">Interpreting the output</h2>
+
+<ul>
+  <li>Multiple/adjusted R squared: square of the correlation between GNP and Employment</li>
+  <li>How well does the model explain the variance in the data?</li>
+</ul>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="nf">round</span><span class="p">(</span><span class="nf">sqrt</span><span class="p">(</span><span class="m">0.9674</span><span class="p">),</span><span class="w"> </span><span class="m">4</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>## [1] 0.9836
+</code></pre>
+</div>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="nf">round</span><span class="p">(</span><span class="n">cor</span><span class="p">(</span><span class="n">longley</span><span class="o">$</span><span class="n">GNP</span><span class="p">,</span><span class="w"> </span><span class="n">longley</span><span class="o">$</span><span class="n">Employed</span><span class="p">),</span><span class="w"> </span><span class="m">4</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>## [1] 0.9836
+</code></pre>
+</div>
+
+<ul>
+  <li>tells us that GNP accounts for 98% of variation in Employment</li>
+</ul>
+
+<hr />
+
+<h2 id="interpreting-the-output-1">Interpreting the output</h2>
+
+<ul>
+  <li>F-statistic is significant at $p &lt; .001$
+    <ul>
+      <li>tells us there is less than a 0.1% chance that an F-ratio this large would happen if the null hypothesis were true</li>
+      <li>GNP predicts employment significantly well</li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="multiple-regression">Multiple regression</h2>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">lm.2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">lm</span><span class="p">(</span><span class="n">Employed</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">GNP.deflator</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">GNP</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Unemployed</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Armed.Forces</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Population</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Year</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">longley</span><span class="p">)</span><span class="w"> 
+
+</span><span class="n">lm.2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">lm</span><span class="p">(</span><span class="n">Employed</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">.</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">longley</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<hr />
+
+<h2 id="multiple-regression-1">Multiple regression</h2>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">summary</span><span class="p">(</span><span class="n">lm.2</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>## 
+## Call:
+## lm(formula = Employed ~ ., data = longley)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.41011 -0.15767 -0.02816  0.10155  0.45539 
+## 
+## Coefficients:
+##                Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  -3.482e+03  8.904e+02  -3.911 0.003560 ** 
+## GNP.deflator  1.506e-02  8.492e-02   0.177 0.863141    
+## GNP          -3.582e-02  3.349e-02  -1.070 0.312681    
+## Unemployed   -2.020e-02  4.884e-03  -4.136 0.002535 ** 
+## Armed.Forces -1.033e-02  2.143e-03  -4.822 0.000944 ***
+## Population   -5.110e-02  2.261e-01  -0.226 0.826212    
+## Year          1.829e+00  4.555e-01   4.016 0.003037 ** 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.3049 on 9 degrees of freedom
+## Multiple R-squared:  0.9955,	Adjusted R-squared:  0.9925 
+## F-statistic: 330.3 on 6 and 9 DF,  p-value: 4.984e-10
+</code></pre>
+</div>
+
+<ul>
+  <li>estimates of the formula ($b_{0}, b_{1}, b_{2}$…)</li>
+  <li>confidence (probability that the estimate is wrong)</li>
+</ul>
+
+<hr />
+
+<ul>
+  <li>Again we can look at $R^2$, $F$-ratio to understand the fit of our model</li>
+  <li>Use standardized beta to compare predictors
+    <ul>
+      <li>removes issue of units</li>
+      <li>bigger absolute value, more important</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">library</span><span class="p">(</span><span class="n">QuantPsyc</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">lm.beta</span><span class="p">(</span><span class="n">lm.2</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>## GNP.deflator          GNP   Unemployed Armed.Forces   Population 
+##   0.04628202  -1.01374635  -0.53754258  -0.20474069  -0.10122111 
+##         Year 
+##   2.47966438
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="how-do-we-decide-which-variables-to-keep-and-in-what-order">How do we decide which variables to keep, and in what order?</h2>
+
+<p><strong>Hierarchical regression</strong>
+- based on previous research
+- known predictors entered into model first</p>
+
+<p><strong>Forced entry regression</strong>
+- all at once</p>
+
+<p><strong>Stepwise regression</strong>
+- not generally appropriate
+- looks for the predictor variable that ‘best’ explains variance in the data
+- perform cross-valdiation if you use stepwise methods</p>
+
+<hr />
+
+<h2 id="assessing-the-model">Assessing the model</h2>
+
+<ul>
+  <li>If you use hierarchical regression, you can compare improvement at each stage of analysis by looking at the change in $R^2$, and testing if that change is significant using:</li>
+</ul>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">anova</span><span class="p">(</span><span class="n">lm.1</span><span class="p">,</span><span class="w"> </span><span class="n">lm.2</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>## Analysis of Variance Table
+## 
+## Model 1: Employed ~ GNP
+## Model 2: Employed ~ GNP.deflator + GNP + Unemployed + Armed.Forces + Population + 
+##     Year
+##   Res.Df    RSS Df Sum of Sq     F   Pr(&gt;F)   
+## 1     14 6.0361                               
+## 2      9 0.8364  5    5.1997 11.19 0.001186 **
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="assessing-the-model-1">Assessing the model</h2>
+
+<ul>
+  <li>case-wise diagnostics looks at individual rows (or ‘cases’) in the data to assess outliers, influential cases, etc</li>
+</ul>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">rstandard</span><span class="p">(</span><span class="n">lm.2</span><span class="p">)</span><span class="w">
+</span><span class="n">rstudent</span><span class="p">(</span><span class="n">lm.2</span><span class="p">)</span><span class="w">
+</span><span class="n">cooks.distance</span><span class="p">(</span><span class="n">lm.2</span><span class="p">)</span><span class="w">
+</span><span class="n">dfbeta</span><span class="p">(</span><span class="n">lm.2</span><span class="p">)</span><span class="w">
+</span><span class="n">dffits</span><span class="p">(</span><span class="n">lm.2</span><span class="p">)</span><span class="w">
+</span><span class="n">hatvalues</span><span class="p">(</span><span class="n">lm.2</span><span class="p">)</span><span class="w">
+</span><span class="n">covratio</span><span class="p">(</span><span class="n">lm.2</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<ul>
+  <li>each criterion has it’s own assumptions &amp; bounds (Andy Field, 7.9.2)</li>
+</ul>
+
+<hr />
+
+<h2 id="assessing-the-model-2">Assessing the model</h2>
+
+<ul>
+  <li>no multicollinearity</li>
+  <li>exists when there is strong correlation between predictor variables</li>
+</ul>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">cor</span><span class="p">(</span><span class="n">longley</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>##              GNP.deflator       GNP Unemployed Armed.Forces Population
+## GNP.deflator    1.0000000 0.9915892  0.6206334    0.4647442  0.9791634
+## GNP             0.9915892 1.0000000  0.6042609    0.4464368  0.9910901
+## Unemployed      0.6206334 0.6042609  1.0000000   -0.1774206  0.6865515
+## Armed.Forces    0.4647442 0.4464368 -0.1774206    1.0000000  0.3644163
+## Population      0.9791634 0.9910901  0.6865515    0.3644163  1.0000000
+## Year            0.9911492 0.9952735  0.6682566    0.4172451  0.9939528
+## Employed        0.9708985 0.9835516  0.5024981    0.4573074  0.9603906
+##                   Year  Employed
+## GNP.deflator 0.9911492 0.9708985
+## GNP          0.9952735 0.9835516
+## Unemployed   0.6682566 0.5024981
+## Armed.Forces 0.4172451 0.4573074
+## Population   0.9939528 0.9603906
+## Year         1.0000000 0.9713295
+## Employed     0.9713295 1.0000000
+</code></pre>
+</div>
+
+<hr />
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">library</span><span class="p">(</span><span class="n">car</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">vif</span><span class="p">(</span><span class="n">lm.2</span><span class="p">)</span><span class="w"> </span><span class="c1"># problem if largest VIF is &gt; 10
+</span></code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>## GNP.deflator          GNP   Unemployed Armed.Forces   Population 
+##    135.53244   1788.51348     33.61889      3.58893    399.15102 
+##         Year 
+##    758.98060
+</code></pre>
+</div>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">mean</span><span class="p">(</span><span class="n">vif</span><span class="p">(</span><span class="n">lm.2</span><span class="p">))</span><span class="w"> </span><span class="c1"># regression may be biased if substantially &gt; 1
+</span></code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>## [1] 519.8976
+</code></pre>
+</div>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="m">1</span><span class="o">/</span><span class="n">vif</span><span class="p">(</span><span class="n">lm.2</span><span class="p">)</span><span class="w"> </span><span class="c1"># problem if tolerance &lt; 0.1
+</span></code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>## GNP.deflator          GNP   Unemployed Armed.Forces   Population 
+## 0.0073783075 0.0005591235 0.0297451814 0.2786345641 0.0025053174 
+##         Year 
+## 0.0013175567
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="assessing-the-model-3">Assessing the model</h2>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">plot</span><span class="p">(</span><span class="n">lm.2</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+<p>Plot 1: Residuals vs Fitted
+- how close is the line to horizontal? (normality)
+- are there outliers?</p>
+
+<p>Plot 2: Q-Q plot
+- how close is the line to the diagonal?</p>
+
+<p>Plot 3: Standardized residuals vs fitted values
+- if dots are not spread out evenly, may have violation of assumption of variance (funnel) or asummption of linearity (curve)</p>
+
+<p>Plot 4: Cook distances
+- identifies extreme values
+- demonstrates which points have influence over model</p>
+
+<hr />
+
+<h2 id="what-now">What now?</h2>
+
+<ul>
+  <li>Remove highly correlated predictors from the model</li>
+</ul>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">longley.uncor</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">subset</span><span class="p">(</span><span class="n">longley</span><span class="p">,</span><span class="w"> </span><span class="n">select</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"GNP"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Unemployed"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Armed.Forces"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Employed"</span><span class="p">))</span><span class="w">
+</span></code></pre>
+</div>
+
+<ul>
+  <li>Remove outliers</li>
+</ul>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">longley.rm_outliers</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">subset</span><span class="p">(</span><span class="n">longley</span><span class="p">,</span><span class="w"> </span><span class="n">Year</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="m">1951</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<ul>
+  <li>Use Principal Components Analysis to reduce set</li>
+</ul>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">principal</span><span class="p">(</span><span class="n">longley</span><span class="p">,</span><span class="w"> </span><span class="m">3</span><span class="p">,</span><span class="w"> </span><span class="n">rotate</span><span class="o">=</span><span class="s2">"oblimin"</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<hr />
+
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2016/09/27/tutorial-3-feature-segment.html">
+            Tutorial 3 - Feature Extraction and Segmentation
+            <small>27 Sep 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/09/27/tutorial-2-assumptions-cor.html">
+            Tutorial 2 - Parametric assumptions and correlations
+            <small>27 Sep 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/09/15/tutorial-1-intro-to-r.html">
+            Tutorial 1 - Introduction to R
+            <small>15 Sep 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+<div id="disqus_thread"></div>
+
+<script>(function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//MIE1402.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+    </div>
+
+  </body>
+</html>

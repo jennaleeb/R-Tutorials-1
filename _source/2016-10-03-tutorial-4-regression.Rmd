@@ -1,0 +1,286 @@
+---
+title       : Tutorial 4 - Regression
+subtitle    : 
+author      : Jenna Blumenthal
+job         : MIE 1402
+framework   : deckjs        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+---
+
+## Single and Multiple Regression
+
+   **Jenna Blumenthal**  
+   Tutorial #: 4   
+   MIE 1402
+
+---
+
+## What is regression?
+
+- simply put, predicting one variable from another (or > 1)
+- we fit our data to some sort of model
+- from this model, we can predict the outcome from any predictor data
+
+---
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(knitr)
+library(pastecs)
+```
+
+```{r}
+ggplot(longley, aes(Year, Employed)) + geom_point()
+```
+
+---
+
+```{r}
+ggplot(longley, aes(Year, Employed)) + geom_point() + geom_smooth(method="lm")
+```
+
+---
+
+## Data we are using today
+
+<style type="text/css">
+table { width: 100%; font-size: 11}
+</style>
+```{r}
+library(datasets)
+kable(head(longley))
+```
+
+---
+
+## Examine the data
+- missing data?
+
+```{r eval=FALSE}
+na.omit(longley)
+```
+
+---
+
+## Examine the data
+
+```{r}
+# data types 
+str(longley)
+```
+
+---
+## Examine the data
+
+```{r}
+# descriptive statistics
+stat.desc(longley, basic=TRUE)
+help(stat.desc)
+```
+
+--- &two-col
+
+***{name: left}
+```{r warning=FALSE, message=FALSE}
+library(psych)
+pairs.panels(longley)
+```
+
+<style type="text/css">
+.right {
+    position: fixed;
+    bottom: -500px;
+    right: 0;}
+</style>
+***{name: right}
+- bivariate scatter plots below the diagonal
+- histograms on the diagonal
+- Pearson correlation above the diagonal
+- **also should be checking assumptions**
+
+---
+## Simple regression
+
+- one independent variable
+
+```{r}
+lm.1 <- lm(Employed ~ GNP, data = longley)
+summary(lm.1)
+```
+
+---
+
+## Interpreting the output
+
+- Multiple/adjusted R squared: square of the correlation between GNP and Employment
+- How well does the model explain the variance in the data?
+```{r}
+round(sqrt(0.9674), 4)
+round(cor(longley$GNP, longley$Employed), 4)
+```
+
+- tells us that GNP accounts for 98% of variation in Employment
+
+---
+
+## Interpreting the output
+
+- F-statistic is significant at $p < .001$
+  + tells us there is less than a 0.1% chance that an F-ratio this large would happen if the null hypothesis were true
+  + GNP predicts employment significantly well
+
+--- 
+
+## Multiple regression
+
+```{r}
+lm.2 <- lm(Employed ~ GNP.deflator + GNP + Unemployed + Armed.Forces + Population + Year, data = longley) 
+
+lm.2 <- lm(Employed ~ ., data = longley)
+```
+
+---
+
+## Multiple regression
+
+```{r}
+summary(lm.2)
+```
+
+- estimates of the formula ($b_{0}, b_{1}, b_{2}$...)
+- confidence (probability that the estimate is wrong)
+
+---
+
+- Again we can look at $R^2$, $F$-ratio to understand the fit of our model
+- Use standardized beta to compare predictors
+  + removes issue of units
+  + bigger absolute value, more important
+
+```{r message=FALSE, warning=FALSE}
+library(QuantPsyc)
+```
+
+  
+```{r}
+lm.beta(lm.2)
+```
+
+---
+
+## How do we decide which variables to keep, and in what order?
+
+**Hierarchical regression**
+- based on previous research
+- known predictors entered into model first
+
+**Forced entry regression**
+- all at once
+
+**Stepwise regression**
+- not generally appropriate
+- looks for the predictor variable that 'best' explains variance in the data
+- perform cross-valdiation if you use stepwise methods
+
+---
+
+## Assessing the model
+
+- If you use hierarchical regression, you can compare improvement at each stage of analysis by looking at the change in $R^2$, and testing if that change is significant using:
+
+```{r}
+anova(lm.1, lm.2)
+```
+
+---
+
+## Assessing the model
+
+- case-wise diagnostics looks at individual rows (or 'cases') in the data to assess outliers, influential cases, etc
+
+```{r eval=FALSE}
+rstandard(lm.2)
+rstudent(lm.2)
+cooks.distance(lm.2)
+dfbeta(lm.2)
+dffits(lm.2)
+hatvalues(lm.2)
+covratio(lm.2)
+```
+
+- each criterion has it's own assumptions & bounds (Andy Field, 7.9.2)
+
+---
+
+## Assessing the model
+
+- no multicollinearity
+- exists when there is strong correlation between predictor variables
+
+```{r}
+cor(longley)
+```
+
+---
+
+```{r message=FALSE, warning=FALSE}
+library(car)
+```
+
+
+```{r}
+vif(lm.2) # problem if largest VIF is > 10
+mean(vif(lm.2)) # regression may be biased if substantially > 1
+1/vif(lm.2) # problem if tolerance < 0.1
+```
+
+---
+
+## Assessing the model
+
+```{r eval=FALSE}
+plot(lm.2)
+```
+Plot 1: Residuals vs Fitted
+- how close is the line to horizontal? (normality)
+- are there outliers?
+
+Plot 2: Q-Q plot
+- how close is the line to the diagonal?
+
+Plot 3: Standardized residuals vs fitted values
+- if dots are not spread out evenly, may have violation of assumption of variance (funnel) or asummption of linearity (curve)
+
+Plot 4: Cook distances
+- identifies extreme values
+- demonstrates which points have influence over model
+
+---
+
+## What now?
+
+- Remove highly correlated predictors from the model
+
+```{r}
+longley.uncor <- subset(longley, select = c("GNP", "Unemployed", "Armed.Forces", "Employed"))
+```
+
+- Remove outliers
+
+```{r}
+longley.rm_outliers <- subset(longley, Year != 1951)
+```
+
+- Use Principal Components Analysis to reduce set
+
+```{r eval=FALSE}
+principal(longley, 3, rotate="oblimin")
+```
+
+---
+
+

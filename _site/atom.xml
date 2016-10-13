@@ -4,13 +4,337 @@
  <title>R</title>
  <link href="https://jennaleeb.github.io//R-Tutorials-1atom.xml" rel="self"/>
  <link href="https://jennaleeb.github.io//R-Tutorials-1"/>
- <updated>2016-10-06T16:39:25-04:00</updated>
+ <updated>2016-10-13T10:23:08-04:00</updated>
  <id>https://jennaleeb.github.io</id>
  <author>
    <name>Jenna Blumenthal</name>
    <email></email>
  </author>
 
+ 
+ <entry>
+   <title>Tutorial 5 - Data manipulation and reporting</title>
+   <link href="https://jennaleeb.github.io/2016/10/11/tutorial-5-data-manipulation-reporting.html"/>
+   <updated>2016-10-11T00:00:00-04:00</updated>
+   <id>https://jennaleeb.github.io/2016/10/11/tutorial-5-data-manipulation-reporting</id>
+   <content type="html">&lt;h2 id=&quot;data-manipulation-and-reporting&quot;&gt;Data Manipulation and Reporting&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Jenna Blumenthal&lt;/strong&gt;&lt;br /&gt;
+   Tutorial #: 5&lt;br /&gt;
+   MIE 1402&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;creating-an-r-markdown-document-in-rstudio&quot;&gt;Creating an R Markdown Document in RStudio&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;File &amp;gt; New File &amp;gt; R Markdown&lt;/li&gt;
+  &lt;li&gt;YAML header contains document metadata
+    &lt;ul&gt;
+      &lt;li&gt;title&lt;/li&gt;
+      &lt;li&gt;author&lt;/li&gt;
+      &lt;li&gt;date&lt;/li&gt;
+      &lt;li&gt;output (html, pdf, word)&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Knit to generate the document&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;learning-the-syntax&quot;&gt;Learning the syntax&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;For simple text, R Markdown follows markdown formatting syntax&lt;/p&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet&quot;&gt;https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;For R, surround your text with&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;```{r}
+data(cars)
+summary(cars)
+```&lt;/pre&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;options-for-r-chunks&quot;&gt;Options for R Chunks&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;echo=FALSE&lt;/code&gt; hides R code&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;include=FALSE&lt;/code&gt; prevent code and results from appearing&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;eval=FALSE&lt;/code&gt; dont run chunk&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;message=FALSE&lt;/code&gt; hides messages&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;warnings=FALSE&lt;/code&gt; hides warnings&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;tables&quot;&gt;Tables&lt;/h2&gt;
+
+&lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;library&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;knitr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;kable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;head&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mtcars&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;html&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style=&quot;text-align:left;&quot;&gt;   &lt;/th&gt;
+   &lt;th style=&quot;text-align:right;&quot;&gt; mpg &lt;/th&gt;
+   &lt;th style=&quot;text-align:right;&quot;&gt; cyl &lt;/th&gt;
+   &lt;th style=&quot;text-align:right;&quot;&gt; disp &lt;/th&gt;
+   &lt;th style=&quot;text-align:right;&quot;&gt; hp &lt;/th&gt;
+   &lt;th style=&quot;text-align:right;&quot;&gt; drat &lt;/th&gt;
+   &lt;th style=&quot;text-align:right;&quot;&gt; wt &lt;/th&gt;
+   &lt;th style=&quot;text-align:right;&quot;&gt; qsec &lt;/th&gt;
+   &lt;th style=&quot;text-align:right;&quot;&gt; vs &lt;/th&gt;
+   &lt;th style=&quot;text-align:right;&quot;&gt; am &lt;/th&gt;
+   &lt;th style=&quot;text-align:right;&quot;&gt; gear &lt;/th&gt;
+   &lt;th style=&quot;text-align:right;&quot;&gt; carb &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style=&quot;text-align:left;&quot;&gt; Mazda RX4 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 21.0 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 6 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 160 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 110 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 3.90 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 2.620 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 16.46 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 0 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 1 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 4 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 4 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style=&quot;text-align:left;&quot;&gt; Mazda RX4 Wag &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 21.0 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 6 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 160 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 110 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 3.90 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 2.875 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 17.02 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 0 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 1 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 4 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 4 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style=&quot;text-align:left;&quot;&gt; Datsun 710 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 22.8 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 4 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 108 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 93 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 3.85 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 2.320 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 18.61 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 1 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 1 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 4 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style=&quot;text-align:left;&quot;&gt; Hornet 4 Drive &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 21.4 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 6 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 258 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 110 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 3.08 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 3.215 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 19.44 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 1 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 0 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 3 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style=&quot;text-align:left;&quot;&gt; Hornet Sportabout &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 18.7 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 8 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 360 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 175 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 3.15 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 3.440 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 17.02 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 0 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 0 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 3 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 2 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style=&quot;text-align:left;&quot;&gt; Valiant &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 18.1 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 6 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 225 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 105 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 2.76 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 3.460 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 20.22 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 1 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 0 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 3 &lt;/td&gt;
+   &lt;td style=&quot;text-align:right;&quot;&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;br /&gt;
+&lt;em&gt;looks better in document than in these slides&lt;/em&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;plots&quot;&gt;Plots&lt;/h2&gt;
+
+&lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;library&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ggplot2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ggplot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mtcars&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;aes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;disp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;drat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;geom_point&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/R-Tutorials-1/figure/source/2016-10-11-tutorial-5-data-manipulation-reporting/unnamed-chunk-2-1.png&quot; alt=&quot;plot of chunk unnamed-chunk-2&quot; /&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;data-manipulation-with-reshape2&quot;&gt;Data manipulation with reshape2&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;reshape2&lt;/code&gt; makes it easy to transform data between wide and long formats&lt;/li&gt;
+  &lt;li&gt;Why/when would you need to use this?
+    &lt;ul&gt;
+      &lt;li&gt;running regressions, other statistical tests ( &lt;code class=&quot;highlighter-rouge&quot;&gt;lm()&lt;/code&gt; requires long format)&lt;/li&gt;
+      &lt;li&gt;plotting data ( &lt;code class=&quot;highlighter-rouge&quot;&gt;ggplot&lt;/code&gt; requires long format)&lt;/li&gt;
+      &lt;li&gt;Generally record data in wide format&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;wide-vs-long-data&quot;&gt;‘Wide’ vs ‘Long’ data&lt;/h2&gt;
+
+&lt;h3 id=&quot;wide-each-column-is-a-variable&quot;&gt;Wide: each column is a variable&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;##   Ozone Solar.R Wind Temp Month Day
+## 1    41     190  7.4   67     5   1
+## 2    36     118  8.0   72     5   2
+## 3    12     149 12.6   74     5   3
+## 4    18     313 11.5   62     5   4
+## 5    NA      NA 14.3   56     5   5
+## 6    28      NA 14.9   66     5   6
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;long-column-for-various-variable-types-and-a-column-for-their-values&quot;&gt;Long: column for various variable types and a column for their values&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;##   variable value
+## 1    Ozone    41
+## 2    Ozone    36
+## 3    Ozone    12
+## 4    Ozone    18
+## 5    Ozone    NA
+## 6    Ozone    28
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;##     variable value
+## 200     Wind  14.9
+## 201     Wind  20.7
+## 202     Wind   9.2
+## 203     Wind  11.5
+## 204     Wind  10.3
+## 205     Wind   6.3
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;##     variable value
+## 454     Temp    63
+## 455     Temp    70
+## 456     Temp    77
+## 457     Temp    75
+## 458     Temp    76
+## 459     Temp    68
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;helpful-for-plotting-data&quot;&gt;Helpful for plotting data&lt;/h3&gt;
+
+&lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;ggplot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;airqual.long&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;aes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;variable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;geom_boxplot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/R-Tutorials-1/figure/source/2016-10-11-tutorial-5-data-manipulation-reporting/unnamed-chunk-6-1.png&quot; alt=&quot;plot of chunk unnamed-chunk-6&quot; /&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;melt-wide-to-long&quot;&gt;Melt: wide to long&lt;/h2&gt;
+
+&lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;airqual.long&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;melt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;airquality&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id.vars&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Month&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Day&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;variable.name&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;climate_variable&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; 
+  &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value.name&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;climate_value&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;head&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;airqual.long&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;##   Month Day climate_variable climate_value
+## 1     5   1            Ozone            41
+## 2     5   2            Ozone            36
+## 3     5   3            Ozone            12
+## 4     5   4            Ozone            18
+## 5     5   5            Ozone            NA
+## 6     5   6            Ozone            28
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;must include which variables you would like to maintain in wide format using &lt;code class=&quot;highlighter-rouge&quot;&gt;id.vars&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;cast-long-to-wide&quot;&gt;Cast: long to wide&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;/R-Tutorials-1/figure/source/2016-10-11-tutorial-5-data-manipulation-reporting/dcast-illustration.png&quot; alt=&quot;Caption for the picture.&quot; /&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;head&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dcast&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;airqual.long&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Month&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Day&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;climate_variable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value.var&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;climate_value&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;##   Month Day Ozone Solar.R Wind Temp
+## 1     5   1    41     190  7.4   67
+## 2     5   2    36     118  8.0   72
+## 3     5   3    12     149 12.6   74
+## 4     5   4    18     313 11.5   62
+## 5     5   5    NA      NA 14.3   56
+## 6     5   6    28      NA 14.9   66
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;a href=&quot;http://seananderson.ca/2013/10/19/reshape.html&quot;&gt;An Introduction to reshape2 - Sean Anderson&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+</content>
+ </entry>
  
  <entry>
    <title>Tutorial 4 - Regression</title>

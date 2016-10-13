@@ -101,6 +101,337 @@
   
   <div class="post">
     <h1 class="post-title">
+      <a href="/R-Tutorials-1//2016/10/11/tutorial-5-data-manipulation-reporting.html">
+        Tutorial 5 - Data manipulation and reporting
+      </a>
+    </h1>
+    
+<a href="/R-Tutorials-1/2016/10/11/tutorial-5-data-manipulation-reporting.html#disqus_thread"
+    class = "commentcount"></a>
+    
+    <span class="post-date">11 Oct 2016</span>
+
+    <h2 id="data-manipulation-and-reporting">Data Manipulation and Reporting</h2>
+
+<p><strong>Jenna Blumenthal</strong><br />
+   Tutorial #: 5<br />
+   MIE 1402</p>
+
+<hr />
+
+<h2 id="creating-an-r-markdown-document-in-rstudio">Creating an R Markdown Document in RStudio</h2>
+
+<ol>
+  <li>File &gt; New File &gt; R Markdown</li>
+  <li>YAML header contains document metadata
+    <ul>
+      <li>title</li>
+      <li>author</li>
+      <li>date</li>
+      <li>output (html, pdf, word)</li>
+    </ul>
+  </li>
+  <li>Knit to generate the document</li>
+</ol>
+
+<hr />
+
+<h2 id="learning-the-syntax">Learning the syntax</h2>
+
+<ul>
+  <li>
+    <p>For simple text, R Markdown follows markdown formatting syntax</p>
+
+    <ul>
+      <li><a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet</a></li>
+    </ul>
+  </li>
+  <li>
+    <p>For R, surround your text with</p>
+  </li>
+</ul>
+
+<pre>```{r}
+data(cars)
+summary(cars)
+```</pre>
+
+<hr />
+
+<h2 id="options-for-r-chunks">Options for R Chunks</h2>
+
+<ul>
+  <li><code class="highlighter-rouge">echo=FALSE</code> hides R code</li>
+  <li><code class="highlighter-rouge">include=FALSE</code> prevent code and results from appearing</li>
+  <li><code class="highlighter-rouge">eval=FALSE</code> dont run chunk</li>
+  <li><code class="highlighter-rouge">message=FALSE</code> hides messages</li>
+  <li><code class="highlighter-rouge">warnings=FALSE</code> hides warnings</li>
+</ul>
+
+<hr />
+
+<h2 id="tables">Tables</h2>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">library</span><span class="p">(</span><span class="n">knitr</span><span class="p">)</span><span class="w">
+</span><span class="n">kable</span><span class="p">(</span><span class="n">head</span><span class="p">(</span><span class="n">mtcars</span><span class="p">),</span><span class="w"> </span><span class="n">format</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"html"</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<table>
+ <thead>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:right;"> mpg </th>
+   <th style="text-align:right;"> cyl </th>
+   <th style="text-align:right;"> disp </th>
+   <th style="text-align:right;"> hp </th>
+   <th style="text-align:right;"> drat </th>
+   <th style="text-align:right;"> wt </th>
+   <th style="text-align:right;"> qsec </th>
+   <th style="text-align:right;"> vs </th>
+   <th style="text-align:right;"> am </th>
+   <th style="text-align:right;"> gear </th>
+   <th style="text-align:right;"> carb </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> Mazda RX4 </td>
+   <td style="text-align:right;"> 21.0 </td>
+   <td style="text-align:right;"> 6 </td>
+   <td style="text-align:right;"> 160 </td>
+   <td style="text-align:right;"> 110 </td>
+   <td style="text-align:right;"> 3.90 </td>
+   <td style="text-align:right;"> 2.620 </td>
+   <td style="text-align:right;"> 16.46 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 4 </td>
+   <td style="text-align:right;"> 4 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Mazda RX4 Wag </td>
+   <td style="text-align:right;"> 21.0 </td>
+   <td style="text-align:right;"> 6 </td>
+   <td style="text-align:right;"> 160 </td>
+   <td style="text-align:right;"> 110 </td>
+   <td style="text-align:right;"> 3.90 </td>
+   <td style="text-align:right;"> 2.875 </td>
+   <td style="text-align:right;"> 17.02 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 4 </td>
+   <td style="text-align:right;"> 4 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Datsun 710 </td>
+   <td style="text-align:right;"> 22.8 </td>
+   <td style="text-align:right;"> 4 </td>
+   <td style="text-align:right;"> 108 </td>
+   <td style="text-align:right;"> 93 </td>
+   <td style="text-align:right;"> 3.85 </td>
+   <td style="text-align:right;"> 2.320 </td>
+   <td style="text-align:right;"> 18.61 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 4 </td>
+   <td style="text-align:right;"> 1 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Hornet 4 Drive </td>
+   <td style="text-align:right;"> 21.4 </td>
+   <td style="text-align:right;"> 6 </td>
+   <td style="text-align:right;"> 258 </td>
+   <td style="text-align:right;"> 110 </td>
+   <td style="text-align:right;"> 3.08 </td>
+   <td style="text-align:right;"> 3.215 </td>
+   <td style="text-align:right;"> 19.44 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 3 </td>
+   <td style="text-align:right;"> 1 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Hornet Sportabout </td>
+   <td style="text-align:right;"> 18.7 </td>
+   <td style="text-align:right;"> 8 </td>
+   <td style="text-align:right;"> 360 </td>
+   <td style="text-align:right;"> 175 </td>
+   <td style="text-align:right;"> 3.15 </td>
+   <td style="text-align:right;"> 3.440 </td>
+   <td style="text-align:right;"> 17.02 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 3 </td>
+   <td style="text-align:right;"> 2 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Valiant </td>
+   <td style="text-align:right;"> 18.1 </td>
+   <td style="text-align:right;"> 6 </td>
+   <td style="text-align:right;"> 225 </td>
+   <td style="text-align:right;"> 105 </td>
+   <td style="text-align:right;"> 2.76 </td>
+   <td style="text-align:right;"> 3.460 </td>
+   <td style="text-align:right;"> 20.22 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 3 </td>
+   <td style="text-align:right;"> 1 </td>
+  </tr>
+</tbody>
+</table>
+
+<p><br />
+<em>looks better in document than in these slides</em></p>
+
+<hr />
+
+<h2 id="plots">Plots</h2>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span><span class="w">
+</span><span class="n">ggplot</span><span class="p">(</span><span class="n">mtcars</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">disp</span><span class="p">,</span><span class="w"> </span><span class="n">drat</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">geom_point</span><span class="p">()</span><span class="w">
+</span></code></pre>
+</div>
+
+<p><img src="/R-Tutorials-1/figure/source/2016-10-11-tutorial-5-data-manipulation-reporting/unnamed-chunk-2-1.png" alt="plot of chunk unnamed-chunk-2" /></p>
+
+<hr />
+
+<h2 id="data-manipulation-with-reshape2">Data manipulation with reshape2</h2>
+
+<ul>
+  <li><code class="highlighter-rouge">reshape2</code> makes it easy to transform data between wide and long formats</li>
+  <li>Why/when would you need to use this?
+    <ul>
+      <li>running regressions, other statistical tests ( <code class="highlighter-rouge">lm()</code> requires long format)</li>
+      <li>plotting data ( <code class="highlighter-rouge">ggplot</code> requires long format)</li>
+      <li>Generally record data in wide format</li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="wide-vs-long-data">‘Wide’ vs ‘Long’ data</h2>
+
+<h3 id="wide-each-column-is-a-variable">Wide: each column is a variable</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>##   Ozone Solar.R Wind Temp Month Day
+## 1    41     190  7.4   67     5   1
+## 2    36     118  8.0   72     5   2
+## 3    12     149 12.6   74     5   3
+## 4    18     313 11.5   62     5   4
+## 5    NA      NA 14.3   56     5   5
+## 6    28      NA 14.9   66     5   6
+</code></pre>
+</div>
+
+<hr />
+
+<h3 id="long-column-for-various-variable-types-and-a-column-for-their-values">Long: column for various variable types and a column for their values</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>##   variable value
+## 1    Ozone    41
+## 2    Ozone    36
+## 3    Ozone    12
+## 4    Ozone    18
+## 5    Ozone    NA
+## 6    Ozone    28
+</code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>##     variable value
+## 200     Wind  14.9
+## 201     Wind  20.7
+## 202     Wind   9.2
+## 203     Wind  11.5
+## 204     Wind  10.3
+## 205     Wind   6.3
+</code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>##     variable value
+## 454     Temp    63
+## 455     Temp    70
+## 456     Temp    77
+## 457     Temp    75
+## 458     Temp    76
+## 459     Temp    68
+</code></pre>
+</div>
+
+<hr />
+
+<h3 id="helpful-for-plotting-data">Helpful for plotting data</h3>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">ggplot</span><span class="p">(</span><span class="n">airqual.long</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">variable</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">geom_boxplot</span><span class="p">()</span><span class="w">
+</span></code></pre>
+</div>
+
+<p><img src="/R-Tutorials-1/figure/source/2016-10-11-tutorial-5-data-manipulation-reporting/unnamed-chunk-6-1.png" alt="plot of chunk unnamed-chunk-6" /></p>
+
+<hr />
+
+<h2 id="melt-wide-to-long">Melt: wide to long</h2>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">airqual.long</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">melt</span><span class="p">(</span><span class="n">airquality</span><span class="p">,</span><span class="w"> </span><span class="n">id.vars</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"Month"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Day"</span><span class="p">),</span><span class="w">
+  </span><span class="n">variable.name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"climate_variable"</span><span class="p">,</span><span class="w"> 
+  </span><span class="n">value.name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"climate_value"</span><span class="p">)</span><span class="w">
+  
+</span><span class="n">head</span><span class="p">(</span><span class="n">airqual.long</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>##   Month Day climate_variable climate_value
+## 1     5   1            Ozone            41
+## 2     5   2            Ozone            36
+## 3     5   3            Ozone            12
+## 4     5   4            Ozone            18
+## 5     5   5            Ozone            NA
+## 6     5   6            Ozone            28
+</code></pre>
+</div>
+
+<ul>
+  <li>must include which variables you would like to maintain in wide format using <code class="highlighter-rouge">id.vars</code></li>
+</ul>
+
+<hr />
+
+<h2 id="cast-long-to-wide">Cast: long to wide</h2>
+
+<p><img src="/R-Tutorials-1/figure/source/2016-10-11-tutorial-5-data-manipulation-reporting/dcast-illustration.png" alt="Caption for the picture." /></p>
+
+<hr />
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">head</span><span class="p">(</span><span class="n">dcast</span><span class="p">(</span><span class="n">airqual.long</span><span class="p">,</span><span class="w"> </span><span class="n">Month</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Day</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">climate_variable</span><span class="p">,</span><span class="w"> </span><span class="n">value.var</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"climate_value"</span><span class="p">))</span><span class="w">
+</span></code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>##   Month Day Ozone Solar.R Wind Temp
+## 1     5   1    41     190  7.4   67
+## 2     5   2    36     118  8.0   72
+## 3     5   3    12     149 12.6   74
+## 4     5   4    18     313 11.5   62
+## 5     5   5    NA      NA 14.3   56
+## 6     5   6    28      NA 14.9   66
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="references">References</h2>
+
+<ol>
+  <li><a href="http://seananderson.ca/2013/10/19/reshape.html">An Introduction to reshape2 - Sean Anderson</a></li>
+</ol>
+
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
       <a href="/R-Tutorials-1//2016/10/03/tutorial-4-regression.html">
         Tutorial 4 - Regression
       </a>

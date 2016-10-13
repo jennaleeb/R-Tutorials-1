@@ -1,0 +1,155 @@
+---
+title       : Tutorial 5 - Data manipulation and reporting
+subtitle    : 
+author      : Jenna Blumenthal
+job         : MIE 1402
+framework   : deckjs        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+widgets     : []            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+---
+
+## Data Manipulation and Reporting
+
+   **Jenna Blumenthal**  
+   Tutorial #: 5  
+   MIE 1402
+
+---
+
+## Creating an R Markdown Document in RStudio
+
+1. File > New File > R Markdown
+2. YAML header contains document metadata
+  - title
+  - author
+  - date
+  - output (html, pdf, word)
+3. Knit to generate the document
+
+---
+
+## Learning the syntax
+
+- For simple text, R Markdown follows markdown formatting syntax
+
+  - [https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
+
+- For R, surround your text with
+
+
+<pre>```{r}
+data(cars)
+summary(cars)
+```</pre>
+
+---
+
+## Options for R Chunks
+
+- `echo=FALSE` hides R code
+- `include=FALSE` prevent code and results from appearing
+- `eval=FALSE` dont run chunk
+- `message=FALSE` hides messages
+- `warnings=FALSE` hides warnings
+
+---
+
+## Tables
+
+```{r results='asis'}
+library(knitr)
+kable(head(mtcars), format = "html")
+```
+
+<br>
+*looks better in document than in these slides*
+
+---
+
+## Plots
+
+```{r warning=FALSE}
+library(ggplot2)
+ggplot(mtcars, aes(disp, drat)) + geom_point()
+```
+
+---
+
+## Data manipulation with reshape2
+
+- `reshape2` makes it easy to transform data between wide and long formats
+- Why/when would you need to use this?
+  - running regressions, other statistical tests ( `lm()` requires long format)
+  - plotting data ( `ggplot` requires long format)
+  - Generally record data in wide format
+
+---
+
+## 'Wide' vs 'Long' data
+
+### Wide: each column is a variable
+
+
+```{r warning=FALSE, echo=FALSE}
+head(airquality)
+```
+
+---
+
+### Long: column for various variable types and a column for their values
+
+```{r include = FALSE}
+library(reshape2)
+airqual.long <- melt(subset(airquality, select = c(Ozone, Wind, Temp)))
+```
+
+```{r echo=FALSE}
+head(airqual.long)
+airqual.long[200:205,]
+tail(airqual.long)
+```
+
+---
+
+### Helpful for plotting data 
+```{r warning=FALSE}
+ggplot(airqual.long, aes(variable, value)) + geom_boxplot()
+```
+
+---
+
+## Melt: wide to long
+
+```{r}
+airqual.long <- melt(airquality, id.vars = c("Month", "Day"),
+  variable.name = "climate_variable", 
+  value.name = "climate_value")
+  
+head(airqual.long)
+```
+
+- must include which variables you would like to maintain in wide format using `id.vars`
+
+---
+
+## Cast: long to wide
+
+![Caption for the picture.](assets/fig/dcast-illustration.png)
+
+---
+
+```{r}
+head(dcast(airqual.long, Month + Day ~ climate_variable, value.var = "climate_value"))
+```
+
+---
+
+## References
+
+1. [An Introduction to reshape2 - Sean Anderson](http://seananderson.ca/2013/10/19/reshape.html)
+
+
+

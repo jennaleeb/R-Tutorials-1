@@ -4,7 +4,7 @@
  <title>R</title>
  <link href="https://jennaleeb.github.io//R-Tutorials-1atom.xml" rel="self"/>
  <link href="https://jennaleeb.github.io//R-Tutorials-1"/>
- <updated>2016-10-25T14:49:22-04:00</updated>
+ <updated>2016-10-25T14:57:17-04:00</updated>
  <id>https://jennaleeb.github.io</id>
  <author>
    <name>Jenna Blumenthal</name>
@@ -33,8 +33,8 @@
     &lt;p&gt;&lt;strong&gt;Eg inflating the error:&lt;/strong&gt;
 + Suppose we consider the safety of a drug in terms of the occurrences of different types of side effects. As more types of side effects are considered, it becomes more likely that the new drug will appear to be less safe than existing drugs in terms of at least one side effect &lt;a href=&quot;https://en.wikipedia.org/wiki/Multiple_comparisons_problem&quot;&gt;Wikipedia&lt;/a&gt;&lt;/p&gt;
   &lt;/li&gt;
-  &lt;li&gt;Produces an $F$-statistic, which compares the systematic variance to the unsystematic variance&lt;/li&gt;
-  &lt;li&gt;“is the $explained\, variance$ $&amp;gt;$ $unexplained\, variance$, overall?”&lt;/li&gt;
+  &lt;li&gt;Produces an &lt;script type=&quot;math/tex&quot;&gt;F&lt;/script&gt;-statistic, which compares the systematic variance to the unsystematic variance&lt;/li&gt;
+  &lt;li&gt;“is the &lt;script type=&quot;math/tex&quot;&gt;explained\, variance&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;&gt;&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;unexplained\, variance&lt;/script&gt;, overall?”&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;hr /&gt;
@@ -169,13 +169,13 @@
 
 &lt;p&gt;We can set our regression equation to:&lt;/p&gt;
 
-&lt;p&gt;$libido_{i} = b_{0} + b_{2high_{i}} + b_{1low_{i}} + \epsilon_{i}$&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;libido_{i} = b_{0} + b_{2high_{i}} + b_{1low_{i}} + \epsilon_{i}&lt;/script&gt;
 
 &lt;p&gt;Where:&lt;/p&gt;
 
-&lt;p&gt;$b_0 = \overline{X}&lt;em&gt;{placebo}$&lt;br /&gt;
-$b_1 = \overline{X}&lt;/em&gt;{low dose} - \overline{X}&lt;em&gt;{placebo}$&lt;br /&gt;
-$b_2 = \overline{X}&lt;/em&gt;{high dose} - \overline{X}_{placebo}$&lt;/p&gt;
+&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;b_0 = \overline{X}_{placebo}&lt;/script&gt;&lt;br /&gt;
+&lt;script type=&quot;math/tex&quot;&gt;b_1 = \overline{X}_{low dose} - \overline{X}_{placebo}&lt;/script&gt;&lt;br /&gt;
+&lt;script type=&quot;math/tex&quot;&gt;b_2 = \overline{X}_{high dose} - \overline{X}_{placebo}&lt;/script&gt;&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;We are asking: Does using group means to predict libido scores perform better than using the overall mean?&lt;/li&gt;
@@ -220,16 +220,16 @@ $b_2 = \overline{X}&lt;/em&gt;{high dose} - \overline{X}_{placebo}$&lt;/p&gt;
 &lt;/div&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;First row: $SS_{M} = 20.13$ (model)&lt;/li&gt;
-  &lt;li&gt;Second row $SS_{R} = 23.60$ (error)&lt;/li&gt;
-  &lt;li&gt;$F$ value: ratio of $MS_{M}/MS_{R}$&lt;/li&gt;
+  &lt;li&gt;First row: &lt;script type=&quot;math/tex&quot;&gt;SS_{M} = 20.13&lt;/script&gt; (model)&lt;/li&gt;
+  &lt;li&gt;Second row &lt;script type=&quot;math/tex&quot;&gt;SS_{R} = 23.60&lt;/script&gt; (error)&lt;/li&gt;
+  &lt;li&gt;&lt;script type=&quot;math/tex&quot;&gt;F&lt;/script&gt; value: ratio of &lt;script type=&quot;math/tex&quot;&gt;MS_{M}/MS_{R}&lt;/script&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;hr /&gt;
 
 &lt;h2 id=&quot;planned-contrasts&quot;&gt;Planned contrasts&lt;/h2&gt;
 &lt;ul&gt;
-  &lt;li&gt;$F$-ratio does not tell us where differences between groups lie&lt;/li&gt;
+  &lt;li&gt;&lt;script type=&quot;math/tex&quot;&gt;F&lt;/script&gt;-ratio does not tell us where differences between groups lie&lt;/li&gt;
   &lt;li&gt;
     &lt;p&gt;Two approaches:&lt;/p&gt;
   &lt;/li&gt;
@@ -324,9 +324,7 @@ $b_2 = \overline{X}&lt;/em&gt;{high dose} - \overline{X}_{placebo}$&lt;/p&gt;
 
 &lt;h2 id=&quot;more-complex-anovas&quot;&gt;More complex ANOVAs&lt;/h2&gt;
 
-&lt;p&gt;&lt;img src=&quot;R-Tutorials-1/figure/source/2016-10-25-tutorial-6-anova/anova_naming.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
+&lt;h2 id=&quot;r-tutorials-1figuresource2016-10-25-tutorial-6-anovaanovanamingjpg&quot;&gt;&lt;img src=&quot;/R-Tutorials-1/figure/source/2016-10-25-tutorial-6-anova/anova_naming.jpg&quot; alt=&quot;&quot; /&gt;&lt;/h2&gt;
 
 &lt;h2 id=&quot;more-complex-anovas-1&quot;&gt;More complex ANOVAs&lt;/h2&gt;
 

@@ -31,8 +31,8 @@ categories  : ['R', 'ANOVA', 'regression']
   __Eg inflating the error:__
   + Suppose we consider the safety of a drug in terms of the occurrences of different types of side effects. As more types of side effects are considered, it becomes more likely that the new drug will appear to be less safe than existing drugs in terms of at least one side effect [Wikipedia](https://en.wikipedia.org/wiki/Multiple_comparisons_problem)
   
-- Produces an $F$-statistic, which compares the systematic variance to the unsystematic variance
- + "is the $explained\, variance$ $>$ $unexplained\, variance$, overall?"
+- Produces an $$F$$-statistic, which compares the systematic variance to the unsystematic variance
+ + "is the $$explained\, variance$$ $$>$$ $$unexplained\, variance$$, overall?"
 
 ---
 
@@ -89,13 +89,13 @@ categories  : ['R', 'ANOVA', 'regression']
 
 We can set our regression equation to:
 
-$libido_{i} = b_{0} + b_{2high_{i}} + b_{1low_{i}} + \epsilon_{i}$
+$$libido_{i} = b_{0} + b_{2high_{i}} + b_{1low_{i}} + \epsilon_{i}$$
 
 Where:
 
-$b_0 = \overline{X}_{placebo}$  
-$b_1 = \overline{X}_{low dose} - \overline{X}_{placebo}$  
-$b_2 = \overline{X}_{high dose} - \overline{X}_{placebo}$   
+$$b_0 = \overline{X}_{placebo}$$  
+$$b_1 = \overline{X}_{low dose} - \overline{X}_{placebo}$$  
+$$b_2 = \overline{X}_{high dose} - \overline{X}_{placebo}$$   
 
 - We are asking: Does using group means to predict libido scores perform better than using the overall mean?
 
@@ -139,14 +139,14 @@ summary(viagraModel)
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
-- First row: $SS_{M} = 20.13$ (model)
-- Second row $SS_{R} = 23.60$ (error)
-- $F$ value: ratio of $MS_{M}/MS_{R}$
+- First row: $$SS_{M} = 20.13$$ (model)
+- Second row $$SS_{R} = 23.60$$ (error)
+- $$F$$ value: ratio of $$MS_{M}/MS_{R}$$
 
 ---
 
 ## Planned contrasts
-- $F$-ratio does not tell us where differences between groups lie
+- $$F$$-ratio does not tell us where differences between groups lie
 - Two approaches:
 
 - __Planned contrasts:__ break down variance accounted for by the model into component parts (specific hypothesis)  
@@ -226,8 +226,7 @@ contrasts(data$dose) <- cbind(contrast_1, contrast_2)
 
 ## More complex ANOVAs
 
-![](R-Tutorials-1/figure/source/2016-10-25-tutorial-6-anova/anova_naming.jpg)
-
+![](/R-Tutorials-1/figure/source/2016-10-25-tutorial-6-anova/anova_naming.jpg)
 ---
 
 ## More complex ANOVAs

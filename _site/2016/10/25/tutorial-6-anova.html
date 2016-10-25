@@ -116,8 +116,8 @@
     <p><strong>Eg inflating the error:</strong>
 + Suppose we consider the safety of a drug in terms of the occurrences of different types of side effects. As more types of side effects are considered, it becomes more likely that the new drug will appear to be less safe than existing drugs in terms of at least one side effect <a href="https://en.wikipedia.org/wiki/Multiple_comparisons_problem">Wikipedia</a></p>
   </li>
-  <li>Produces an $F$-statistic, which compares the systematic variance to the unsystematic variance</li>
-  <li>“is the $explained\, variance$ $&gt;$ $unexplained\, variance$, overall?”</li>
+  <li>Produces an <script type="math/tex">F</script>-statistic, which compares the systematic variance to the unsystematic variance</li>
+  <li>“is the <script type="math/tex">explained\, variance</script> <script type="math/tex">></script> <script type="math/tex">unexplained\, variance</script>, overall?”</li>
 </ul>
 
 <hr />
@@ -252,13 +252,13 @@
 
 <p>We can set our regression equation to:</p>
 
-<p>$libido_{i} = b_{0} + b_{2high_{i}} + b_{1low_{i}} + \epsilon_{i}$</p>
+<script type="math/tex; mode=display">libido_{i} = b_{0} + b_{2high_{i}} + b_{1low_{i}} + \epsilon_{i}</script>
 
 <p>Where:</p>
 
-<p>$b_0 = \overline{X}<em>{placebo}$<br />
-$b_1 = \overline{X}</em>{low dose} - \overline{X}<em>{placebo}$<br />
-$b_2 = \overline{X}</em>{high dose} - \overline{X}_{placebo}$</p>
+<p><script type="math/tex">b_0 = \overline{X}_{placebo}</script><br />
+<script type="math/tex">b_1 = \overline{X}_{low dose} - \overline{X}_{placebo}</script><br />
+<script type="math/tex">b_2 = \overline{X}_{high dose} - \overline{X}_{placebo}</script></p>
 
 <ul>
   <li>We are asking: Does using group means to predict libido scores perform better than using the overall mean?</li>
@@ -303,16 +303,16 @@ $b_2 = \overline{X}</em>{high dose} - \overline{X}_{placebo}$</p>
 </div>
 
 <ul>
-  <li>First row: $SS_{M} = 20.13$ (model)</li>
-  <li>Second row $SS_{R} = 23.60$ (error)</li>
-  <li>$F$ value: ratio of $MS_{M}/MS_{R}$</li>
+  <li>First row: <script type="math/tex">SS_{M} = 20.13</script> (model)</li>
+  <li>Second row <script type="math/tex">SS_{R} = 23.60</script> (error)</li>
+  <li><script type="math/tex">F</script> value: ratio of <script type="math/tex">MS_{M}/MS_{R}</script></li>
 </ul>
 
 <hr />
 
 <h2 id="planned-contrasts">Planned contrasts</h2>
 <ul>
-  <li>$F$-ratio does not tell us where differences between groups lie</li>
+  <li><script type="math/tex">F</script>-ratio does not tell us where differences between groups lie</li>
   <li>
     <p>Two approaches:</p>
   </li>
@@ -407,9 +407,7 @@ $b_2 = \overline{X}</em>{high dose} - \overline{X}_{placebo}$</p>
 
 <h2 id="more-complex-anovas">More complex ANOVAs</h2>
 
-<p><img src="R-Tutorials-1/figure/source/2016-10-25-tutorial-6-anova/anova_naming.jpg" alt="" /></p>
-
-<hr />
+<h2 id="r-tutorials-1figuresource2016-10-25-tutorial-6-anovaanovanamingjpg"><img src="/R-Tutorials-1/figure/source/2016-10-25-tutorial-6-anova/anova_naming.jpg" alt="" /></h2>
 
 <h2 id="more-complex-anovas-1">More complex ANOVAs</h2>
 

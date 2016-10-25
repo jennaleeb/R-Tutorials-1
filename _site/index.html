@@ -101,6 +101,356 @@
   
   <div class="post">
     <h1 class="post-title">
+      <a href="/R-Tutorials-1//2016/10/25/tutorial-6-anova.html">
+        Tutorial 6 - Comparing several means (ANOVA)
+      </a>
+    </h1>
+    
+<a href="/R-Tutorials-1/2016/10/25/tutorial-6-anova.html#disqus_thread"
+    class = "commentcount"></a>
+    
+    <span class="post-date">25 Oct 2016</span>
+
+    <h2 id="comparing-several-means-anova">Comparing Several Means: ANOVA</h2>
+
+<p><strong>Jenna Blumenthal</strong><br />
+   Tutorial #: 6<br />
+   MIE 1402</p>
+
+<hr />
+
+<h2 id="anova-as-an-omnibus-test">ANOVA as an omnibus test</h2>
+<ul>
+  <li>
+    <p>Allows us to compare the means of three or more groups without inflating the error (see <em>Field</em>, pg 399)</p>
+
+    <p><strong>Eg inflating the error:</strong>
++ Suppose we consider the safety of a drug in terms of the occurrences of different types of side effects. As more types of side effects are considered, it becomes more likely that the new drug will appear to be less safe than existing drugs in terms of at least one side effect <a href="https://en.wikipedia.org/wiki/Multiple_comparisons_problem">Wikipedia</a></p>
+  </li>
+  <li>Produces an $F$-statistic, which compares the systematic variance to the unsystematic variance</li>
+  <li>“is the $explained\, variance$ $&gt;$ $unexplained\, variance$, overall?”</li>
+</ul>
+
+<hr />
+
+<h2 id="anova-as-regression">ANOVA as Regression</h2>
+<ul>
+  <li>Both just configurations of the General Linear Model (GLM)</li>
+  <li>How well does our model (individual groupings) predict the data, compared to the error?
+    <ul>
+      <li>This is the same as: are our groups significantly different?</li>
+      <li>Regression with a categorial predictor variable</li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="data-we-are-using">Data we are using:</h3>
+<ul>
+  <li><a href="https://studysites.sagepub.com/dsur/study/articles.htm">https://studysites.sagepub.com/dsur/study/articles.htm</a></li>
+</ul>
+
+<style type="text/css">
+.deck-container td { padding: 5px 20px}
+</style>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: right">person</th>
+      <th style="text-align: left">dose</th>
+      <th style="text-align: right">libido</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: right">1</td>
+      <td style="text-align: left">Placebo</td>
+      <td style="text-align: right">3</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">2</td>
+      <td style="text-align: left">Placebo</td>
+      <td style="text-align: right">2</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">3</td>
+      <td style="text-align: left">Placebo</td>
+      <td style="text-align: right">1</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">4</td>
+      <td style="text-align: left">Placebo</td>
+      <td style="text-align: right">1</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">5</td>
+      <td style="text-align: left">Placebo</td>
+      <td style="text-align: right">4</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">6</td>
+      <td style="text-align: left">Low Dose</td>
+      <td style="text-align: right">5</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">7</td>
+      <td style="text-align: left">Low Dose</td>
+      <td style="text-align: right">2</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">8</td>
+      <td style="text-align: left">Low Dose</td>
+      <td style="text-align: right">4</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">9</td>
+      <td style="text-align: left">Low Dose</td>
+      <td style="text-align: right">2</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">10</td>
+      <td style="text-align: left">Low Dose</td>
+      <td style="text-align: right">3</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">11</td>
+      <td style="text-align: left">High Dose</td>
+      <td style="text-align: right">7</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">12</td>
+      <td style="text-align: left">High Dose</td>
+      <td style="text-align: right">4</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">13</td>
+      <td style="text-align: left">High Dose</td>
+      <td style="text-align: right">5</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">14</td>
+      <td style="text-align: left">High Dose</td>
+      <td style="text-align: right">3</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">15</td>
+      <td style="text-align: left">High Dose</td>
+      <td style="text-align: right">6</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="anova-as-regression-1">ANOVA as Regression</h2>
+
+<ul>
+  <li>Does dose (placebo, low or high) predict libido? (regression-speak)</li>
+  <li>Can also say: is libido in these 3 groups significantly different? (ANOVA-speak)</li>
+</ul>
+
+<p><img src="/R-Tutorials-1/figure/source/2016-10-25-tutorial-6-anova/unnamed-chunk-4-1.png" alt="plot of chunk unnamed-chunk-4" /></p>
+
+<hr />
+
+<h2 id="anova-as-regression-2">ANOVA as Regression</h2>
+
+<ul>
+  <li>If our predictor variable (dose) has 3 ordered levels (placebo, low dose, high dose)</li>
+</ul>
+
+<p>We can set our regression equation to:</p>
+
+<p>$libido_{i} = b_{0} + b_{2high_{i}} + b_{1low_{i}} + \epsilon_{i}$</p>
+
+<p>Where:</p>
+
+<p>$b_0 = \overline{X}<em>{placebo}$<br />
+$b_1 = \overline{X}</em>{low dose} - \overline{X}<em>{placebo}$<br />
+$b_2 = \overline{X}</em>{high dose} - \overline{X}_{placebo}$</p>
+
+<ul>
+  <li>We are asking: Does using group means to predict libido scores perform better than using the overall mean?</li>
+</ul>
+
+<hr />
+
+<h3 id="try-this-yourself">Try this yourself:</h3>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">lm.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">lm</span><span class="p">(</span><span class="n">libido</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">dose</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">data</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<ul>
+  <li>calculate the means of each dose group</li>
+  <li>prove to yourself that regression = ANOVA = GLM</li>
+</ul>
+
+<hr />
+
+<h2 id="anova-as-regression-3">ANOVA as Regression</h2>
+
+<p>Moral of the story: ANOVA can always be represented by the multiple regression equation in which the # of predictor variables is one <strong>less</strong> than the # of categories of the independent variable.</p>
+
+<p><img src="/R-Tutorials-1/figure/source/2016-10-25-tutorial-6-anova/unnamed-chunk-7-1.png" alt="plot of chunk unnamed-chunk-7" /></p>
+
+<hr />
+
+<h2 id="anova-in-r">ANOVA in R</h2>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">viagraModel</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">aov</span><span class="p">(</span><span class="n">libido</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">dose</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">data</span><span class="p">)</span><span class="w">
+</span><span class="n">summary</span><span class="p">(</span><span class="n">viagraModel</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>##             Df Sum Sq Mean Sq F value Pr(&gt;F)  
+## dose         2  20.13  10.067   5.119 0.0247 *
+## Residuals   12  23.60   1.967                 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+</code></pre>
+</div>
+
+<ul>
+  <li>First row: $SS_{M} = 20.13$ (model)</li>
+  <li>Second row $SS_{R} = 23.60$ (error)</li>
+  <li>$F$ value: ratio of $MS_{M}/MS_{R}$</li>
+</ul>
+
+<hr />
+
+<h2 id="planned-contrasts">Planned contrasts</h2>
+<ul>
+  <li>$F$-ratio does not tell us where differences between groups lie</li>
+  <li>
+    <p>Two approaches:</p>
+  </li>
+  <li>
+    <p><strong>Planned contrasts:</strong> break down variance accounted for by the model into component parts (specific hypothesis)</p>
+
+    <ul>
+      <li>Not going to go into the theory today, but I highly recommend <em>Field</em> 419-424. This is one of those times where looking through the math helps.</li>
+    </ul>
+  </li>
+  <li><strong>Post hoc tests:</strong> compare every group but use a stricter acceptance criterion (no specific hypothesis)</li>
+</ul>
+
+<hr />
+
+<h2 id="built-in-planned-contrasts-in-r">Built-in planned contrasts in R</h2>
+
+<ul>
+  <li>R actually sets default constrasts for your grouping variable</li>
+</ul>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">summary.lm</span><span class="p">(</span><span class="n">viagraModel</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>## 
+## Call:
+## aov(formula = libido ~ dose, data = data)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+##   -2.0   -1.2   -0.2    0.9    2.0 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)   
+## (Intercept)     2.2000     0.6272   3.508  0.00432 **
+## doseLow Dose    1.0000     0.8869   1.127  0.28158   
+## doseHigh Dose   2.8000     0.8869   3.157  0.00827 **
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 1.402 on 12 degrees of freedom
+## Multiple R-squared:  0.4604,	Adjusted R-squared:  0.3704 
+## F-statistic: 5.119 on 2 and 12 DF,  p-value: 0.02469
+</code></pre>
+</div>
+
+<hr />
+
+<ul>
+  <li>Compares each group to the base (first) group
+    <ul>
+      <li>Is each dose signficantly different than the placebo?</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">contrasts</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">dose</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>##           Low Dose High Dose
+## Placebo          0         0
+## Low Dose         1         0
+## High Dose        0         1
+</code></pre>
+</div>
+
+<ul>
+  <li>If we wanted to set our own contrasts
+    <ul>
+      <li>e.g. is any viagra (low or high) significantly different than the placebo, and are high and low doses different from each other?</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">contrast_1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">-2</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">)</span><span class="w"> </span><span class="c1"># placebo vs viagra
+</span><span class="n">contrast_2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">-1</span><span class="p">,</span><span class="m">1</span><span class="p">)</span><span class="w"> </span><span class="c1"># high vs low
+</span><span class="w">
+</span><span class="n">contrasts</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">dose</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">cbind</span><span class="p">(</span><span class="n">contrast_1</span><span class="p">,</span><span class="w"> </span><span class="n">contrast_2</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>##           contrast_1 contrast_2
+## Placebo           -2          0
+## Low Dose           1         -1
+## High Dose          1          1
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="more-complex-anovas">More complex ANOVAs</h2>
+
+<p><img src="R-Tutorials-1/figure/source/2016-10-25-tutorial-6-anova/anova_naming.jpg" alt="" /></p>
+
+<hr />
+
+<h2 id="more-complex-anovas-1">More complex ANOVAs</h2>
+
+<ul>
+  <li>Benefit of using ANOVA is you can look at the effect of more than one independent variable, and how they interact
+    <ul>
+      <li>Main effects</li>
+      <li>Interaction effects</li>
+    </ul>
+  </li>
+  <li>In R:</li>
+</ul>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">aov_model</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">aov</span><span class="p">(</span><span class="n">outcome</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">predictor1</span><span class="o">*</span><span class="n">predictor2</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">data_frame</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<hr />
+
+<h2 id="references">References</h2>
+
+<p>Field A, Miles J, Field Z. Discovering Statistics Using R. London: Sage; 2012.</p>
+
+<p><a href="https://en.wikipedia.org/wiki/Multiple_comparisons_problem">https://en.wikipedia.org/wiki/Multiple_comparisons_problem</a></p>
+
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
       <a href="/R-Tutorials-1//2016/10/11/tutorial-5-data-manipulation-reporting.html">
         Tutorial 5 - Data manipulation and reporting
       </a>

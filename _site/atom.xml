@@ -4,7 +4,7 @@
  <title>R</title>
  <link href="https://jennaleeb.github.io//R-Tutorials-1atom.xml" rel="self"/>
  <link href="https://jennaleeb.github.io//R-Tutorials-1"/>
- <updated>2016-11-02T12:47:44-04:00</updated>
+ <updated>2016-11-02T12:54:15-04:00</updated>
  <id>https://jennaleeb.github.io</id>
  <author>
    <name>Jenna Blumenthal</name>
@@ -47,7 +47,7 @@
 &lt;h2 id=&quot;logistic-regression-equation&quot;&gt;Logistic regression equation&lt;/h2&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;We are instead predicting the &lt;strong&gt;probability&lt;/strong&gt; of $Y$ occuring, rather than the &lt;strong&gt;value&lt;/strong&gt; of $Y$&lt;/li&gt;
+  &lt;li&gt;We are instead predicting the &lt;strong&gt;probability&lt;/strong&gt; of &lt;script type=&quot;math/tex&quot;&gt;Y&lt;/script&gt; occuring, rather than the &lt;strong&gt;value&lt;/strong&gt; of &lt;script type=&quot;math/tex&quot;&gt;Y&lt;/script&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;P(Y) = \frac{1}{1+e^{-(b_{0}+b_{1}X_{1}+b_{2}X_{2}...)}}&lt;/script&gt;
@@ -59,7 +59,7 @@
   &lt;li&gt;We instead take the logarithm of the equation&lt;/li&gt;
   &lt;li&gt;This allows us to express a non-linear relationship in a linear way
     &lt;ul&gt;
-      &lt;li&gt;$P(Y)$ is continuous, and varies from 0 to 1&lt;/li&gt;
+      &lt;li&gt;&lt;script type=&quot;math/tex&quot;&gt;P(Y)&lt;/script&gt; is continuous, and varies from 0 to 1&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
@@ -69,12 +69,12 @@
 &lt;h2 id=&quot;assessing-the-model&quot;&gt;Assessing the model&lt;/h2&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;for a given occurance, $Y$ will either be 0 (didn’t occur) or 1 (did occur)&lt;/li&gt;
-  &lt;li&gt;so $P(Y)$ is the &lt;em&gt;chance&lt;/em&gt; that it occured&lt;/li&gt;
+  &lt;li&gt;for a given occurance, &lt;script type=&quot;math/tex&quot;&gt;Y&lt;/script&gt; will either be 0 (didn’t occur) or 1 (did occur)&lt;/li&gt;
+  &lt;li&gt;so &lt;script type=&quot;math/tex&quot;&gt;P(Y)&lt;/script&gt; is the &lt;em&gt;chance&lt;/em&gt; that it occured&lt;/li&gt;
   &lt;li&gt;To assess whether our model fits the data, we can compare the &lt;strong&gt;observed&lt;/strong&gt; and &lt;strong&gt;predicted&lt;/strong&gt; values of the outcome&lt;/li&gt;
   &lt;li&gt;The measure is called the &lt;strong&gt;log-likelihood&lt;/strong&gt;
     &lt;ul&gt;
-      &lt;li&gt;Analogous to $SS_{R}$ in that it is an indicator of how much unexplained information there is after a model has been fitted&lt;/li&gt;
+      &lt;li&gt;Analogous to &lt;script type=&quot;math/tex&quot;&gt;SS_{R}&lt;/script&gt; in that it is an indicator of how much unexplained information there is after a model has been fitted&lt;/li&gt;
       &lt;li&gt;Large value = lots of unexplained observations&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
@@ -82,29 +82,29 @@
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;\text{log-likelihood} = \sum_{i=1}^{N}[Y_{i}ln(P(Y_{i}))+(1-Y_{i})ln(1-P(Y_{i})))]&lt;/script&gt;
 
-&lt;p&gt;— &amp;amp;two-col&lt;/p&gt;
+&lt;hr /&gt;
 
 &lt;h2 id=&quot;assessing-the-model-1&quot;&gt;Assessing the model&lt;/h2&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;\text{log-likelihood} = \sum_{i=1}^{N}[Y_{i}ln(P(Y_{i}))+(1-Y_{i})ln(1-P(Y_{i})))]&lt;/script&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;recall the $ln$ distribution:&lt;/li&gt;
+  &lt;li&gt;recall the &lt;script type=&quot;math/tex&quot;&gt;ln&lt;/script&gt; distribution:&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;&lt;img src=&quot;/R-Tutorials-1/figure/source/2016-11-01-tutorial-7-anova/unnamed-chunk-2-1.png&quot; alt=&quot;plot of chunk unnamed-chunk-2&quot; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;What happens when&lt;br /&gt;
-$Y_{i} = 0$?&lt;br /&gt;
-$Y_{i} = 1$?&lt;/li&gt;
+&lt;script type=&quot;math/tex&quot;&gt;Y_{i} = 0&lt;/script&gt;?&lt;br /&gt;
+&lt;script type=&quot;math/tex&quot;&gt;Y_{i} = 1&lt;/script&gt;?&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;hr /&gt;
 
 &lt;h2 id=&quot;deviance-statistic&quot;&gt;Deviance statistic&lt;/h2&gt;
 &lt;ul&gt;
-  &lt;li&gt;deviance = $-2 x LL$&lt;/li&gt;
+  &lt;li&gt;deviance = &lt;script type=&quot;math/tex&quot;&gt;-2 x LL&lt;/script&gt;&lt;/li&gt;
   &lt;li&gt;more convenient because it has a chi-square distribution&lt;/li&gt;
   &lt;li&gt;easier to calculate significance of value&lt;/li&gt;
   &lt;li&gt;We use the deviance to compare models (similar to &lt;strong&gt;aov&lt;/strong&gt;(model_1, model_2))
@@ -124,11 +124,11 @@ $Y_{i} = 1$?&lt;/li&gt;
 
 &lt;h3 id=&quot;other-ways-to-assess-the-model&quot;&gt;Other ways to assess the model&lt;/h3&gt;
 &lt;p&gt;(we won’t go over)
-- $R$, $R^{2}$
-  + Hosmer and Lemeshow’s $R^{2}&lt;em&gt;{L}$
-  + Cox and Snell’s $R^{2}&lt;/em&gt;{CS}$
-  + Nagelkerke’s $R^{2}&lt;em&gt;{N}$
-- Each have their own theoretical background and slightly different equations (_Field&lt;/em&gt;, 317-18)
+- &lt;script type=&quot;math/tex&quot;&gt;R&lt;/script&gt;, &lt;script type=&quot;math/tex&quot;&gt;R^{2}&lt;/script&gt;
+  + Hosmer and Lemeshow’s &lt;script type=&quot;math/tex&quot;&gt;R^{2}_{L}&lt;/script&gt;
+  + Cox and Snell’s &lt;script type=&quot;math/tex&quot;&gt;R^{2}_{CS}&lt;/script&gt;
+  + Nagelkerke’s &lt;script type=&quot;math/tex&quot;&gt;R^{2}_{N}&lt;/script&gt;
+- Each have their own theoretical background and slightly different equations (&lt;em&gt;Field&lt;/em&gt;, 317-18)
 - AIC, BIC&lt;/p&gt;
 
 &lt;hr /&gt;
@@ -136,7 +136,7 @@ $Y_{i} = 1$?&lt;/li&gt;
 &lt;h2 id=&quot;odds-ratio&quot;&gt;Odds ratio&lt;/h2&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;More important to interpreting logistic regression is the value of the odds ratio, $e^{B}$
+  &lt;li&gt;More important to interpreting logistic regression is the value of the odds ratio, &lt;script type=&quot;math/tex&quot;&gt;e^{B}&lt;/script&gt;
     &lt;ul&gt;
       &lt;li&gt;Indicator of the change in odds resulting from a &lt;strong&gt;unit change&lt;/strong&gt; in the predictor&lt;/li&gt;
     &lt;/ul&gt;
@@ -148,9 +148,9 @@ $Y_{i} = 1$?&lt;/li&gt;
 
 &lt;p&gt;Where:&lt;/p&gt;
 
-&lt;p&gt;$P(event\,Y) = \frac{1}{1+e^{-b_{0}+b_{1}X_{1}+b_{2}X_{2}…}}$&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;P(event\,Y) = \frac{1}{1+e^{-b_{0}+b_{1}X_{1}+b_{2}X_{2}...}}&lt;/script&gt;
 
-&lt;p&gt;$P(no\,event\,Y) = 1 - P(event\,Y)$&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;P(no\,event\,Y) = 1 - P(event\,Y)&lt;/script&gt;
 
 &lt;hr /&gt;
 
@@ -225,7 +225,7 @@ $Y_{i} = 1$?&lt;/li&gt;
 
 &lt;ul&gt;
   &lt;li&gt;The residual deviance is lower than the null deviance (model is now predicting the outcome more accurately than baseline)&lt;/li&gt;
-  &lt;li&gt;Question of how &lt;em&gt;much&lt;/em&gt; better the model predicts the outcome is assessed using the $\chi^{2}$ statistic:
+  &lt;li&gt;Question of how &lt;em&gt;much&lt;/em&gt; better the model predicts the outcome is assessed using the &lt;script type=&quot;math/tex&quot;&gt;\chi^{2}&lt;/script&gt; statistic:
 &lt;script type=&quot;math/tex&quot;&gt;\chi^{2} = 499.98 - 486.97 = 13.01&lt;/script&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
@@ -270,13 +270,13 @@ $Y_{i} = 1$?&lt;/li&gt;
 &lt;h3 id=&quot;assessing-coefficients&quot;&gt;Assessing coefficients&lt;/h3&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;similar to linear regression, the $b$ estimate replaces the value in our original equation&lt;/li&gt;
+  &lt;li&gt;similar to linear regression, the &lt;script type=&quot;math/tex&quot;&gt;b&lt;/script&gt; estimate replaces the value in our original equation&lt;/li&gt;
   &lt;li&gt;represents the change in the logit of the outcome variable associated with a one-unit change in the predictor variable
     &lt;ul&gt;
-      &lt;li&gt;the natural logarithm ($ln$) if the odds of $Y$ occuring&lt;/li&gt;
+      &lt;li&gt;the natural logarithm (&lt;script type=&quot;math/tex&quot;&gt;ln&lt;/script&gt;) if the odds of &lt;script type=&quot;math/tex&quot;&gt;Y&lt;/script&gt; occuring&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;$z$-statistic tells us whether the $b$ coefficient is significantly different from 0&lt;/li&gt;
+  &lt;li&gt;&lt;script type=&quot;math/tex&quot;&gt;z&lt;/script&gt;-statistic tells us whether the &lt;script type=&quot;math/tex&quot;&gt;b&lt;/script&gt; coefficient is significantly different from 0&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;hr /&gt;

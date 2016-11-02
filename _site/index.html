@@ -141,7 +141,7 @@
 <h2 id="logistic-regression-equation">Logistic regression equation</h2>
 
 <ul>
-  <li>We are instead predicting the <strong>probability</strong> of $Y$ occuring, rather than the <strong>value</strong> of $Y$</li>
+  <li>We are instead predicting the <strong>probability</strong> of <script type="math/tex">Y</script> occuring, rather than the <strong>value</strong> of <script type="math/tex">Y</script></li>
 </ul>
 
 <script type="math/tex; mode=display">P(Y) = \frac{1}{1+e^{-(b_{0}+b_{1}X_{1}+b_{2}X_{2}...)}}</script>
@@ -153,7 +153,7 @@
   <li>We instead take the logarithm of the equation</li>
   <li>This allows us to express a non-linear relationship in a linear way
     <ul>
-      <li>$P(Y)$ is continuous, and varies from 0 to 1</li>
+      <li><script type="math/tex">P(Y)</script> is continuous, and varies from 0 to 1</li>
     </ul>
   </li>
 </ul>
@@ -163,12 +163,12 @@
 <h2 id="assessing-the-model">Assessing the model</h2>
 
 <ul>
-  <li>for a given occurance, $Y$ will either be 0 (didn’t occur) or 1 (did occur)</li>
-  <li>so $P(Y)$ is the <em>chance</em> that it occured</li>
+  <li>for a given occurance, <script type="math/tex">Y</script> will either be 0 (didn’t occur) or 1 (did occur)</li>
+  <li>so <script type="math/tex">P(Y)</script> is the <em>chance</em> that it occured</li>
   <li>To assess whether our model fits the data, we can compare the <strong>observed</strong> and <strong>predicted</strong> values of the outcome</li>
   <li>The measure is called the <strong>log-likelihood</strong>
     <ul>
-      <li>Analogous to $SS_{R}$ in that it is an indicator of how much unexplained information there is after a model has been fitted</li>
+      <li>Analogous to <script type="math/tex">SS_{R}</script> in that it is an indicator of how much unexplained information there is after a model has been fitted</li>
       <li>Large value = lots of unexplained observations</li>
     </ul>
   </li>
@@ -176,29 +176,29 @@
 
 <script type="math/tex; mode=display">\text{log-likelihood} = \sum_{i=1}^{N}[Y_{i}ln(P(Y_{i}))+(1-Y_{i})ln(1-P(Y_{i})))]</script>
 
-<p>— &amp;two-col</p>
+<hr />
 
 <h2 id="assessing-the-model-1">Assessing the model</h2>
 
 <script type="math/tex; mode=display">\text{log-likelihood} = \sum_{i=1}^{N}[Y_{i}ln(P(Y_{i}))+(1-Y_{i})ln(1-P(Y_{i})))]</script>
 
 <ul>
-  <li>recall the $ln$ distribution:</li>
+  <li>recall the <script type="math/tex">ln</script> distribution:</li>
 </ul>
 
 <p><img src="/R-Tutorials-1/figure/source/2016-11-01-tutorial-7-anova/unnamed-chunk-2-1.png" alt="plot of chunk unnamed-chunk-2" /></p>
 
 <ul>
   <li>What happens when<br />
-$Y_{i} = 0$?<br />
-$Y_{i} = 1$?</li>
+<script type="math/tex">Y_{i} = 0</script>?<br />
+<script type="math/tex">Y_{i} = 1</script>?</li>
 </ul>
 
 <hr />
 
 <h2 id="deviance-statistic">Deviance statistic</h2>
 <ul>
-  <li>deviance = $-2 x LL$</li>
+  <li>deviance = <script type="math/tex">-2 x LL</script></li>
   <li>more convenient because it has a chi-square distribution</li>
   <li>easier to calculate significance of value</li>
   <li>We use the deviance to compare models (similar to <strong>aov</strong>(model_1, model_2))
@@ -218,11 +218,11 @@ $Y_{i} = 1$?</li>
 
 <h3 id="other-ways-to-assess-the-model">Other ways to assess the model</h3>
 <p>(we won’t go over)
-- $R$, $R^{2}$
-  + Hosmer and Lemeshow’s $R^{2}<em>{L}$
-  + Cox and Snell’s $R^{2}</em>{CS}$
-  + Nagelkerke’s $R^{2}<em>{N}$
-- Each have their own theoretical background and slightly different equations (_Field</em>, 317-18)
+- <script type="math/tex">R</script>, <script type="math/tex">R^{2}</script>
+  + Hosmer and Lemeshow’s <script type="math/tex">R^{2}_{L}</script>
+  + Cox and Snell’s <script type="math/tex">R^{2}_{CS}</script>
+  + Nagelkerke’s <script type="math/tex">R^{2}_{N}</script>
+- Each have their own theoretical background and slightly different equations (<em>Field</em>, 317-18)
 - AIC, BIC</p>
 
 <hr />
@@ -230,7 +230,7 @@ $Y_{i} = 1$?</li>
 <h2 id="odds-ratio">Odds ratio</h2>
 
 <ul>
-  <li>More important to interpreting logistic regression is the value of the odds ratio, $e^{B}$
+  <li>More important to interpreting logistic regression is the value of the odds ratio, <script type="math/tex">e^{B}</script>
     <ul>
       <li>Indicator of the change in odds resulting from a <strong>unit change</strong> in the predictor</li>
     </ul>
@@ -242,9 +242,9 @@ $Y_{i} = 1$?</li>
 
 <p>Where:</p>
 
-<p>$P(event\,Y) = \frac{1}{1+e^{-b_{0}+b_{1}X_{1}+b_{2}X_{2}…}}$</p>
+<script type="math/tex; mode=display">P(event\,Y) = \frac{1}{1+e^{-b_{0}+b_{1}X_{1}+b_{2}X_{2}...}}</script>
 
-<p>$P(no\,event\,Y) = 1 - P(event\,Y)$</p>
+<script type="math/tex; mode=display">P(no\,event\,Y) = 1 - P(event\,Y)</script>
 
 <hr />
 
@@ -319,7 +319,7 @@ $Y_{i} = 1$?</li>
 
 <ul>
   <li>The residual deviance is lower than the null deviance (model is now predicting the outcome more accurately than baseline)</li>
-  <li>Question of how <em>much</em> better the model predicts the outcome is assessed using the $\chi^{2}$ statistic:
+  <li>Question of how <em>much</em> better the model predicts the outcome is assessed using the <script type="math/tex">\chi^{2}</script> statistic:
 <script type="math/tex">\chi^{2} = 499.98 - 486.97 = 13.01</script></li>
 </ul>
 
@@ -364,13 +364,13 @@ $Y_{i} = 1$?</li>
 <h3 id="assessing-coefficients">Assessing coefficients</h3>
 
 <ul>
-  <li>similar to linear regression, the $b$ estimate replaces the value in our original equation</li>
+  <li>similar to linear regression, the <script type="math/tex">b</script> estimate replaces the value in our original equation</li>
   <li>represents the change in the logit of the outcome variable associated with a one-unit change in the predictor variable
     <ul>
-      <li>the natural logarithm ($ln$) if the odds of $Y$ occuring</li>
+      <li>the natural logarithm (<script type="math/tex">ln</script>) if the odds of <script type="math/tex">Y</script> occuring</li>
     </ul>
   </li>
-  <li>$z$-statistic tells us whether the $b$ coefficient is significantly different from 0</li>
+  <li><script type="math/tex">z</script>-statistic tells us whether the <script type="math/tex">b</script> coefficient is significantly different from 0</li>
 </ul>
 
 <hr />

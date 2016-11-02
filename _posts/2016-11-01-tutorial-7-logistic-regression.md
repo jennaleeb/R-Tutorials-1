@@ -37,7 +37,7 @@ categories  : ['R', 'regression']
 
 ## Logistic regression equation
 
-- We are instead predicting the **probability** of $Y$ occuring, rather than the **value** of $Y$
+- We are instead predicting the **probability** of $$Y$$ occuring, rather than the **value** of $$Y$$
 
 $$ P(Y) = \frac{1}{1+e^{-(b_{0}+b_{1}X_{1}+b_{2}X_{2}...)}} $$
 
@@ -45,39 +45,39 @@ $$ P(Y) = \frac{1}{1+e^{-(b_{0}+b_{1}X_{1}+b_{2}X_{2}...)}} $$
   
 - We instead take the logarithm of the equation
 - This allows us to express a non-linear relationship in a linear way
-  + $P(Y)$ is continuous, and varies from 0 to 1
+  + $$P(Y)$$ is continuous, and varies from 0 to 1
 
 ---
 
 ## Assessing the model
 
-- for a given occurance, $Y$ will either be 0 (didn't occur) or 1 (did occur)
-- so $P(Y)$ is the _chance_ that it occured
+- for a given occurance, $$Y$$ will either be 0 (didn't occur) or 1 (did occur)
+- so $$P(Y)$$ is the _chance_ that it occured
 - To assess whether our model fits the data, we can compare the **observed** and **predicted** values of the outcome
 - The measure is called the **log-likelihood**
-  + Analogous to $SS_{R}$ in that it is an indicator of how much unexplained information there is after a model has been fitted
+  + Analogous to $$SS_{R}$$ in that it is an indicator of how much unexplained information there is after a model has been fitted
   + Large value = lots of unexplained observations
 
 $$\text{log-likelihood} = \sum_{i=1}^{N}[Y_{i}ln(P(Y_{i}))+(1-Y_{i})ln(1-P(Y_{i})))]$$
 
---- &two-col
+---
 
 ## Assessing the model
 
 $$\text{log-likelihood} = \sum_{i=1}^{N}[Y_{i}ln(P(Y_{i}))+(1-Y_{i})ln(1-P(Y_{i})))]$$
 
-- recall the $ln$ distribution:
+- recall the $$ln$$ distribution:
 
 ![plot of chunk unnamed-chunk-2](/R-Tutorials-1/figure/source/2016-11-01-tutorial-7-anova/unnamed-chunk-2-1.png)
 
 - What happens when  
-  $Y_{i} = 0$?  
-  $Y_{i} = 1$?
+  $$Y_{i} = 0$$?  
+  $$Y_{i} = 1$$?
 
 ---
 
 ## Deviance statistic
-- deviance = $-2 x LL$
+- deviance = $$-2 x LL$$
 - more convenient because it has a chi-square distribution
 - easier to calculate significance of value
 - We use the deviance to compare models (similar to **aov**(model_1, model_2))
@@ -93,10 +93,10 @@ $$df = k_{new} - k_{baseline}$$
 
 ### Other ways to assess the model
 (we won't go over)
-- $R$, $R^{2}$
-  + Hosmer and Lemeshow's $R^{2}_{L}$
-  + Cox and Snell's $R^{2}_{CS}$
-  + Nagelkerke's $R^{2}_{N}$
+- $$R$$, $$R^{2}$$
+  + Hosmer and Lemeshow's $$R^{2}_{L}$$
+  + Cox and Snell's $$R^{2}_{CS}$$
+  + Nagelkerke's $$R^{2}_{N}$$
 - Each have their own theoretical background and slightly different equations (_Field_, 317-18)
 - AIC, BIC
 
@@ -104,7 +104,7 @@ $$df = k_{new} - k_{baseline}$$
 
 ## Odds ratio
 
-- More important to interpreting logistic regression is the value of the odds ratio, $e^{B}$
+- More important to interpreting logistic regression is the value of the odds ratio, $$e^{B}$$
   + Indicator of the change in odds resulting from a **unit change** in the predictor
   
 - The **"odds"** of an event occuring is:  
@@ -113,9 +113,9 @@ $$\text{odds} = \frac{P(event)}{P(no\,event)}$$
 
 Where:  
 
-$P(event\,Y) = \frac{1}{1+e^{-b_{0}+b_{1}X_{1}+b_{2}X_{2}...}}$
+$$P(event\,Y) = \frac{1}{1+e^{-b_{0}+b_{1}X_{1}+b_{2}X_{2}...}}$$
 
-$P(no\,event\,Y) = 1 - P(event\,Y)$
+$$P(no\,event\,Y) = 1 - P(event\,Y)$$
 
 ---
 
@@ -188,7 +188,7 @@ summary(model.1)
 ```
 
 - The residual deviance is lower than the null deviance (model is now predicting the outcome more accurately than baseline)
-- Question of how _much_ better the model predicts the outcome is assessed using the $\chi^{2}$ statistic:
+- Question of how _much_ better the model predicts the outcome is assessed using the $$\chi^{2}$$ statistic:
 $$\chi^{2} = 499.98 - 486.97 = 13.01$$
 
 ---
@@ -231,10 +231,10 @@ $$\chi^{2}(1) = 13.01, p < .001 $$
 
 ### Assessing coefficients
 
-- similar to linear regression, the $b$ estimate replaces the value in our original equation
+- similar to linear regression, the $$b$$ estimate replaces the value in our original equation
 - represents the change in the logit of the outcome variable associated with a one-unit change in the predictor variable
-  + the natural logarithm ($ln$) if the odds of $Y$ occuring
-- $z$-statistic tells us whether the $b$ coefficient is significantly different from 0
+  + the natural logarithm ($$ln$$) if the odds of $$Y$$ occuring
+- $$z$$-statistic tells us whether the $$b$$ coefficient is significantly different from 0
 
 ---
 

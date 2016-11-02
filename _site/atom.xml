@@ -4,13 +4,429 @@
  <title>R</title>
  <link href="https://jennaleeb.github.io//R-Tutorials-1atom.xml" rel="self"/>
  <link href="https://jennaleeb.github.io//R-Tutorials-1"/>
- <updated>2016-10-25T14:57:17-04:00</updated>
+ <updated>2016-11-02T12:47:44-04:00</updated>
  <id>https://jennaleeb.github.io</id>
  <author>
    <name>Jenna Blumenthal</name>
    <email></email>
  </author>
 
+ 
+ <entry>
+   <title>Tutorial 7 - Logistic Regression</title>
+   <link href="https://jennaleeb.github.io/2016/11/01/tutorial-7-logistic-regression.html"/>
+   <updated>2016-11-01T00:00:00-04:00</updated>
+   <id>https://jennaleeb.github.io/2016/11/01/tutorial-7-logistic-regression</id>
+   <content type="html">&lt;h2 id=&quot;logistic-regression&quot;&gt;Logistic Regression&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Jenna Blumenthal&lt;/strong&gt;&lt;br /&gt;
+   Tutorial #: 7&lt;br /&gt;
+   MIE 1402&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Logistic regression is simply regression with an outcome variable that is &lt;strong&gt;categorical&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;The predictor variables are continuous or categorical
+    &lt;ul&gt;
+      &lt;li&gt;if the predictor variables are categorical only, would use a chi-squared test (&lt;em&gt;Field&lt;/em&gt;, Ch. 18)&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;For example, in medical research:
+    &lt;ul&gt;
+      &lt;li&gt;given a set of cancer patients, what is the likelihood that their tumors are cancerous vs. benign?&lt;/li&gt;
+      &lt;li&gt;use existing database to establish which variables are influential in predicting malignancy&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;logistic-regression-equation&quot;&gt;Logistic regression equation&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;We are instead predicting the &lt;strong&gt;probability&lt;/strong&gt; of $Y$ occuring, rather than the &lt;strong&gt;value&lt;/strong&gt; of $Y$&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;P(Y) = \frac{1}{1+e^{-(b_{0}+b_{1}X_{1}+b_{2}X_{2}...)}}&lt;/script&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Since we cannot apply linear regression when the outcome variable is categorical (would violate the assumption of linearity)&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;We instead take the logarithm of the equation&lt;/li&gt;
+  &lt;li&gt;This allows us to express a non-linear relationship in a linear way
+    &lt;ul&gt;
+      &lt;li&gt;$P(Y)$ is continuous, and varies from 0 to 1&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;assessing-the-model&quot;&gt;Assessing the model&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;for a given occurance, $Y$ will either be 0 (didn’t occur) or 1 (did occur)&lt;/li&gt;
+  &lt;li&gt;so $P(Y)$ is the &lt;em&gt;chance&lt;/em&gt; that it occured&lt;/li&gt;
+  &lt;li&gt;To assess whether our model fits the data, we can compare the &lt;strong&gt;observed&lt;/strong&gt; and &lt;strong&gt;predicted&lt;/strong&gt; values of the outcome&lt;/li&gt;
+  &lt;li&gt;The measure is called the &lt;strong&gt;log-likelihood&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;Analogous to $SS_{R}$ in that it is an indicator of how much unexplained information there is after a model has been fitted&lt;/li&gt;
+      &lt;li&gt;Large value = lots of unexplained observations&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\text{log-likelihood} = \sum_{i=1}^{N}[Y_{i}ln(P(Y_{i}))+(1-Y_{i})ln(1-P(Y_{i})))]&lt;/script&gt;
+
+&lt;p&gt;— &amp;amp;two-col&lt;/p&gt;
+
+&lt;h2 id=&quot;assessing-the-model-1&quot;&gt;Assessing the model&lt;/h2&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\text{log-likelihood} = \sum_{i=1}^{N}[Y_{i}ln(P(Y_{i}))+(1-Y_{i})ln(1-P(Y_{i})))]&lt;/script&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;recall the $ln$ distribution:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/R-Tutorials-1/figure/source/2016-11-01-tutorial-7-anova/unnamed-chunk-2-1.png&quot; alt=&quot;plot of chunk unnamed-chunk-2&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;What happens when&lt;br /&gt;
+$Y_{i} = 0$?&lt;br /&gt;
+$Y_{i} = 1$?&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;deviance-statistic&quot;&gt;Deviance statistic&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;deviance = $-2 x LL$&lt;/li&gt;
+  &lt;li&gt;more convenient because it has a chi-square distribution&lt;/li&gt;
+  &lt;li&gt;easier to calculate significance of value&lt;/li&gt;
+  &lt;li&gt;We use the deviance to compare models (similar to &lt;strong&gt;aov&lt;/strong&gt;(model_1, model_2))
+    &lt;ul&gt;
+      &lt;li&gt;Does our model improve prediction?&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;\chi^{2}=2LL(new) - 2LL(baseline)&lt;/script&gt;&lt;br /&gt;
+&lt;script type=&quot;math/tex&quot;&gt;df = k_{new} - k_{baseline}&lt;/script&gt;
+- In linear regression, the baseline model is the mean
+- In logistic, it is the category with the highest &lt;strong&gt;frequency&lt;/strong&gt;
+  + The category with the higher # of cases (0 or 1) is our “best guess”&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;other-ways-to-assess-the-model&quot;&gt;Other ways to assess the model&lt;/h3&gt;
+&lt;p&gt;(we won’t go over)
+- $R$, $R^{2}$
+  + Hosmer and Lemeshow’s $R^{2}&lt;em&gt;{L}$
+  + Cox and Snell’s $R^{2}&lt;/em&gt;{CS}$
+  + Nagelkerke’s $R^{2}&lt;em&gt;{N}$
+- Each have their own theoretical background and slightly different equations (_Field&lt;/em&gt;, 317-18)
+- AIC, BIC&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;odds-ratio&quot;&gt;Odds ratio&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;More important to interpreting logistic regression is the value of the odds ratio, $e^{B}$
+    &lt;ul&gt;
+      &lt;li&gt;Indicator of the change in odds resulting from a &lt;strong&gt;unit change&lt;/strong&gt; in the predictor&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;The &lt;strong&gt;“odds”&lt;/strong&gt; of an event occuring is:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\text{odds} = \frac{P(event)}{P(no\,event)}&lt;/script&gt;
+
+&lt;p&gt;Where:&lt;/p&gt;
+
+&lt;p&gt;$P(event\,Y) = \frac{1}{1+e^{-b_{0}+b_{1}X_{1}+b_{2}X_{2}…}}$&lt;/p&gt;
+
+&lt;p&gt;$P(no\,event\,Y) = 1 - P(event\,Y)$&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;odds-ratio-1&quot;&gt;Odds ratio&lt;/h2&gt;
+
+&lt;p&gt;So, the odds &lt;strong&gt;ratio&lt;/strong&gt; is&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\Delta odds = \frac{\text{odds after a unit change in predictor}}{\text{original odds}}&lt;/script&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;if &amp;gt; 1, as the predictor increases, the odds of the outcome occuring increase&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;logistic-regression-in-r&quot;&gt;Logistic regression in R&lt;/h2&gt;
+
+&lt;p&gt;How does GRE, GPA and prestige of undergrad institution influence admission into graduate school? &lt;a href=&quot;http://www.ats.ucla.edu/stat/r/dae/logit.htm&quot;&gt;(UCLA Institute for Digital Research and Education)&lt;/a&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;read.csv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://www.ats.ucla.edu/stat/data/binary.csv&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;head&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;##   admit gre  gpa rank
+## 1     0 380 3.61    3
+## 2     1 660 3.67    3
+## 3     1 800 4.00    1
+## 4     1 640 3.19    4
+## 5     0 520 2.93    4
+## 6     1 760 3.00    2
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;library&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mlogit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;### Let's start by just looking at GPA
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;model.1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;glm&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;admit&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gpa&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;family&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;binomial&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;summary&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;model.1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;## 
+## Call:
+## glm(formula = admit ~ gpa, family = &quot;binomial&quot;, data = data)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -1.1131  -0.8874  -0.7566   1.3305   1.9824  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&amp;gt;|z|)    
+## (Intercept)  -4.3576     1.0353  -4.209 2.57e-05 ***
+## gpa           1.0511     0.2989   3.517 0.000437 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 499.98  on 399  degrees of freedom
+## Residual deviance: 486.97  on 398  degrees of freedom
+## AIC: 490.97
+## 
+## Number of Fisher Scoring iterations: 4
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The residual deviance is lower than the null deviance (model is now predicting the outcome more accurately than baseline)&lt;/li&gt;
+  &lt;li&gt;Question of how &lt;em&gt;much&lt;/em&gt; better the model predicts the outcome is assessed using the $\chi^{2}$ statistic:
+&lt;script type=&quot;math/tex&quot;&gt;\chi^{2} = 499.98 - 486.97 = 13.01&lt;/script&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;Or in R:&lt;/p&gt;
+
+&lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;model.1.Chi&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;model.1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;null.deviance&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;model.1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;deviance&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;round&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;model.1.Chi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;## [1] 13.01
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Find the probability associated with this chi-square statistic by using the pchisq() function, and the difference in degrees of freedom&lt;/p&gt;
+
+&lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;df&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;model.1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;df.null&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;model.1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;df.residual&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;df&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;## [1] 1
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pchisq&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;model.1.Chi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;df&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;# this is the probability we want
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;## [1] 0.0003100148
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;So we can report:&lt;br /&gt;
+&lt;script type=&quot;math/tex&quot;&gt;% &lt;![CDATA[
+\chi^{2}(1) = 13.01, p &lt; .001 %]]&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;assessing-coefficients&quot;&gt;Assessing coefficients&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;similar to linear regression, the $b$ estimate replaces the value in our original equation&lt;/li&gt;
+  &lt;li&gt;represents the change in the logit of the outcome variable associated with a one-unit change in the predictor variable
+    &lt;ul&gt;
+      &lt;li&gt;the natural logarithm ($ln$) if the odds of $Y$ occuring&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;$z$-statistic tells us whether the $b$ coefficient is significantly different from 0&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;odds-ratio-2&quot;&gt;Odds ratio&lt;/h3&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{\text{odds after a unit change in the predictor}}{\text{original odds}}&lt;/script&gt;
+
+&lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nf&quot;&gt;exp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;model.1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;coefficients&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;## (Intercept)         gpa 
+##  0.01280926  2.86082123
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;more-than-one-predictor&quot;&gt;More than one predictor&lt;/h2&gt;
+
+&lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;## 'data.frame':	400 obs. of  4 variables:
+##  $ admit: int  0 1 1 1 0 1 1 0 1 0 ...
+##  $ gre  : int  380 660 800 640 520 760 560 400 540 700 ...
+##  $ gpa  : num  3.61 3.67 4 3.19 2.93 3 2.98 3.08 3.39 3.92 ...
+##  $ rank : int  3 3 1 4 4 2 1 2 3 2 ...
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rank&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;factor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rank&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;model.2&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;glm&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;admit&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gpa&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gre&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rank&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;family&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;binomial&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;summary&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;model.2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;## 
+## Call:
+## glm(formula = admit ~ gpa + gre + rank, family = &quot;binomial&quot;, 
+##     data = data)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -1.6268  -0.8662  -0.6388   1.1490   2.0790  
+## 
+## Coefficients:
+##              Estimate Std. Error z value Pr(&amp;gt;|z|)    
+## (Intercept) -3.989979   1.139951  -3.500 0.000465 ***
+## gpa          0.804038   0.331819   2.423 0.015388 *  
+## gre          0.002264   0.001094   2.070 0.038465 *  
+## rank2       -0.675443   0.316490  -2.134 0.032829 *  
+## rank3       -1.340204   0.345306  -3.881 0.000104 ***
+## rank4       -1.551464   0.417832  -3.713 0.000205 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 499.98  on 399  degrees of freedom
+## Residual deviance: 458.52  on 394  degrees of freedom
+## AIC: 470.52
+## 
+## Number of Fisher Scoring iterations: 4
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;interpretation&quot;&gt;Interpretation&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;for every unit change in &lt;strong&gt;gre&lt;/strong&gt; and &lt;strong&gt;gpa&lt;/strong&gt;, we get the value that the log odds value increases by&lt;/li&gt;
+  &lt;li&gt;But for interpreting &lt;strong&gt;rank&lt;/strong&gt; recall:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;contrasts&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rank&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;##   2 3 4
+## 1 0 0 0
+## 2 1 0 0
+## 3 0 1 0
+## 4 0 0 1
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;ul&gt;
+  &lt;li&gt;For &lt;strong&gt;rank&lt;/strong&gt;, we are getting the change in log odds that occurs when you compare institution with rank 2 versus rank 1&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nf&quot;&gt;exp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;model.2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;coefficients&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;## (Intercept)         gpa         gre       rank2       rank3       rank4 
+##   0.0185001   2.2345448   1.0022670   0.5089310   0.2617923   0.2119375
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;ul&gt;
+  &lt;li&gt;Now we can say that for a one unit increase in gpa, the odds of being admitted to graduate school (versus not being admitted) increase by a factor of 2.23&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;comparing-models&quot;&gt;Comparing models&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;You can use the difference in deviance equation&lt;/li&gt;
+  &lt;li&gt;Or in R, simply:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;anova&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;model.1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;model.2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;## Analysis of Deviance Table
+## 
+## Model 1: admit ~ gpa
+## Model 2: admit ~ gpa + gre + rank
+##   Resid. Df Resid. Dev Df Deviance
+## 1       398     486.97            
+## 2       394     458.52  4    28.45
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pchisq&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;28.45&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;## [1] 1.010924e-05
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
+
+&lt;p&gt;Field A, Miles J, Field Z. Discovering Statistics Using R. London: Sage; 2012.&lt;/p&gt;
+
+&lt;p&gt;R Data Analysis Examples: Logit Regression. UCLA Institute for Digital Research and Education. http://www.ats.ucla.edu/stat/r/dae/logit.htm&lt;/p&gt;
+</content>
+ </entry>
  
  <entry>
    <title>Tutorial 6 - Comparing several means (ANOVA)</title>

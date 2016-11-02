@@ -193,6 +193,9 @@ contrasts(data$dose)
 
 ```{r eval=FALSE}
 aov_model <- aov(outcome ~ predictor1*predictor2, data = data_frame)
+
+aov_model <- aov(outcome ~ predictor1 + predictor2 + predictor1:predictor2, data = data_frame)
+
 ```
 
 ---
@@ -203,4 +206,6 @@ Field A, Miles J, Field Z. Discovering Statistics Using R. London: Sage; 2012.
 
 [https://en.wikipedia.org/wiki/Multiple_comparisons_problem](https://en.wikipedia.org/wiki/Multiple_comparisons_problem)
 
-
+mtcars
+lm.2 <- lm(disp ~ drat + mpg , data = mtcars)
+summary(lm.2)

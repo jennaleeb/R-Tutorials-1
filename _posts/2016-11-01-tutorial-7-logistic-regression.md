@@ -68,7 +68,7 @@ $$\text{log-likelihood} = \sum_{i=1}^{N}[Y_{i}ln(P(Y_{i}))+(1-Y_{i})ln(1-P(Y_{i}
 
 - recall the $$ln$$ distribution:
 
-![plot of chunk unnamed-chunk-2](/R-Tutorials-1/figure/source/2016-11-01-tutorial-7-logistic regression/unnamed-chunk-2-1.png)
+![plot of chunk unnamed-chunk-2](/R-Tutorials-1/figure/source/2016-11-01-tutorial-7-logistic-regression/unnamed-chunk-2-1.png)
 
 - What happens when  
   $$Y_{i} = 0$$?  

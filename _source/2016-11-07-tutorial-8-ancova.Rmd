@@ -1,0 +1,153 @@
+---
+title       : Tutorial 8 - ANCOVA
+subtitle    : 
+author      : Jenna Blumenthal
+job         : MIE 1402
+framework   : deckjs        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+widgets     : [mathjax]     # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+---
+
+```{r include=FALSE}
+library(knitr)
+library(ggplot2)
+```
+
+## Analysis of Covariance (ANCOVA)
+
+   **Jenna Blumenthal**  
+   Tutorial #: 8  
+   MIE 1402
+
+---
+
+```{r, include=FALSE}
+library(knitr)
+library(car)
+```
+
+## Introduction
+
+- We can extend the regression equation for ANOVA to include continuous variable(s) that predict the outcome variable
+- These _continuous_ variables that are NOT part of the experimental manipulation (but can influence the outcome) is called a covariate  
+  
+- Dealing with covariates relatively simple:
+  + Enter the variable into regression model first (hierarchical)
+  + Then, enter the dummy variables representing the experimental manipulation  
+
+  
+- Voila! Now we can see the effect of the experiment after the covariate(s) have been accounted for
+
+---
+
+## Reasons for including covariates
+
+**1. Reduce within-group error variance**
+  + Explain some of the 'unexplained' variance ($SS_{R}$)
+  
+**2. Elimination of confounds**
+  + Remove bias of any variable that is known to influence the dependent variable
+
+---
+
+## Assumptions of ANCOVA
+
+Same as ANOVA, plus:
+
+**1. Independence of covariate and treatment effect**
+- if the covariate is to explain some of the $SS_{R}$, it must be independent of the experimental effect
+- variance explained by treatment & covariate should not overlap
+  + covariate will (statiscally speaking) reduce the experimental effect!
+- problem can be avoided by randomizing participants, or matching experimental groups on the covariate
+- to evaluate, run a t-test (or anova if > 2) to see if the groups differ significantly on levels of the covariate
+
+--- &two-col
+
+## Example: mtcars
+
+```{r}
+kable(head(mtcars[,c("am","mpg","hp")]))
+```
+
+*** {name: right}
+_Note_  
+**am:** type of transmission (auto or manual)  
+**mpg:** miles per gallon  
+**hp:** horsepower  
+
+---
+
+```{r echo=FALSE}
+ggplot(mtcars, aes(hp, mpg)) + geom_point()
+```
+
+$r_{hp,mpg}$ = `r cor(mtcars$hp, mtcars$mpg)`
+
+---
+
+## Assumption 1
+
+Run a t-test to see if groups differ significantly on covariate
+
+```{r}
+mtcars$am <- as.factor(mtcars$am)
+t.test(mtcars[mtcars$am == 0,]$hp, mtcars[mtcars$am == 1,]$hp)
+```
+
+---
+
+## Assumptions of ANCOVA
+
+**2. Homogeneity of Regression Slopes**
+- the slope of the regression line should be approximately the same in all groups
+- i.e. relationship between covariate and outcome variable should not differ significantly between groups
+
+```{r}
+leveneTest(mtcars$hp, mtcars$am)
+```
+
+---
+
+## Running the ANCOVA Analysis
+
+- Recall: we want to study the effect of **am** on **mpg**, taking into account the covariate **hp**
+
+```{r}
+result.1 <- aov(mpg~hp+am,data = mtcars)
+summary.lm(result.1)
+```
+
+---
+
+### What does it look like if we don't include the covariate?
+
+```{r}
+result.2 <- aov(mpg~am,data = mtcars)
+summary.lm(result.2)
+```
+
+- Adjusted R-squared has gone down from 0.77 to 0.34
+- Auto/Manual is explaining 'more' of the variance when we remove the effect of the covariate
+
+---
+
+### Interaction term
+
+```{r}
+result.3 <- aov(mpg~hp*am,data = mtcars)
+result.3 <- aov(mpg~hp + am + hp:am ,data = mtcars)
+summary.lm(result.3)
+```
+
+- confirms that the interaction between **am** and **hp** is non-significant (assumption 2)
+
+---
+
+## References
+
+Field A, Miles J, Field Z. Discovering Statistics Using R. London: Sage; 2012.
+
+https://www.tutorialspoint.com/r/r_analysis_of_covariance.htm

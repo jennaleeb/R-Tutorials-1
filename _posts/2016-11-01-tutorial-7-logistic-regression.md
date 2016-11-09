@@ -83,8 +83,9 @@ $$\text{log-likelihood} = \sum_{i=1}^{N}[Y_{i}ln(P(Y_{i}))+(1-Y_{i})ln(1-P(Y_{i}
 - We use the deviance to compare models (similar to **aov**(model_1, model_2))
   + Does our model improve prediction?  
   
-$$\chi^{2}=2LL(new) - 2LL(baseline)$$  
-$$df = k_{new} - k_{baseline}$$
+  $$\chi^{2}=2LL(new) - 2LL(baseline)$$  
+  $$df = k_{new} - k_{baseline}$$  
+
 - In linear regression, the baseline model is the mean
 - In logistic, it is the category with the highest **frequency**
   + The category with the higher # of cases (0 or 1) is our "best guess"

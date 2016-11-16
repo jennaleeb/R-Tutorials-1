@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Tutorial 9 - Repeated-Measures and Mixed Design &middot; R
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/R-Tutorials-1/public/css/poole.css">
+  <link rel="stylesheet" href="/R-Tutorials-1/public/css/syntax.css">
+  <link rel="stylesheet" href="/R-Tutorials-1/public/css/hyde.css">
+  <link rel="stylesheet" href="/R-Tutorials-1/public/css/custom.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/R-Tutorials-1public/apple-touch-icon-144-precomposed.png">
+                                 <link rel="shortcut icon" href="/R-Tutorials-1public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+  
+  <!-- Mathjax -->
+  <script type="text/javascript"
+            src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+    
+    <!--Disqus comment counts-->
+    <script id="dsq-count-scr" src="//MIE1402.disqus.com/count.js" async></script>
+    
+</head>
+
+
+  <body class="theme-base-0b">
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <h1>
+        <a href="/R-Tutorials-1">
+          R
+        </a>
+      </h1>
+      <p class="lead">Content for MIE 1402 tutorials</p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="sidebar-nav-item" href="/R-Tutorials-1">Home</a>
+
+      
+
+      
+      
+        
+          
+        
+      
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/R-Tutorials-1/about.html">About</a>
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/R-Tutorials-1/archive.html">Archives</a>
+          
+        
+      
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/R-Tutorials-1/categories.html">Categories</a>
+          
+        
+      
+        
+          
+        
+      
+      <a class="sidebar-nav-item" href="https://github.com/jennaleeb/R-Tutorials-1">GitHub project</a>
+    </nav>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="post">
+  <h1 class="post-title">Tutorial 9 - Repeated-Measures and Mixed Design</h1>
+  <span class="post-date">15 Nov 2016</span>
+  <h2 id="repeated-measures-and-mixed-design">Repeated-Measures and Mixed Design</h2>
+
+<p><strong>Jenna Blumenthal</strong><br />
+   Tutorial #: 9<br />
+   MIE 1402</p>
+
+<hr />
+
+<h2 id="introduction">Introduction</h2>
+
+<ul>
+  <li>‘Repeated-measures’ - when the same entities participate in all conditions of an experiment or provide data at multiple time points</li>
+  <li>Previously, we have looked at differences between several means when different entities contribute to different means</li>
+  <li>BUT - the assumption of independence is now violated
+    <ul>
+      <li>data taken under different experimental conditions (but same entity) are likely to be related</li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="sphericity">Sphericity</h2>
+
+<ul>
+  <li>Instead, we assume that the relationship between pairs of experimental conditions is similar (sphericity)
+    <ul>
+      <li>equality of variances of the <em>differences</em> between treatment levels</li>
+      <li>you need at least 3 conditions for sphericity to be an issue (i.e. you need to test for it)</li>
+    </ul>
+  </li>
+</ul>
+
+<p style="text-align: center;">$$var_{A-B} \approx var_{A-C} \approx var_{B-C}$$
+</p>
+
+<ul>
+  <li>Can also be assessed with Mauchly’s test (null hypothesis: variances between conditions are equal)</li>
+</ul>
+
+<hr />
+
+<h2 id="dealing-with-violations-of-sphericity">Dealing with violations of sphericity</h2>
+<p>(to produce a valid <script type="math/tex">F</script>-ratio)</p>
+
+<ol>
+  <li>Apply a correction factor to the degrees of freedom in the <script type="math/tex">F</script>-ratio:
+    <ul>
+      <li>Greenhouse-Geisser correction <script type="math/tex">\hat\varepsilon</script> (varies between 1 &amp; <script type="math/tex">\frac{1}{k-1}</script>)</li>
+      <li>Hynh-Feld correction <script type="math/tex">\tilde\varepsilon</script> (less conservative)</li>
+    </ul>
+  </li>
+  <li>Use multivariate analysis of variance (MANOVA)
+    <ul>
+      <li>don’t need assumption of sphericity</li>
+    </ul>
+  </li>
+  <li>Analyse data as a multilevel model
+    <ul>
+      <li>regression where we can include multiple observations form the same entities</li>
+    </ul>
+  </li>
+</ol>
+
+<hr />
+
+<h2 id="theoretical-framework">Theoretical framework</h2>
+
+<ul>
+  <li>In independent ANOVA, within-participant variance is our <script type="math/tex">SS_{R}</script></li>
+  <li>In repeated measures, some of the within-participant variation comes from the effects of our experimental manipulation</li>
+  <li>as w/ independent design, the <script type="math/tex">F</script>-ratio is the variation due to experimental manipulation (<script type="math/tex">SS_{M}</script>) vs. variation due to random factors (<script type="math/tex">SS_{R}</script>)</li>
+</ul>
+
+<p><img src="/R-Tutorials-1/figure/source/2016-11-15-tutorial-9-repeated/partitioning_variance.jpg" alt="" />
+<em>Field</em>, p. 556</p>
+
+<hr />
+
+<h2 id="repeated-measures-in-r">Repeated-measures in R</h2>
+
+<p>Grab data: <a href="http://bit.ly/2fT3QXW">http://bit.ly/2fT3QXW</a></p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: right">Essay</th>
+      <th style="text-align: right">tutor1</th>
+      <th style="text-align: right">tutor2</th>
+      <th style="text-align: right">tutor3</th>
+      <th style="text-align: right">tutor4</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">62</td>
+      <td style="text-align: right">58</td>
+      <td style="text-align: right">63</td>
+      <td style="text-align: right">64</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">2</td>
+      <td style="text-align: right">63</td>
+      <td style="text-align: right">60</td>
+      <td style="text-align: right">68</td>
+      <td style="text-align: right">65</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">3</td>
+      <td style="text-align: right">65</td>
+      <td style="text-align: right">61</td>
+      <td style="text-align: right">72</td>
+      <td style="text-align: right">65</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">4</td>
+      <td style="text-align: right">68</td>
+      <td style="text-align: right">64</td>
+      <td style="text-align: right">58</td>
+      <td style="text-align: right">61</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">5</td>
+      <td style="text-align: right">69</td>
+      <td style="text-align: right">65</td>
+      <td style="text-align: right">54</td>
+      <td style="text-align: right">59</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">6</td>
+      <td style="text-align: right">71</td>
+      <td style="text-align: right">67</td>
+      <td style="text-align: right">65</td>
+      <td style="text-align: right">50</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="step-1-format-data">Step 1: Format data</h3>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">dataLong</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">melt</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Essay"</span><span class="p">)</span><span class="w">
+</span><span class="n">kable</span><span class="p">(</span><span class="n">dataLong</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: right">Essay</th>
+      <th style="text-align: left">variable</th>
+      <th style="text-align: right">value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: right">1</td>
+      <td style="text-align: left">tutor1</td>
+      <td style="text-align: right">62</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">2</td>
+      <td style="text-align: left">tutor1</td>
+      <td style="text-align: right">63</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">3</td>
+      <td style="text-align: left">tutor1</td>
+      <td style="text-align: right">65</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">4</td>
+      <td style="text-align: left">tutor1</td>
+      <td style="text-align: right">68</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">5</td>
+      <td style="text-align: left">tutor1</td>
+      <td style="text-align: right">69</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">6</td>
+      <td style="text-align: left">tutor1</td>
+      <td style="text-align: right">71</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">7</td>
+      <td style="text-align: left">tutor1</td>
+      <td style="text-align: right">78</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">8</td>
+      <td style="text-align: left">tutor1</td>
+      <td style="text-align: right">75</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">1</td>
+      <td style="text-align: left">tutor2</td>
+      <td style="text-align: right">58</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">2</td>
+      <td style="text-align: left">tutor2</td>
+      <td style="text-align: right">60</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">3</td>
+      <td style="text-align: left">tutor2</td>
+      <td style="text-align: right">61</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">4</td>
+      <td style="text-align: left">tutor2</td>
+      <td style="text-align: right">64</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">5</td>
+      <td style="text-align: left">tutor2</td>
+      <td style="text-align: right">65</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">6</td>
+      <td style="text-align: left">tutor2</td>
+      <td style="text-align: right">67</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">7</td>
+      <td style="text-align: left">tutor2</td>
+      <td style="text-align: right">66</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">8</td>
+      <td style="text-align: left">tutor2</td>
+      <td style="text-align: right">73</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">1</td>
+      <td style="text-align: left">tutor3</td>
+      <td style="text-align: right">63</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">2</td>
+      <td style="text-align: left">tutor3</td>
+      <td style="text-align: right">68</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">3</td>
+      <td style="text-align: left">tutor3</td>
+      <td style="text-align: right">72</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">4</td>
+      <td style="text-align: left">tutor3</td>
+      <td style="text-align: right">58</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">5</td>
+      <td style="text-align: left">tutor3</td>
+      <td style="text-align: right">54</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">6</td>
+      <td style="text-align: left">tutor3</td>
+      <td style="text-align: right">65</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">7</td>
+      <td style="text-align: left">tutor3</td>
+      <td style="text-align: right">67</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">8</td>
+      <td style="text-align: left">tutor3</td>
+      <td style="text-align: right">75</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">1</td>
+      <td style="text-align: left">tutor4</td>
+      <td style="text-align: right">64</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">2</td>
+      <td style="text-align: left">tutor4</td>
+      <td style="text-align: right">65</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">3</td>
+      <td style="text-align: left">tutor4</td>
+      <td style="text-align: right">65</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">4</td>
+      <td style="text-align: left">tutor4</td>
+      <td style="text-align: right">61</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">5</td>
+      <td style="text-align: left">tutor4</td>
+      <td style="text-align: right">59</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">6</td>
+      <td style="text-align: left">tutor4</td>
+      <td style="text-align: right">50</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">7</td>
+      <td style="text-align: left">tutor4</td>
+      <td style="text-align: right">50</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">8</td>
+      <td style="text-align: left">tutor4</td>
+      <td style="text-align: right">45</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="step-1-format-data-1">Step 1: Format data</h3>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="nf">names</span><span class="p">(</span><span class="n">dataLong</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"Essay"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Tutor"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Grade"</span><span class="p">)</span><span class="w">
+</span><span class="n">str</span><span class="p">(</span><span class="n">dataLong</span><span class="o">$</span><span class="n">Tutor</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>##  Factor w/ 4 levels "tutor1","tutor2",..: 1 1 1 1 1 1 1 1 2 2 ...
+</code></pre>
+</div>
+
+<hr />
+
+<h3 id="step-2-exploring-the-data">Step 2: Exploring the data</h3>
+
+<ul>
+  <li>parametric assumptions, graph the data, etc.</li>
+  <li>contrasts?</li>
+</ul>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">contrasts</span><span class="p">(</span><span class="n">dataLong</span><span class="o">$</span><span class="n">Tutor</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>##        tutor2 tutor3 tutor4
+## tutor1      0      0      0
+## tutor2      1      0      0
+## tutor3      0      1      0
+## tutor4      0      0      1
+</code></pre>
+</div>
+
+<ul>
+  <li>must be orthogonal if you want Type III sums of squares, see <em>Field</em>, 568, but we only have 1 variable</li>
+</ul>
+
+<hr />
+
+<h3 id="step-3-compute-anova">Step 3: Compute ANOVA</h3>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">library</span><span class="p">(</span><span class="n">ez</span><span class="p">)</span><span class="w">
+</span><span class="n">model.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ezANOVA</span><span class="p">(</span><span class="n">dataLong</span><span class="p">,</span><span class="w"> </span><span class="n">dv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">.</span><span class="p">(</span><span class="n">Grade</span><span class="p">),</span><span class="w"> </span><span class="n">wid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">.</span><span class="p">(</span><span class="n">Essay</span><span class="p">),</span><span class="w"> </span><span class="n">within</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">.</span><span class="p">(</span><span class="n">Tutor</span><span class="p">),</span><span class="w"> </span><span class="n">detailed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<hr />
+
+<h3 id="step-4-examine-anova">Step 4: Examine ANOVA</h3>
+
+<ul>
+  <li>4.1 - check sphericity assumption</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>## $ANOVA
+##        Effect DFn DFd        SSn      SSd           F            p p&lt;.05
+## 1 (Intercept)   1   7 130816.125  103.375 8858.165659 4.027213e-12     *
+## 2       Tutor   3  21    554.125 1048.375    3.699893 2.784621e-02     *
+##         ges
+## 1 0.9912725
+## 2 0.3248333
+## 
+## $`Mauchly's Test for Sphericity`
+##   Effect         W          p p&lt;.05
+## 2  Tutor 0.1310624 0.04305676     *
+## 
+## $`Sphericity Corrections`
+##   Effect       GGe      p[GG] p[GG]&lt;.05       HFe      p[HF] p[HF]&lt;.05
+## 2  Tutor 0.5576185 0.06287878           0.7122543 0.04712856         *
+</code></pre>
+</div>
+
+<hr />
+
+<h3 id="step-5-individual-contrastspost-hoc">Step 5: Individual contrasts/post-hoc</h3>
+
+<ul>
+  <li>didn’t really have a hypothesis so no informative contrasts</li>
+</ul>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">pairwise.t.test</span><span class="p">(</span><span class="n">dataLong</span><span class="o">$</span><span class="n">Grade</span><span class="p">,</span><span class="w"> </span><span class="n">dataLong</span><span class="o">$</span><span class="n">Tutor</span><span class="p">,</span><span class="w"> </span><span class="n">paired</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">,</span><span class="w"> </span><span class="n">p.adjust.method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"bonferroni"</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>## 
+## 	Pairwise comparisons using paired t tests 
+## 
+## data:  dataLong$Grade and dataLong$Tutor 
+## 
+##        tutor1 tutor2 tutor3
+## tutor2 0.022  -      -     
+## tutor3 1.000  1.000  -     
+## tutor4 0.261  0.961  0.637 
+## 
+## P value adjustment method: bonferroni
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="factorial-repeated-measures-design">Factorial repeated-measures design</h2>
+
+<ul>
+  <li>Nothing terribly new</li>
+  <li>More than one independent variable, add it to ` within = .(var1, var2)`</li>
+  <li>Now we look at main effects + interaction effects</li>
+  <li>Again check sphericity</li>
+  <li>Break down main effects using contrasts/post-hoc tests</li>
+</ul>
+
+<hr />
+
+<h2 id="mixed-designs">Mixed Designs</h2>
+
+<ul>
+  <li>Includes both between groups &amp; repeated measures</li>
+  <li><em>Field</em>, Ch. 14 example: what do people look for in a partner?</li>
+  <li>Independent variables:
+    <ul>
+      <li>Personality</li>
+      <li>Looks</li>
+      <li>Gender</li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="mixed-design-using-ezanova">Mixed Design using <code class="highlighter-rouge">ezANOVA()</code></h2>
+
+<p>(not going through all data set-up)</p>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">model.2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ezANOVA</span><span class="p">(</span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">datingLong</span><span class="p">,</span><span class="w"> </span><span class="n">dv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">.</span><span class="p">(</span><span class="n">rating</span><span class="p">),</span><span class="w"> </span><span class="n">wid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">.</span><span class="p">(</span><span class="n">participant</span><span class="p">),</span><span class="w"> </span><span class="n">between</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">.</span><span class="p">(</span><span class="n">gender</span><span class="p">),</span><span class="w"> </span><span class="n">within</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">.</span><span class="p">(</span><span class="n">looks</span><span class="p">,</span><span class="w"> </span><span class="n">personality</span><span class="p">),</span><span class="w"> </span><span class="n">detailed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<hr />
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">model.2</span><span class="w">
+</span></code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>## $ANOVA
+##                     Effect DFn DFd        SSn       SSd            F
+## 1              (Intercept)   1  18 846249.800  760.2222 2.003690e+04
+## 2                   gender   1  18      0.200  760.2222 4.735457e-03
+## 3                    looks   2  36  20779.633  882.7111 4.237325e+02
+## 5              personality   2  36  23233.600 1274.0444 3.282498e+02
+## 4             gender:looks   2  36   3944.100  882.7111 8.042699e+01
+## 6       gender:personality   2  36   4420.133 1274.0444 6.244868e+01
+## 7        looks:personality   4  72   4055.267 1992.6222 3.663253e+01
+## 8 gender:looks:personality   4  72   2669.667 1992.6222 2.411596e+01
+##              p p&lt;.05          ges
+## 1 7.013239e-29     * 9.942319e-01
+## 2 9.458958e-01       4.073486e-05
+## 3 9.594812e-26     * 8.088849e-01
+## 5 7.689430e-24     * 8.255493e-01
+## 4 5.234187e-14     * 4.454748e-01
+## 6 1.974986e-12     * 4.737685e-01
+## 7 1.101308e-16     * 4.523510e-01
+## 8 1.107801e-12     * 3.522328e-01
+## 
+## $`Mauchly's Test for Sphericity`
+##                     Effect         W         p p&lt;.05
+## 3                    looks 0.9602054 0.7081010      
+## 4             gender:looks 0.9602054 0.7081010      
+## 5              personality 0.9293298 0.5363446      
+## 6       gender:personality 0.9293298 0.5363446      
+## 7        looks:personality 0.6133545 0.5339382      
+## 8 gender:looks:personality 0.6133545 0.5339382      
+## 
+## $`Sphericity Corrections`
+##                     Effect       GGe        p[GG] p[GG]&lt;.05       HFe
+## 3                    looks 0.9617284 7.624114e-25         * 1.0744125
+## 4             gender:looks 0.9617284 1.487026e-13         * 1.0744125
+## 5              personality 0.9339944 2.056621e-22         * 1.0380537
+## 6       gender:personality 0.9339944 9.442426e-12         * 1.0380537
+## 7        looks:personality 0.7993543 9.003598e-14         * 0.9922411
+## 8 gender:looks:personality 0.7993543 1.470422e-10         * 0.9922411
+##          p[HF] p[HF]&lt;.05
+## 3 9.594812e-26         *
+## 4 5.234187e-14         *
+## 5 7.689430e-24         *
+## 6 1.974986e-12         *
+## 7 1.426883e-16         *
+## 8 1.337876e-12         *
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="references">References</h2>
+
+<p>Field A, Miles J, Field Z. Discovering Statistics Using R. London: Sage; 2012.</p>
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2016/11/07/tutorial-8-ancova.html">
+            Tutorial 8 - ANCOVA
+            <small>07 Nov 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/11/01/tutorial-7-logistic-regression.html">
+            Tutorial 7 - Logistic Regression
+            <small>01 Nov 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/10/25/tutorial-6-anova.html">
+            Tutorial 6 - Comparing several means (ANOVA)
+            <small>25 Oct 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+<div id="disqus_thread"></div>
+
+<script>(function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//MIE1402.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+    </div>
+
+  </body>
+</html>

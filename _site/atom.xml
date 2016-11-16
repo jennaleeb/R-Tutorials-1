@@ -4,13 +4,536 @@
  <title>R</title>
  <link href="https://jennaleeb.github.io//R-Tutorials-1atom.xml" rel="self"/>
  <link href="https://jennaleeb.github.io//R-Tutorials-1"/>
- <updated>2016-11-09T11:02:13-05:00</updated>
+ <updated>2016-11-16T09:55:51-05:00</updated>
  <id>https://jennaleeb.github.io</id>
  <author>
    <name>Jenna Blumenthal</name>
    <email></email>
  </author>
 
+ 
+ <entry>
+   <title>Tutorial 9 - Repeated-Measures and Mixed Design</title>
+   <link href="https://jennaleeb.github.io/2016/11/15/tutorial-9-repeated.html"/>
+   <updated>2016-11-15T00:00:00-05:00</updated>
+   <id>https://jennaleeb.github.io/2016/11/15/tutorial-9-repeated</id>
+   <content type="html">&lt;h2 id=&quot;repeated-measures-and-mixed-design&quot;&gt;Repeated-Measures and Mixed Design&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Jenna Blumenthal&lt;/strong&gt;&lt;br /&gt;
+   Tutorial #: 9&lt;br /&gt;
+   MIE 1402&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;‘Repeated-measures’ - when the same entities participate in all conditions of an experiment or provide data at multiple time points&lt;/li&gt;
+  &lt;li&gt;Previously, we have looked at differences between several means when different entities contribute to different means&lt;/li&gt;
+  &lt;li&gt;BUT - the assumption of independence is now violated
+    &lt;ul&gt;
+      &lt;li&gt;data taken under different experimental conditions (but same entity) are likely to be related&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;sphericity&quot;&gt;Sphericity&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Instead, we assume that the relationship between pairs of experimental conditions is similar (sphericity)
+    &lt;ul&gt;
+      &lt;li&gt;equality of variances of the &lt;em&gt;differences&lt;/em&gt; between treatment levels&lt;/li&gt;
+      &lt;li&gt;you need at least 3 conditions for sphericity to be an issue (i.e. you need to test for it)&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p style=&quot;text-align: center;&quot;&gt;$$var_{A-B} \approx var_{A-C} \approx var_{B-C}$$
+&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Can also be assessed with Mauchly’s test (null hypothesis: variances between conditions are equal)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;dealing-with-violations-of-sphericity&quot;&gt;Dealing with violations of sphericity&lt;/h2&gt;
+&lt;p&gt;(to produce a valid &lt;script type=&quot;math/tex&quot;&gt;F&lt;/script&gt;-ratio)&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Apply a correction factor to the degrees of freedom in the &lt;script type=&quot;math/tex&quot;&gt;F&lt;/script&gt;-ratio:
+    &lt;ul&gt;
+      &lt;li&gt;Greenhouse-Geisser correction &lt;script type=&quot;math/tex&quot;&gt;\hat\varepsilon&lt;/script&gt; (varies between 1 &amp;amp; &lt;script type=&quot;math/tex&quot;&gt;\frac{1}{k-1}&lt;/script&gt;)&lt;/li&gt;
+      &lt;li&gt;Hynh-Feld correction &lt;script type=&quot;math/tex&quot;&gt;\tilde\varepsilon&lt;/script&gt; (less conservative)&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Use multivariate analysis of variance (MANOVA)
+    &lt;ul&gt;
+      &lt;li&gt;don’t need assumption of sphericity&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Analyse data as a multilevel model
+    &lt;ul&gt;
+      &lt;li&gt;regression where we can include multiple observations form the same entities&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;theoretical-framework&quot;&gt;Theoretical framework&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;In independent ANOVA, within-participant variance is our &lt;script type=&quot;math/tex&quot;&gt;SS_{R}&lt;/script&gt;&lt;/li&gt;
+  &lt;li&gt;In repeated measures, some of the within-participant variation comes from the effects of our experimental manipulation&lt;/li&gt;
+  &lt;li&gt;as w/ independent design, the &lt;script type=&quot;math/tex&quot;&gt;F&lt;/script&gt;-ratio is the variation due to experimental manipulation (&lt;script type=&quot;math/tex&quot;&gt;SS_{M}&lt;/script&gt;) vs. variation due to random factors (&lt;script type=&quot;math/tex&quot;&gt;SS_{R}&lt;/script&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/R-Tutorials-1/figure/source/2016-11-15-tutorial-9-repeated/partitioning_variance.jpg&quot; alt=&quot;&quot; /&gt;
+&lt;em&gt;Field&lt;/em&gt;, p. 556&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;repeated-measures-in-r&quot;&gt;Repeated-measures in R&lt;/h2&gt;
+
+&lt;p&gt;Grab data: &lt;a href=&quot;http://bit.ly/2fT3QXW&quot;&gt;http://bit.ly/2fT3QXW&lt;/a&gt;&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;Essay&lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;tutor1&lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;tutor2&lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;tutor3&lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;tutor4&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;1&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;62&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;58&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;63&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;64&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;2&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;63&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;60&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;68&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;65&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;3&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;65&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;61&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;72&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;65&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;4&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;68&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;64&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;58&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;61&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;5&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;69&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;65&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;54&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;59&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;6&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;71&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;67&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;65&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;50&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;step-1-format-data&quot;&gt;Step 1: Format data&lt;/h3&gt;
+
+&lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;dataLong&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;melt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Essay&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;kable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dataLong&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;Essay&lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;variable&lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;value&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;1&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;tutor1&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;62&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;2&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;tutor1&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;63&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;3&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;tutor1&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;65&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;4&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;tutor1&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;68&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;5&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;tutor1&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;69&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;6&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;tutor1&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;71&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;7&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;tutor1&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;78&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;8&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;tutor1&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;75&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;1&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;tutor2&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;58&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;2&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;tutor2&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;60&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;3&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;tutor2&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;61&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;4&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;tutor2&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;64&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;5&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;tutor2&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;65&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;6&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;tutor2&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;67&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;7&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;tutor2&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;66&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;8&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;tutor2&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;73&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;1&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;tutor3&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;63&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;2&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;tutor3&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;68&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;3&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;tutor3&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;72&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;4&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;tutor3&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;58&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;5&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;tutor3&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;54&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;6&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;tutor3&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;65&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;7&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;tutor3&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;67&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;8&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;tutor3&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;75&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;1&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;tutor4&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;64&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;2&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;tutor4&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;65&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;3&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;tutor4&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;65&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;4&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;tutor4&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;61&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;5&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;tutor4&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;59&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;6&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;tutor4&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;50&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;7&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;tutor4&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;50&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;8&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;tutor4&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;45&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;step-1-format-data-1&quot;&gt;Step 1: Format data&lt;/h3&gt;
+
+&lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nf&quot;&gt;names&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dataLong&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Essay&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Tutor&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Grade&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dataLong&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Tutor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;##  Factor w/ 4 levels &quot;tutor1&quot;,&quot;tutor2&quot;,..: 1 1 1 1 1 1 1 1 2 2 ...
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;step-2-exploring-the-data&quot;&gt;Step 2: Exploring the data&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;parametric assumptions, graph the data, etc.&lt;/li&gt;
+  &lt;li&gt;contrasts?&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;contrasts&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dataLong&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Tutor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;##        tutor2 tutor3 tutor4
+## tutor1      0      0      0
+## tutor2      1      0      0
+## tutor3      0      1      0
+## tutor4      0      0      1
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;must be orthogonal if you want Type III sums of squares, see &lt;em&gt;Field&lt;/em&gt;, 568, but we only have 1 variable&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;step-3-compute-anova&quot;&gt;Step 3: Compute ANOVA&lt;/h3&gt;
+
+&lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;library&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ez&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;model.1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ezANOVA&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dataLong&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dv&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Grade&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;wid&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Essay&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;within&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Tutor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;detailed&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;TRUE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;step-4-examine-anova&quot;&gt;Step 4: Examine ANOVA&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;4.1 - check sphericity assumption&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;## $ANOVA
+##        Effect DFn DFd        SSn      SSd           F            p p&amp;lt;.05
+## 1 (Intercept)   1   7 130816.125  103.375 8858.165659 4.027213e-12     *
+## 2       Tutor   3  21    554.125 1048.375    3.699893 2.784621e-02     *
+##         ges
+## 1 0.9912725
+## 2 0.3248333
+## 
+## $`Mauchly's Test for Sphericity`
+##   Effect         W          p p&amp;lt;.05
+## 2  Tutor 0.1310624 0.04305676     *
+## 
+## $`Sphericity Corrections`
+##   Effect       GGe      p[GG] p[GG]&amp;lt;.05       HFe      p[HF] p[HF]&amp;lt;.05
+## 2  Tutor 0.5576185 0.06287878           0.7122543 0.04712856         *
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;step-5-individual-contrastspost-hoc&quot;&gt;Step 5: Individual contrasts/post-hoc&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;didn’t really have a hypothesis so no informative contrasts&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;pairwise.t.test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dataLong&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Grade&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dataLong&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Tutor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;paired&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;TRUE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p.adjust.method&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;bonferroni&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;## 
+## 	Pairwise comparisons using paired t tests 
+## 
+## data:  dataLong$Grade and dataLong$Tutor 
+## 
+##        tutor1 tutor2 tutor3
+## tutor2 0.022  -      -     
+## tutor3 1.000  1.000  -     
+## tutor4 0.261  0.961  0.637 
+## 
+## P value adjustment method: bonferroni
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;factorial-repeated-measures-design&quot;&gt;Factorial repeated-measures design&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Nothing terribly new&lt;/li&gt;
+  &lt;li&gt;More than one independent variable, add it to ` within = .(var1, var2)`&lt;/li&gt;
+  &lt;li&gt;Now we look at main effects + interaction effects&lt;/li&gt;
+  &lt;li&gt;Again check sphericity&lt;/li&gt;
+  &lt;li&gt;Break down main effects using contrasts/post-hoc tests&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;mixed-designs&quot;&gt;Mixed Designs&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Includes both between groups &amp;amp; repeated measures&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;Field&lt;/em&gt;, Ch. 14 example: what do people look for in a partner?&lt;/li&gt;
+  &lt;li&gt;Independent variables:
+    &lt;ul&gt;
+      &lt;li&gt;Personality&lt;/li&gt;
+      &lt;li&gt;Looks&lt;/li&gt;
+      &lt;li&gt;Gender&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;mixed-design-using-ezanova&quot;&gt;Mixed Design using &lt;code class=&quot;highlighter-rouge&quot;&gt;ezANOVA()&lt;/code&gt;&lt;/h2&gt;
+
+&lt;p&gt;(not going through all data set-up)&lt;/p&gt;
+
+&lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;model.2&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ezANOVA&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;datingLong&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dv&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rating&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;wid&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;participant&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;between&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gender&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;within&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;looks&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;personality&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;detailed&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;TRUE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;model.2&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;## $ANOVA
+##                     Effect DFn DFd        SSn       SSd            F
+## 1              (Intercept)   1  18 846249.800  760.2222 2.003690e+04
+## 2                   gender   1  18      0.200  760.2222 4.735457e-03
+## 3                    looks   2  36  20779.633  882.7111 4.237325e+02
+## 5              personality   2  36  23233.600 1274.0444 3.282498e+02
+## 4             gender:looks   2  36   3944.100  882.7111 8.042699e+01
+## 6       gender:personality   2  36   4420.133 1274.0444 6.244868e+01
+## 7        looks:personality   4  72   4055.267 1992.6222 3.663253e+01
+## 8 gender:looks:personality   4  72   2669.667 1992.6222 2.411596e+01
+##              p p&amp;lt;.05          ges
+## 1 7.013239e-29     * 9.942319e-01
+## 2 9.458958e-01       4.073486e-05
+## 3 9.594812e-26     * 8.088849e-01
+## 5 7.689430e-24     * 8.255493e-01
+## 4 5.234187e-14     * 4.454748e-01
+## 6 1.974986e-12     * 4.737685e-01
+## 7 1.101308e-16     * 4.523510e-01
+## 8 1.107801e-12     * 3.522328e-01
+## 
+## $`Mauchly's Test for Sphericity`
+##                     Effect         W         p p&amp;lt;.05
+## 3                    looks 0.9602054 0.7081010      
+## 4             gender:looks 0.9602054 0.7081010      
+## 5              personality 0.9293298 0.5363446      
+## 6       gender:personality 0.9293298 0.5363446      
+## 7        looks:personality 0.6133545 0.5339382      
+## 8 gender:looks:personality 0.6133545 0.5339382      
+## 
+## $`Sphericity Corrections`
+##                     Effect       GGe        p[GG] p[GG]&amp;lt;.05       HFe
+## 3                    looks 0.9617284 7.624114e-25         * 1.0744125
+## 4             gender:looks 0.9617284 1.487026e-13         * 1.0744125
+## 5              personality 0.9339944 2.056621e-22         * 1.0380537
+## 6       gender:personality 0.9339944 9.442426e-12         * 1.0380537
+## 7        looks:personality 0.7993543 9.003598e-14         * 0.9922411
+## 8 gender:looks:personality 0.7993543 1.470422e-10         * 0.9922411
+##          p[HF] p[HF]&amp;lt;.05
+## 3 9.594812e-26         *
+## 4 5.234187e-14         *
+## 5 7.689430e-24         *
+## 6 1.974986e-12         *
+## 7 1.426883e-16         *
+## 8 1.337876e-12         *
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
+
+&lt;p&gt;Field A, Miles J, Field Z. Discovering Statistics Using R. London: Sage; 2012.&lt;/p&gt;
+</content>
+ </entry>
  
  <entry>
    <title>Tutorial 8 - ANCOVA</title>

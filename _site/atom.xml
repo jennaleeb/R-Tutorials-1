@@ -4,13 +4,477 @@
  <title>R</title>
  <link href="https://jennaleeb.github.io//R-Tutorials-1atom.xml" rel="self"/>
  <link href="https://jennaleeb.github.io//R-Tutorials-1"/>
- <updated>2016-11-16T09:57:07-05:00</updated>
+ <updated>2016-11-24T10:01:33-05:00</updated>
  <id>https://jennaleeb.github.io</id>
  <author>
    <name>Jenna Blumenthal</name>
    <email></email>
  </author>
 
+ 
+ <entry>
+   <title>Tutorial 10 - Non-parametric tests and categorical data</title>
+   <link href="https://jennaleeb.github.io/2016/11/21/tutorial-10-non-parametric.html"/>
+   <updated>2016-11-21T00:00:00-05:00</updated>
+   <id>https://jennaleeb.github.io/2016/11/21/tutorial-10-non-parametric</id>
+   <content type="html">&lt;h2 id=&quot;non-parametric-tests-and-categorical-data&quot;&gt;Non-parametric tests and categorical data&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Jenna Blumenthal&lt;/strong&gt;&lt;br /&gt;
+   Tutorial #: 10&lt;br /&gt;
+   MIE 1402&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Up until now, we’ve looked at various approaches to look for differences between means&lt;/li&gt;
+  &lt;li&gt;But these rely on the parametric assumptions&lt;/li&gt;
+  &lt;li&gt;Not always possible to correct for using transformations, segmentation, etc.&lt;/li&gt;
+  &lt;li&gt;Instead, use tests that don’t rely on these assumptions&lt;/li&gt;
+  &lt;li&gt;Most of these work by &lt;strong&gt;ranking&lt;/strong&gt; the data&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;general-analogies&quot;&gt;General ‘analogies’&lt;/h2&gt;
+&lt;table style=&quot;text-align: left;&quot;&gt;&lt;/table&gt;
+
+&lt;style type=&quot;text/css&quot;&gt;
+table { text-align: left}
+.deck-container td {border: 3px solid #95a5a6; padding: 7px}
+&lt;/style&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Parametric&lt;/td&gt;
+      &lt;td&gt;Non-parametric&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Independent t-test&lt;/td&gt;
+      &lt;td&gt;Wilcoxon rank-sum&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Dependent t-test&lt;/td&gt;
+      &lt;td&gt;Wilcoxon signed-rank&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Independent ANOVA&lt;/td&gt;
+      &lt;td&gt;Kruskal-Wallis / Jonckheere-Terpstra&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Repeated-measures ANOVA&lt;/td&gt;
+      &lt;td&gt;Friedman’s ANOVA&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;theory-of-the-wilcoxon-rank-sum-test&quot;&gt;Theory of the Wilcoxon rank-sum test&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;rank the scores, ignoring which group they originated&lt;/li&gt;
+  &lt;li&gt;if there is &lt;em&gt;no&lt;/em&gt; difference between groups, you would assume there would be some ranked high, some ranked low, in both groups
+    &lt;ul&gt;
+      &lt;li&gt;sum of ranks: group 1 &lt;script type=&quot;math/tex&quot;&gt;\approx&lt;/script&gt; group 2&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;once we’ve ranked the data, sum up the ranks in each group&lt;/li&gt;
+  &lt;li&gt;correct for the # of people in each group (otherwise big group = large sum of ranks)
+mean rank = &lt;script type=&quot;math/tex&quot;&gt;\frac{N(N+1)}{2}&lt;/script&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;script type=&quot;math/tex&quot;&gt;W&lt;/script&gt; = sum of ranks - mean rank&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;significance-and-effect-size&quot;&gt;Significance and effect size&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Take the smaller of &lt;script type=&quot;math/tex&quot;&gt;W_{1}&lt;/script&gt;, &lt;script type=&quot;math/tex&quot;&gt;W_{2}&lt;/script&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;R&lt;/strong&gt; calculates the associate &lt;script type=&quot;math/tex&quot;&gt;p&lt;/script&gt; value
+    &lt;ul&gt;
+      &lt;li&gt;either by Monte Carlo simulation&lt;/li&gt;
+      &lt;li&gt;or if &lt;script type=&quot;math/tex&quot;&gt;N&gt;40&lt;/script&gt;, &lt;strong&gt;R&lt;/strong&gt; assumes the distribution of the &lt;script type=&quot;math/tex&quot;&gt;W&lt;/script&gt; statistic is normal
+        &lt;ul&gt;
+          &lt;li&gt;then can also calculate effect size using &lt;script type=&quot;math/tex&quot;&gt;r = \frac{z}{\sqrt{N}}&lt;/script&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;wilcoxon-signed-rank-test&quot;&gt;Wilcoxon signed-rank test&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Scores come from the same entity&lt;/li&gt;
+  &lt;li&gt;Test the assumption of normality of the differences between the scores (Shapiro-Wilk etc)&lt;/li&gt;
+  &lt;li&gt;Calculate difference between scores&lt;/li&gt;
+  &lt;li&gt;Add up all the (+)’s and all the (-)’s&lt;/li&gt;
+  &lt;li&gt;The smaller values is used as the test statistic &lt;script type=&quot;math/tex&quot;&gt;T&lt;/script&gt;&lt;/li&gt;
+  &lt;li&gt;Again correct for group size using the mean (&lt;script type=&quot;math/tex&quot;&gt;\bar{T}&lt;/script&gt;)&lt;/li&gt;
+  &lt;li&gt;Find &lt;script type=&quot;math/tex&quot;&gt;z&lt;/script&gt; score and &lt;script type=&quot;math/tex&quot;&gt;p&lt;/script&gt; value using
+&lt;script type=&quot;math/tex&quot;&gt;z = \frac{T - \bar{T}}{SE_{\bar{T}}}&lt;/script&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;comparing-two-groups-in-r&quot;&gt;Comparing two groups in R&lt;/h2&gt;
+
+&lt;p&gt;Both independent (rank-sum) and dependent (signed-rank) Wilcoxon can be run using:&lt;/p&gt;
+
+&lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;model&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;wilcox.test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;group1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;group2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;paired&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;TRUE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;FALSE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;correct&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;FALSE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;kruskal-wallis-test&quot;&gt;Kruskal-Wallis test&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;comparing multiple independent groups&lt;/li&gt;
+  &lt;li&gt;However, recall that the &lt;script type=&quot;math/tex&quot;&gt;F&lt;/script&gt; statistic can be robust to violations of assumptions
+    &lt;ul&gt;
+      &lt;li&gt;see Sec. 10.3 and Jane Superbrain 10.2 (pg 412-414)&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;can also use this non-parametric approach&lt;/li&gt;
+  &lt;li&gt;Test statistic derived from ranking the data regardless of group, adding up the ranks in each group&lt;/li&gt;
+  &lt;li&gt;Similarly, the Jonckheere-Terpstra statistic tests for an ordered pattern (trend) in the groups you are comparing&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;friedmans-anova&quot;&gt;Friedman’s ANOVA&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Several conditions, same entities&lt;/li&gt;
+  &lt;li&gt;Again, test statistic derived from ranking (but this time each group is ranked, within-participant)&lt;/li&gt;
+  &lt;li&gt;Ranks added up, produces test statistic&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;r-example&quot;&gt;R example&lt;/h2&gt;
+
+&lt;p&gt;Grab data: &lt;a href=&quot;http://bit.ly/2flElhq&quot;&gt;http://bit.ly/2flElhq&lt;/a&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;read.delim&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;coulrophobia.dat&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;## 'data.frame':	60 obs. of  2 variables:
+##  $ infotype: Factor w/ 4 levels &quot;Advert&quot;,&quot;Exposure&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ beliefs : int  5 3 1 3 4 4 5 5 3 5 ...
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;testing-assumptions&quot;&gt;Testing assumptions&lt;/h2&gt;
+
+&lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;by&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;beliefs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;infotype&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shapiro.test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;## data$infotype: Advert
+## 
+## 	Shapiro-Wilk normality test
+## 
+## data:  dd[x, ]
+## W = 0.89718, p-value = 0.08619
+## 
+## -------------------------------------------------------- 
+## data$infotype: Exposure
+## 
+## 	Shapiro-Wilk normality test
+## 
+## data:  dd[x, ]
+## W = 0.86665, p-value = 0.03013
+## 
+## -------------------------------------------------------- 
+## data$infotype: None
+## 
+## 	Shapiro-Wilk normality test
+## 
+## data:  dd[x, ]
+## W = 0.60343, p-value = 2.738e-05
+## 
+## -------------------------------------------------------- 
+## data$infotype: Story
+## 
+## 	Shapiro-Wilk normality test
+## 
+## data:  dd[x, ]
+## W = 0.85504, p-value = 0.02048
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;testing-assumptions-1&quot;&gt;Testing assumptions&lt;/h2&gt;
+
+&lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;library&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;car&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;leveneTest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;beliefs&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;infotype&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;## Levene's Test for Homogeneity of Variance (center = median)
+##       Df F value  Pr(&amp;gt;F)  
+## group  3  2.4165 0.07593 .
+##       56                  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;running-the-k-w-test-in-r&quot;&gt;Running the K-W test in R&lt;/h2&gt;
+
+&lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;clown.model.1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;kruskal.test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;beliefs&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;infotype&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;clown.model.1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;## 
+## 	Kruskal-Wallis rank sum test
+## 
+## data:  data$beliefs by data$infotype
+## Kruskal-Wallis chi-squared = 17.058, df = 3, p-value = 0.0006876
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;library&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pgirmess&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;kruskalmc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;beliefs&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;infotype&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;## Multiple comparison test after Kruskal-Wallis 
+## p.value: 0.05 
+## Comparisons
+##                   obs.dif critical.dif difference
+## Advert-Exposure 21.266667     16.82428       TRUE
+## Advert-None     13.700000     16.82428      FALSE
+## Advert-Story    23.166667     16.82428       TRUE
+## Exposure-None    7.566667     16.82428      FALSE
+## Exposure-Story   1.900000     16.82428      FALSE
+## None-Story       9.466667     16.82428      FALSE
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;more-focused-comparisons&quot;&gt;More focused comparisons&lt;/h3&gt;
+
+&lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;contrasts&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;infotype&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;##          Exposure None Story
+## Advert          0    0     0
+## Exposure        1    0     0
+## None            0    1     0
+## Story           0    0     1
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;infotype&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;None&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Advert&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Story&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Exposure&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;# re-order levels
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;kruskalmc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;beliefs&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;infotype&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cont&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;two-tailed&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;# compare all to first level
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;## Multiple comparison test after Kruskal-Wallis, treatments vs control (two-tailed) 
+## p.value: 0.05 
+## Comparisons
+##                obs.dif critical.dif difference
+## None-Advert   21.26667     15.26651       TRUE
+## None-Story    13.70000     15.26651      FALSE
+## None-Exposure 23.16667     15.26651       TRUE
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;categorical-data&quot;&gt;Categorical data&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;So far we’ve mostly looked at predicting continuous variables (except logistic regression)&lt;/li&gt;
+  &lt;li&gt;For categorical, we instead look at frequencies rather than the mean&lt;/li&gt;
+  &lt;li&gt;Consider a simple contingency table, where we analyze the # of ‘things’ that fall into each combination of categories&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;pearson-chi-square-test&quot;&gt;Pearson Chi-Square test&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Test for relationship between 2 categorical variables&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Compare the frequencies you observe vs. the frequencies you would expect to see by chance&lt;/p&gt;
+
+    &lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;\chi^{2} = \frac{\sum (observed_{ij} - model_{ij})^{2}}{model_{ij}}&lt;/script&gt; (where &lt;script type=&quot;math/tex&quot;&gt;i,j&lt;/script&gt; are rows/column numbers of contingency table)&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;So what is the ‘model’?
+    &lt;ul&gt;
+      &lt;li&gt;In ANOVA: group means&lt;/li&gt;
+      &lt;li&gt;Here: expected frequency &lt;script type=&quot;math/tex&quot;&gt;model_{ij} = \frac{row-total_{i} \times column-total_{j}}{total -observations}&lt;/script&gt;&lt;/li&gt;
+      &lt;li&gt;So in a 2 x 2 table, each cell would have a &lt;script type=&quot;math/tex&quot;&gt;model_{ij}&lt;/script&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;pearson-chi-square-test-1&quot;&gt;Pearson Chi-Square test&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;once &lt;script type=&quot;math/tex&quot;&gt;\chi^{2}&lt;/script&gt; is calculated, we can find the &lt;script type=&quot;math/tex&quot;&gt;dof = (r-1)(c-1)&lt;/script&gt;&lt;/li&gt;
+  &lt;li&gt;So for 2 x 2 table, dof = 1, then look at the distribution&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;assumptions&quot;&gt;Assumptions:&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;check to make sure no expected frequencies are &amp;lt; 5&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;independence: can’t use &lt;script type=&quot;math/tex&quot;&gt;\chi^{2}&lt;/script&gt; test on a repeated-measures design&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Break down significant test w/ standardized residuals
+    &lt;ul&gt;
+      &lt;li&gt;analogous to breaking down a significant ANOVA&lt;/li&gt;
+    &lt;/ul&gt;
+
+    &lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;standardized\,residual = \frac{observed_{ij} - model_{ij}}{\sqrt{model_{ij}}}&lt;/script&gt;
+- behaves like a z-score, can assess signficance directly&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;categorical-analysis-in-r&quot;&gt;Categorical analysis in R&lt;/h2&gt;
+
+&lt;p&gt;Grab data: &lt;a href=&quot;http://bit.ly/2fZwh7r&quot;&gt;http://bit.ly/2fZwh7r&lt;/a&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;bike_data&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;read.delim&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Handlebars.dat&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bike_data&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;##        Hands Nationality Frequency
+## 1 One Handed       Dutch       120
+## 2 One Handed     English        17
+## 3 Two Handed       Dutch       578
+## 4 Two Handed     English       154
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# Create contingency table
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;one_hand&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;subset&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bike_data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Frequency&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bike_data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Hands&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;One Handed&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;two_hand&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;subset&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bike_data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Frequency&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bike_data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Hands&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Two Handed&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bike_table&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rbind&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;one_hand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;two_hand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bike_table&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;##          [,1] [,2]
+## one_hand  120   17
+## two_hand  578  154
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;colnames&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bike_table&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Dutch&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;English&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;library&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gmodels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CrossTable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bike_table&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fisher&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;FALSE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;chisq&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;TRUE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;expected&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;TRUE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sresid&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;TRUE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;## 
+##  
+##    Cell Contents
+## |-------------------------|
+## |                       N |
+## |              Expected N |
+## | Chi-square contribution |
+## |           N / Row Total |
+## |           N / Col Total |
+## |         N / Table Total |
+## |-------------------------|
+## 
+##  
+## Total Observations in Table:  869 
+## 
+##  
+##              |  
+##              |     Dutch |   English | Row Total | 
+## -------------|-----------|-----------|-----------|
+##     one_hand |       120 |        17 |       137 | 
+##              |   110.041 |    26.959 |           | 
+##              |     0.901 |     3.679 |           | 
+##              |     0.876 |     0.124 |     0.158 | 
+##              |     0.172 |     0.099 |           | 
+##              |     0.138 |     0.020 |           | 
+## -------------|-----------|-----------|-----------|
+##     two_hand |       578 |       154 |       732 | 
+##              |   587.959 |   144.041 |           | 
+##              |     0.169 |     0.689 |           | 
+##              |     0.790 |     0.210 |     0.842 | 
+##              |     0.828 |     0.901 |           | 
+##              |     0.665 |     0.177 |           | 
+## -------------|-----------|-----------|-----------|
+## Column Total |       698 |       171 |       869 | 
+##              |     0.803 |     0.197 |           | 
+## -------------|-----------|-----------|-----------|
+## 
+##  
+## Statistics for All Table Factors
+## 
+## 
+## Pearson's Chi-squared test 
+## ------------------------------------------------------------
+## Chi^2 =  5.437138     d.f. =  1     p =  0.01971294 
+## 
+## Pearson's Chi-squared test with Yates' continuity correction 
+## ------------------------------------------------------------
+## Chi^2 =  4.904869     d.f. =  1     p =  0.02678109 
+## 
+## 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;effect-size&quot;&gt;Effect size&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;most useful measures is the odds ratio&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\textrm{odds}_{\textrm{Dutch bike one-handed}} = \frac{\textrm{number that bike one-handed}}{\textrm{number that bike two-handed}}&lt;/script&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\textrm{odds}_{\textrm{English bike one-handed}} = \frac{\textrm{number that bike one-handed}}{\textrm{number that bike two-handed}}&lt;/script&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\textrm{odds ratio} = \frac{\textrm{odds}_{\textrm{Dutch bike one-handed}}}{\textrm{odds}_{\textrm{English bike one-handed}}}&lt;/script&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
+
+&lt;p&gt;Field A, Miles J, Field Z. Discovering Statistics Using R. London: Sage; 2012.&lt;/p&gt;
+</content>
+ </entry>
  
  <entry>
    <title>Tutorial 9 - Repeated-Measures and Mixed Design</title>

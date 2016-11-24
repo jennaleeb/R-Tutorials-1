@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Tutorial 10 - Non-parametric tests and categorical data &middot; R
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/R-Tutorials-1/public/css/poole.css">
+  <link rel="stylesheet" href="/R-Tutorials-1/public/css/syntax.css">
+  <link rel="stylesheet" href="/R-Tutorials-1/public/css/hyde.css">
+  <link rel="stylesheet" href="/R-Tutorials-1/public/css/custom.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/R-Tutorials-1public/apple-touch-icon-144-precomposed.png">
+                                 <link rel="shortcut icon" href="/R-Tutorials-1public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+  
+  <!-- Mathjax -->
+  <script type="text/javascript"
+            src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+    
+    <!--Disqus comment counts-->
+    <script id="dsq-count-scr" src="//MIE1402.disqus.com/count.js" async></script>
+    
+</head>
+
+
+  <body class="theme-base-0b">
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <h1>
+        <a href="/R-Tutorials-1">
+          R
+        </a>
+      </h1>
+      <p class="lead">Content for MIE 1402 tutorials</p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="sidebar-nav-item" href="/R-Tutorials-1">Home</a>
+
+      
+
+      
+      
+        
+          
+        
+      
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/R-Tutorials-1/about.html">About</a>
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/R-Tutorials-1/archive.html">Archives</a>
+          
+        
+      
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/R-Tutorials-1/categories.html">Categories</a>
+          
+        
+      
+        
+          
+        
+      
+      <a class="sidebar-nav-item" href="https://github.com/jennaleeb/R-Tutorials-1">GitHub project</a>
+    </nav>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="post">
+  <h1 class="post-title">Tutorial 10 - Non-parametric tests and categorical data</h1>
+  <span class="post-date">21 Nov 2016</span>
+  <h2 id="non-parametric-tests-and-categorical-data">Non-parametric tests and categorical data</h2>
+
+<p><strong>Jenna Blumenthal</strong><br />
+   Tutorial #: 10<br />
+   MIE 1402</p>
+
+<hr />
+
+<h2 id="introduction">Introduction</h2>
+
+<ul>
+  <li>Up until now, we’ve looked at various approaches to look for differences between means</li>
+  <li>But these rely on the parametric assumptions</li>
+  <li>Not always possible to correct for using transformations, segmentation, etc.</li>
+  <li>Instead, use tests that don’t rely on these assumptions</li>
+  <li>Most of these work by <strong>ranking</strong> the data</li>
+</ul>
+
+<hr />
+
+<h2 id="general-analogies">General ‘analogies’</h2>
+<table style="text-align: left;"></table>
+
+<style type="text/css">
+table { text-align: left}
+.deck-container td {border: 3px solid #95a5a6; padding: 7px}
+</style>
+
+<table>
+  <tbody>
+    <tr>
+      <td>Parametric</td>
+      <td>Non-parametric</td>
+    </tr>
+    <tr>
+      <td>Independent t-test</td>
+      <td>Wilcoxon rank-sum</td>
+    </tr>
+    <tr>
+      <td>Dependent t-test</td>
+      <td>Wilcoxon signed-rank</td>
+    </tr>
+    <tr>
+      <td>Independent ANOVA</td>
+      <td>Kruskal-Wallis / Jonckheere-Terpstra</td>
+    </tr>
+    <tr>
+      <td>Repeated-measures ANOVA</td>
+      <td>Friedman’s ANOVA</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="theory-of-the-wilcoxon-rank-sum-test">Theory of the Wilcoxon rank-sum test</h2>
+
+<ul>
+  <li>rank the scores, ignoring which group they originated</li>
+  <li>if there is <em>no</em> difference between groups, you would assume there would be some ranked high, some ranked low, in both groups
+    <ul>
+      <li>sum of ranks: group 1 <script type="math/tex">\approx</script> group 2</li>
+    </ul>
+  </li>
+  <li>once we’ve ranked the data, sum up the ranks in each group</li>
+  <li>correct for the # of people in each group (otherwise big group = large sum of ranks)
+mean rank = <script type="math/tex">\frac{N(N+1)}{2}</script></li>
+  <li><script type="math/tex">W</script> = sum of ranks - mean rank</li>
+</ul>
+
+<hr />
+
+<h3 id="significance-and-effect-size">Significance and effect size</h3>
+
+<ul>
+  <li>Take the smaller of <script type="math/tex">W_{1}</script>, <script type="math/tex">W_{2}</script></li>
+  <li><strong>R</strong> calculates the associate <script type="math/tex">p</script> value
+    <ul>
+      <li>either by Monte Carlo simulation</li>
+      <li>or if <script type="math/tex">N>40</script>, <strong>R</strong> assumes the distribution of the <script type="math/tex">W</script> statistic is normal
+        <ul>
+          <li>then can also calculate effect size using <script type="math/tex">r = \frac{z}{\sqrt{N}}</script></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="wilcoxon-signed-rank-test">Wilcoxon signed-rank test</h2>
+
+<ul>
+  <li>Scores come from the same entity</li>
+  <li>Test the assumption of normality of the differences between the scores (Shapiro-Wilk etc)</li>
+  <li>Calculate difference between scores</li>
+  <li>Add up all the (+)’s and all the (-)’s</li>
+  <li>The smaller values is used as the test statistic <script type="math/tex">T</script></li>
+  <li>Again correct for group size using the mean (<script type="math/tex">\bar{T}</script>)</li>
+  <li>Find <script type="math/tex">z</script> score and <script type="math/tex">p</script> value using
+<script type="math/tex">z = \frac{T - \bar{T}}{SE_{\bar{T}}}</script></li>
+</ul>
+
+<hr />
+
+<h2 id="comparing-two-groups-in-r">Comparing two groups in R</h2>
+
+<p>Both independent (rank-sum) and dependent (signed-rank) Wilcoxon can be run using:</p>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">model</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">wilcox.test</span><span class="p">(</span><span class="n">group1</span><span class="p">,</span><span class="w"> </span><span class="n">group2</span><span class="p">,</span><span class="w"> </span><span class="n">paired</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">/</span><span class="kc">FALSE</span><span class="p">,</span><span class="w"> </span><span class="n">correct</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<hr />
+
+<h2 id="kruskal-wallis-test">Kruskal-Wallis test</h2>
+
+<ul>
+  <li>comparing multiple independent groups</li>
+  <li>However, recall that the <script type="math/tex">F</script> statistic can be robust to violations of assumptions
+    <ul>
+      <li>see Sec. 10.3 and Jane Superbrain 10.2 (pg 412-414)</li>
+    </ul>
+  </li>
+  <li>can also use this non-parametric approach</li>
+  <li>Test statistic derived from ranking the data regardless of group, adding up the ranks in each group</li>
+  <li>Similarly, the Jonckheere-Terpstra statistic tests for an ordered pattern (trend) in the groups you are comparing</li>
+</ul>
+
+<hr />
+
+<h2 id="friedmans-anova">Friedman’s ANOVA</h2>
+
+<ul>
+  <li>Several conditions, same entities</li>
+  <li>Again, test statistic derived from ranking (but this time each group is ranked, within-participant)</li>
+  <li>Ranks added up, produces test statistic</li>
+</ul>
+
+<hr />
+
+<h2 id="r-example">R example</h2>
+
+<p>Grab data: <a href="http://bit.ly/2flElhq">http://bit.ly/2flElhq</a></p>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">data</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read.delim</span><span class="p">(</span><span class="s2">"coulrophobia.dat"</span><span class="p">)</span><span class="w">
+</span><span class="n">str</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>## 'data.frame':	60 obs. of  2 variables:
+##  $ infotype: Factor w/ 4 levels "Advert","Exposure",..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ beliefs : int  5 3 1 3 4 4 5 5 3 5 ...
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="testing-assumptions">Testing assumptions</h2>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">by</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">beliefs</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">$</span><span class="n">infotype</span><span class="p">,</span><span class="w"> </span><span class="n">shapiro.test</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>## data$infotype: Advert
+## 
+## 	Shapiro-Wilk normality test
+## 
+## data:  dd[x, ]
+## W = 0.89718, p-value = 0.08619
+## 
+## -------------------------------------------------------- 
+## data$infotype: Exposure
+## 
+## 	Shapiro-Wilk normality test
+## 
+## data:  dd[x, ]
+## W = 0.86665, p-value = 0.03013
+## 
+## -------------------------------------------------------- 
+## data$infotype: None
+## 
+## 	Shapiro-Wilk normality test
+## 
+## data:  dd[x, ]
+## W = 0.60343, p-value = 2.738e-05
+## 
+## -------------------------------------------------------- 
+## data$infotype: Story
+## 
+## 	Shapiro-Wilk normality test
+## 
+## data:  dd[x, ]
+## W = 0.85504, p-value = 0.02048
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="testing-assumptions-1">Testing assumptions</h2>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">library</span><span class="p">(</span><span class="n">car</span><span class="p">)</span><span class="w">
+</span><span class="n">leveneTest</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">beliefs</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">data</span><span class="o">$</span><span class="n">infotype</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>## Levene's Test for Homogeneity of Variance (center = median)
+##       Df F value  Pr(&gt;F)  
+## group  3  2.4165 0.07593 .
+##       56                  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="running-the-k-w-test-in-r">Running the K-W test in R</h2>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">clown.model.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">kruskal.test</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">beliefs</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">data</span><span class="o">$</span><span class="n">infotype</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">data</span><span class="p">)</span><span class="w">
+</span><span class="n">clown.model.1</span><span class="w">
+</span></code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>## 
+## 	Kruskal-Wallis rank sum test
+## 
+## data:  data$beliefs by data$infotype
+## Kruskal-Wallis chi-squared = 17.058, df = 3, p-value = 0.0006876
+</code></pre>
+</div>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">library</span><span class="p">(</span><span class="n">pgirmess</span><span class="p">)</span><span class="w">
+</span><span class="n">kruskalmc</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">beliefs</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">data</span><span class="o">$</span><span class="n">infotype</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">data</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>## Multiple comparison test after Kruskal-Wallis 
+## p.value: 0.05 
+## Comparisons
+##                   obs.dif critical.dif difference
+## Advert-Exposure 21.266667     16.82428       TRUE
+## Advert-None     13.700000     16.82428      FALSE
+## Advert-Story    23.166667     16.82428       TRUE
+## Exposure-None    7.566667     16.82428      FALSE
+## Exposure-Story   1.900000     16.82428      FALSE
+## None-Story       9.466667     16.82428      FALSE
+</code></pre>
+</div>
+
+<hr />
+
+<h3 id="more-focused-comparisons">More focused comparisons</h3>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">contrasts</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">infotype</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>##          Exposure None Story
+## Advert          0    0     0
+## Exposure        1    0     0
+## None            0    1     0
+## Story           0    0     1
+</code></pre>
+</div>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">levels</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">infotype</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"None"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Advert"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Story"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Exposure"</span><span class="p">)</span><span class="w"> </span><span class="c1"># re-order levels
+</span><span class="n">kruskalmc</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">beliefs</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">data</span><span class="o">$</span><span class="n">infotype</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="n">cont</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"two-tailed"</span><span class="p">)</span><span class="w"> </span><span class="c1"># compare all to first level
+</span></code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>## Multiple comparison test after Kruskal-Wallis, treatments vs control (two-tailed) 
+## p.value: 0.05 
+## Comparisons
+##                obs.dif critical.dif difference
+## None-Advert   21.26667     15.26651       TRUE
+## None-Story    13.70000     15.26651      FALSE
+## None-Exposure 23.16667     15.26651       TRUE
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="categorical-data">Categorical data</h2>
+
+<ul>
+  <li>So far we’ve mostly looked at predicting continuous variables (except logistic regression)</li>
+  <li>For categorical, we instead look at frequencies rather than the mean</li>
+  <li>Consider a simple contingency table, where we analyze the # of ‘things’ that fall into each combination of categories</li>
+</ul>
+
+<hr />
+
+<h2 id="pearson-chi-square-test">Pearson Chi-Square test</h2>
+
+<ul>
+  <li>Test for relationship between 2 categorical variables</li>
+  <li>
+    <p>Compare the frequencies you observe vs. the frequencies you would expect to see by chance</p>
+
+    <p><script type="math/tex">\chi^{2} = \frac{\sum (observed_{ij} - model_{ij})^{2}}{model_{ij}}</script> (where <script type="math/tex">i,j</script> are rows/column numbers of contingency table)</p>
+  </li>
+  <li>So what is the ‘model’?
+    <ul>
+      <li>In ANOVA: group means</li>
+      <li>Here: expected frequency <script type="math/tex">model_{ij} = \frac{row-total_{i} \times column-total_{j}}{total -observations}</script></li>
+      <li>So in a 2 x 2 table, each cell would have a <script type="math/tex">model_{ij}</script></li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="pearson-chi-square-test-1">Pearson Chi-Square test</h2>
+
+<ul>
+  <li>once <script type="math/tex">\chi^{2}</script> is calculated, we can find the <script type="math/tex">dof = (r-1)(c-1)</script></li>
+  <li>So for 2 x 2 table, dof = 1, then look at the distribution</li>
+</ul>
+
+<h3 id="assumptions">Assumptions:</h3>
+<ul>
+  <li>check to make sure no expected frequencies are &lt; 5</li>
+  <li>
+    <p>independence: can’t use <script type="math/tex">\chi^{2}</script> test on a repeated-measures design</p>
+  </li>
+  <li>Break down significant test w/ standardized residuals
+    <ul>
+      <li>analogous to breaking down a significant ANOVA</li>
+    </ul>
+
+    <p><script type="math/tex">standardized\,residual = \frac{observed_{ij} - model_{ij}}{\sqrt{model_{ij}}}</script>
+- behaves like a z-score, can assess signficance directly</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="categorical-analysis-in-r">Categorical analysis in R</h2>
+
+<p>Grab data: <a href="http://bit.ly/2fZwh7r">http://bit.ly/2fZwh7r</a></p>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">bike_data</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read.delim</span><span class="p">(</span><span class="s2">"Handlebars.dat"</span><span class="p">)</span><span class="w">
+</span><span class="n">bike_data</span><span class="w">
+</span></code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>##        Hands Nationality Frequency
+## 1 One Handed       Dutch       120
+## 2 One Handed     English        17
+## 3 Two Handed       Dutch       578
+## 4 Two Handed     English       154
+</code></pre>
+</div>
+
+<hr />
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="c1"># Create contingency table
+</span><span class="n">one_hand</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">subset</span><span class="p">(</span><span class="n">bike_data</span><span class="o">$</span><span class="n">Frequency</span><span class="p">,</span><span class="w"> </span><span class="n">bike_data</span><span class="o">$</span><span class="n">Hands</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">"One Handed"</span><span class="p">)</span><span class="w">
+</span><span class="n">two_hand</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">subset</span><span class="p">(</span><span class="n">bike_data</span><span class="o">$</span><span class="n">Frequency</span><span class="p">,</span><span class="w"> </span><span class="n">bike_data</span><span class="o">$</span><span class="n">Hands</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">"Two Handed"</span><span class="p">)</span><span class="w">
+</span><span class="n">bike_table</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">rbind</span><span class="p">(</span><span class="n">one_hand</span><span class="p">,</span><span class="w"> </span><span class="n">two_hand</span><span class="p">)</span><span class="w">
+</span><span class="n">bike_table</span><span class="w">
+</span></code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>##          [,1] [,2]
+## one_hand  120   17
+## two_hand  578  154
+</code></pre>
+</div>
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">colnames</span><span class="p">(</span><span class="n">bike_table</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"Dutch"</span><span class="p">,</span><span class="w"> </span><span class="s2">"English"</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<hr />
+
+<div class="language-r highlighter-rouge"><pre class="highlight"><code><span class="n">library</span><span class="p">(</span><span class="n">gmodels</span><span class="p">)</span><span class="w">
+</span><span class="n">CrossTable</span><span class="p">(</span><span class="n">bike_table</span><span class="p">,</span><span class="w"> </span><span class="n">fisher</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">,</span><span class="w"> </span><span class="n">chisq</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">,</span><span class="w"> </span><span class="n">expected</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">,</span><span class="w"> </span><span class="n">sresid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<hr />
+
+<div class="highlighter-rouge"><pre class="highlight"><code>## 
+##  
+##    Cell Contents
+## |-------------------------|
+## |                       N |
+## |              Expected N |
+## | Chi-square contribution |
+## |           N / Row Total |
+## |           N / Col Total |
+## |         N / Table Total |
+## |-------------------------|
+## 
+##  
+## Total Observations in Table:  869 
+## 
+##  
+##              |  
+##              |     Dutch |   English | Row Total | 
+## -------------|-----------|-----------|-----------|
+##     one_hand |       120 |        17 |       137 | 
+##              |   110.041 |    26.959 |           | 
+##              |     0.901 |     3.679 |           | 
+##              |     0.876 |     0.124 |     0.158 | 
+##              |     0.172 |     0.099 |           | 
+##              |     0.138 |     0.020 |           | 
+## -------------|-----------|-----------|-----------|
+##     two_hand |       578 |       154 |       732 | 
+##              |   587.959 |   144.041 |           | 
+##              |     0.169 |     0.689 |           | 
+##              |     0.790 |     0.210 |     0.842 | 
+##              |     0.828 |     0.901 |           | 
+##              |     0.665 |     0.177 |           | 
+## -------------|-----------|-----------|-----------|
+## Column Total |       698 |       171 |       869 | 
+##              |     0.803 |     0.197 |           | 
+## -------------|-----------|-----------|-----------|
+## 
+##  
+## Statistics for All Table Factors
+## 
+## 
+## Pearson's Chi-squared test 
+## ------------------------------------------------------------
+## Chi^2 =  5.437138     d.f. =  1     p =  0.01971294 
+## 
+## Pearson's Chi-squared test with Yates' continuity correction 
+## ------------------------------------------------------------
+## Chi^2 =  4.904869     d.f. =  1     p =  0.02678109 
+## 
+## 
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="effect-size">Effect size</h2>
+
+<ul>
+  <li>most useful measures is the odds ratio</li>
+</ul>
+
+<script type="math/tex; mode=display">\textrm{odds}_{\textrm{Dutch bike one-handed}} = \frac{\textrm{number that bike one-handed}}{\textrm{number that bike two-handed}}</script>
+
+<script type="math/tex; mode=display">\textrm{odds}_{\textrm{English bike one-handed}} = \frac{\textrm{number that bike one-handed}}{\textrm{number that bike two-handed}}</script>
+
+<script type="math/tex; mode=display">\textrm{odds ratio} = \frac{\textrm{odds}_{\textrm{Dutch bike one-handed}}}{\textrm{odds}_{\textrm{English bike one-handed}}}</script>
+
+<hr />
+
+<h2 id="references">References</h2>
+
+<p>Field A, Miles J, Field Z. Discovering Statistics Using R. London: Sage; 2012.</p>
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2016/11/15/tutorial-9-repeated.html">
+            Tutorial 9 - Repeated-Measures and Mixed Design
+            <small>15 Nov 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/11/07/tutorial-8-ancova.html">
+            Tutorial 8 - ANCOVA
+            <small>07 Nov 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/11/01/tutorial-7-logistic-regression.html">
+            Tutorial 7 - Logistic Regression
+            <small>01 Nov 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+<div id="disqus_thread"></div>
+
+<script>(function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//MIE1402.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+    </div>
+
+  </body>
+</html>
